@@ -1,4 +1,4 @@
-package ml.huytools.ycnanswer;
+package ml.huytools.ycnanswer.View;
 
 import android.content.Context;
 import android.opengl.GLES20;
@@ -18,7 +18,6 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 
-
 public class MainActivity extends AppCompatActivity {
 
     @Override
@@ -30,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
         editBox.setText("Hello Matron");
 
         setContentView(tsv);
+
 
 
         addContentView(editBox, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
