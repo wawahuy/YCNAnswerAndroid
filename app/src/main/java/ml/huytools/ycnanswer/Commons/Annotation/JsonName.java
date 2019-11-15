@@ -1,4 +1,4 @@
-package ml.huytools.yuhmvc.Antotations;
+package ml.huytools.ycnanswer.Commons.Annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
