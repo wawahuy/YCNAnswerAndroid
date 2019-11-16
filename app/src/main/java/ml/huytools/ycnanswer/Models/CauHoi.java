@@ -6,11 +6,9 @@ import ml.huytools.ycnanswer.Commons.Model;
 
 public class CauHoi extends Model {
 
-    @JsonName("id")
-    private String id;
+    @JsonName
+    private int id;
 
     public CauHoi(){
-        id = "1";
     }
-
 }

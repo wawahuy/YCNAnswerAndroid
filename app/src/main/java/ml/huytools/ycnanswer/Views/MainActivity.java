@@ -14,10 +14,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        CauHoi cauHoi = new CauHoi();
-        CauHoi newCH = Model.ParseJson(CauHoi.class, cauHoi.toJson().toString());
-        Log.v("Log", newCH.toJson().toString());
     }
 
 
