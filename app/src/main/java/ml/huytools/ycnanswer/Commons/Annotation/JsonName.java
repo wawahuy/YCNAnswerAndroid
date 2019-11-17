@@ -1,4 +1,4 @@
-package ml.huytools.yuhmvc.Antotations;
+package ml.huytools.ycnanswer.Commons.Annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
@@ -10,5 +10,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.FIELD, ElementType.METHOD})
 public @interface JsonName {
-    String value();
+    String value() default "";
 }
