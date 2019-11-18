@@ -2,7 +2,6 @@ package ml.huytools.ycnanswer.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -12,15 +11,15 @@ import ml.huytools.ycnanswer.Commons.AnimationView;
 import ml.huytools.ycnanswer.Models.CauHoi;
 import ml.huytools.ycnanswer.Presenters.GamePresenter;
 import ml.huytools.ycnanswer.R;
-import ml.huytools.ycnanswer.Views.Game.CountDown;
+import ml.huytools.ycnanswer.Views.GameViews.CountDown.CountDown;
 
 
 public class GameActivity extends AppCompatActivity
         implements GamePresenter.View {
 
     GamePresenter presenter;
-    CountDown countDown;
     AnimationView tableLevelQuestion;
+    CountDown countDown;
 
     ImageView imv_tableLevelQuestion;
     TextView txv_question;
@@ -35,6 +34,7 @@ public class GameActivity extends AppCompatActivity
         setContentView(R.layout.activity_game);
 
         /// E
+        countDown = findViewById(R.id.countDown);
         txv_question = findViewById(R.id.txv_cauhoi);
         txv_paA = findViewById(R.id.txv_paA);
         txv_paB = findViewById(R.id.txv_paB);
@@ -43,8 +43,6 @@ public class GameActivity extends AppCompatActivity
         imv_tableLevelQuestion = findViewById(R.id.iv_tb_level_question);
 
         /// O
-        ImageView imvCounDown = findViewById(R.id.imvCountDown);
-        countDown = new CountDown(this, imvCounDown);
 
         /// table question
         tableLevelQuestion = new AnimationView(this, R.drawable.sprite_levelscore,
@@ -73,7 +71,6 @@ public class GameActivity extends AppCompatActivity
 
     @Override
     public void RestartCountDown() {
-        countDown.start();
     }
 
 
