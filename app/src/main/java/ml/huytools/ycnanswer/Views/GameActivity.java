@@ -11,7 +11,7 @@ import ml.huytools.ycnanswer.Commons.AnimationView;
 import ml.huytools.ycnanswer.Models.CauHoi;
 import ml.huytools.ycnanswer.Presenters.GamePresenter;
 import ml.huytools.ycnanswer.R;
-import ml.huytools.ycnanswer.Views.GameViews.CountDown.CountDown;
+import ml.huytools.ycnanswer.Views.GameViews.Components.CountDown;
 
 
 public class GameActivity extends AppCompatActivity
@@ -35,14 +35,14 @@ public class GameActivity extends AppCompatActivity
 
         /// E
         countDown = findViewById(R.id.countDown);
+        countDown.setTimeCountDown(30);
+
         txv_question = findViewById(R.id.txv_cauhoi);
         txv_paA = findViewById(R.id.txv_paA);
         txv_paB = findViewById(R.id.txv_paB);
         txv_paC = findViewById(R.id.txv_paC);
         txv_paD = findViewById(R.id.txv_paD);
         imv_tableLevelQuestion = findViewById(R.id.iv_tb_level_question);
-
-        /// O
 
         /// table question
         tableLevelQuestion = new AnimationView(this, R.drawable.sprite_levelscore,
@@ -71,6 +71,7 @@ public class GameActivity extends AppCompatActivity
 
     @Override
     public void RestartCountDown() {
+        countDown.start();
     }
 
 
