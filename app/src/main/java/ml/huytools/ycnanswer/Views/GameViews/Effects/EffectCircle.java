@@ -1,10 +1,7 @@
 package ml.huytools.ycnanswer.Views.GameViews.Effects;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
-
-import ml.huytools.ycnanswer.Views.GameViews.IRenderable;
 
 public class EffectCircle extends Effect {
 
@@ -12,6 +9,7 @@ public class EffectCircle extends Effect {
     int radius, x, y;
     float upd_radius, upd_colorAlpha, upd_color;
     Paint paint;
+    float t;
 
     public EffectCircle(int radius, int x, int y){
         paint = new Paint();
@@ -24,6 +22,7 @@ public class EffectCircle extends Effect {
         setColor(255, 255, 255, 255);
         this.upd_radius = 1;
         this.upd_colorAlpha = 1;
+        this.t = 1;
     }
 
     public void setColor(int a, int r, int g, int b){

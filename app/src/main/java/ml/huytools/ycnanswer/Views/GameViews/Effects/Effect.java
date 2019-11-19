@@ -1,7 +1,7 @@
 package ml.huytools.ycnanswer.Views.GameViews.Effects;
 
-import ml.huytools.ycnanswer.Views.GameViews.IRenderable;
+import ml.huytools.ycnanswer.Views.GameViews.IRender;
 
-public abstract class Effect implements IRenderable {
+public abstract class Effect implements IRender {
     public abstract  boolean canRemove();
 }

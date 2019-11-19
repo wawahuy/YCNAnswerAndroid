@@ -19,6 +19,14 @@ import java.io.ByteArrayOutputStream;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
+/***
+ * AnimationView.java
+ * Author: Nguyen Gia Huy
+ * Project: https://github.com/wawahuy/YCNAnswerAndroid
+ * Start: 17/11/2019
+ * Update: 20/11/2019
+ *
+ */
 public class AnimationView {
 
     LinkedHashMap<String, byte[]> bitmapLinkedHashMap;

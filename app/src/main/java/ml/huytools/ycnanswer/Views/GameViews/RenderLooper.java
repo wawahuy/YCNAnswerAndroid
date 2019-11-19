@@ -3,6 +3,14 @@ package ml.huytools.ycnanswer.Views.GameViews;
 import android.os.AsyncTask;
 import android.os.SystemClock;
 
+/***
+ * RenderLooper.java
+ * Author: Nguyen Gia Huy
+ * Project: https://github.com/wawahuy/YCNAnswerAndroid
+ * Start: 19/11/2019
+ * Update: 20/11/2019
+ *
+ */
 public class RenderLooper extends AsyncTask<Void, Void, Void> {
     ILooper looper;
     boolean loop;

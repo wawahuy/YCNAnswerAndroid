@@ -7,21 +7,29 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.RectF;
-import android.os.AsyncTask;
-import android.os.SystemClock;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import ml.huytools.ycnanswer.Views.GameViews.Effects.Effect;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectCircle;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
 import ml.huytools.ycnanswer.Views.GameViews.RenderLooper;
 
-public class CountDown extends SurfaceView implements RenderLooper.ILooper {
 
-    final int BARSIZE = 20;
+/***
+ * CountDown.java
+ * Author: Nguyen Gia Huy
+ * Project: https://github.com/wawahuy/YCNAnswerAndroid
+ * Start: 19/11/2019
+ * Update: 20/11/2019
+ *
+ * CountDown la thanh phan View ket xuat dem nguoc thoi gian
+ *
+ */
+public class CountDown extends SurfaceView implements RenderLooper.ILooper, SurfaceHolder.Callback {
+
+    /// Vien cua thanh xoay nguoc
+    final int BAR_SIZE = 20;
 
     SurfaceHolder holder;
     RenderLooper looper;
@@ -30,44 +38,70 @@ public class CountDown extends SurfaceView implements RenderLooper.ILooper {
     Paint textPaint;
     Paint barPaint;
     Paint backgroundPaint;
-    int timeCountDown;
-    int timeCurrent;
-    int step;
-    int cx, cy, cw, ch;
 
+    /// Thoi gian dem nguoc
+    int timeCountDown;
+
+    /// Thoi gian dem nguoc hien tai
+    int timeCurrent;
+
+    /// Tong thoi gian cua cac frame
+    /// Dung de tao su kien tick, va effect
+    int step;
+
+    /// cx, cy la trong tam
+    /// cw, ch bang 1/4 do dai cua view
+    /// yt la toa do y de can giua theo y
+    int cx, cy, cw, ch, yt;
+    RectF rectF;
+
+    /// Su kien moi Tick va Timeout
+    boolean hasCallEnd;
+    Callback callback;
 
     public CountDown(Context context, AttributeSet attrs) {
         super(context, attrs);
+
+        // Transparent
         setZOrderOnTop(true);
         getHolder().setFormat(PixelFormat.RGBA_8888);
+
+        /// default
         holder = getHolder();
         timeCurrent = 0;
         timeCountDown = 100000;
         step = 0;
 
-
-        /// init text
+        /// init paint text
         textPaint = new Paint();
         textPaint.setColor(Color.WHITE);
-        textPaint.setTextSize(50);
+        textPaint.setTextSize(40);
         textPaint.setTextAlign(Paint.Align.CENTER);
+        textPaint.setAntiAlias(true);
 
-        /// background
+        /// init paint background
         backgroundPaint = new Paint();
         backgroundPaint.setARGB(255, 20, 29, 58);
         backgroundPaint.setAntiAlias(true);
 
-        /// bar
+        /// init paint bar
         barPaint = new Paint();
         barPaint.setARGB(255,255, 102, 0);
         barPaint.setAntiAlias(true);
 
-        /// effect
+        /// init list effect
         effectManager = new EffectManager();
 
+        /// dang ki su kien SurfaceHolder
+        holder.addCallback(this);
+
+        /// Khoi tao vong lap re-draw
         looper = new RenderLooper(this);
         looper.setFPS(25);
-        looper.execute();
+    }
+
+    public void setCallback(Callback callback){
+        this.callback = callback;
     }
 
     public void setTimeCountDown(int seconds){
@@ -75,17 +109,31 @@ public class CountDown extends SurfaceView implements RenderLooper.ILooper {
     }
 
     public void start(){
+        hasCallEnd = false;
         timeCurrent = timeCountDown;
     }
 
     public void stop(){
+        timeCurrent = -1;
     }
 
     @Override
     public void update() {
-        if(canDeepSleep())
-            return;
 
+        // Kiem tra khi timeout (timeCurrent <= 0)
+        if(canDeepSleep()){
+
+            // Call event
+            if(!hasCallEnd){
+                hasCallEnd = true;
+                if(callback != null){
+                    callback.OnEnd();
+                }
+            }
+            return;
+        }
+
+        // tinh step frame
         int sleep = looper.getSleep();
         timeCurrent -= sleep;
         step += sleep;
@@ -109,10 +157,14 @@ public class CountDown extends SurfaceView implements RenderLooper.ILooper {
         barPaint.setARGB(255, r, g, b);
 
 
-        // cap nhat hieu ung
-        float t = per/100*1000;
-        t = t < 300 ? 300 : t;
-        if(step > t){
+        // tick
+        if(step > 999){
+            // callback
+            if(callback != null){
+                callback.OnTick(timeCurrent);
+            }
+
+            // effect
             step = 0;
             EffectCircle effect = new EffectCircle(cw, cx, cy);
             effect.setColor(255,r, g, b);
@@ -133,10 +185,6 @@ public class CountDown extends SurfaceView implements RenderLooper.ILooper {
             canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
 
             // draw effect
-            cy = canvas.getHeight()/2;
-            cx = canvas.getWidth()/2;
-            cw = cx/2;
-            ch = cy/2;
             effectManager.draw(canvas);
 
             // draw full bar load
@@ -144,15 +192,13 @@ public class CountDown extends SurfaceView implements RenderLooper.ILooper {
 
             // draw bar out
             int barOutAngle = (timeCountDown - timeCurrent)*360/timeCountDown;
-            RectF rectF = new RectF(cw, ch, cx+cw, cy+ch);
             canvas.drawArc(rectF, 270, barOutAngle, true, backgroundPaint);
 
             // draw bg
-            canvas.drawCircle(cx, cy, cw-BARSIZE, backgroundPaint);
+            canvas.drawCircle(cx, cy, cw-BAR_SIZE, backgroundPaint);
 
             // draw text
             int t = timeCurrent/1000;
-            int yt = cy - (int)(textPaint.descent() + textPaint.ascent()) / 2;
             canvas.drawText(Integer.toString(t), cx, yt, textPaint);
 
 
@@ -165,4 +211,32 @@ public class CountDown extends SurfaceView implements RenderLooper.ILooper {
         return timeCurrent <= 0;
     }
 
+    @Override
+    public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        /// Init
+        Canvas canvas = holder.lockCanvas();
+        cy = canvas.getHeight()/2;
+        cx = canvas.getWidth()/2;
+        cw = cx/2;
+        ch = cy/2;
+        yt = cy - (int)(textPaint.descent() + textPaint.ascent()) / 2;
+        rectF = new RectF(cw, ch, cx+cw, cy+ch);
+        holder.unlockCanvasAndPost(canvas);
+
+        /// Run
+        looper.execute();
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
+    }
+
+    public interface Callback {
+        void OnEnd();
+        void OnTick(int cur);
+    }
 }

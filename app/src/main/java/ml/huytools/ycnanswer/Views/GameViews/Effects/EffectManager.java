@@ -4,9 +4,9 @@ import android.graphics.Canvas;
 
 import java.util.LinkedList;
 
-import ml.huytools.ycnanswer.Views.GameViews.IRenderable;
+import ml.huytools.ycnanswer.Views.GameViews.IRender;
 
-public class EffectManager implements IRenderable {
+public class EffectManager implements IRender {
 
     LinkedList<Effect> effects;
 
@@ -24,11 +24,16 @@ public class EffectManager implements IRenderable {
 
     @Override
     public void update(){
+        LinkedList<Effect> effectRM = new LinkedList<>();
         for(Effect effect:effects){
             effect.update();
             if(effect.canRemove()){
-                effects.remove(effect);
+                effectRM.add(effect);
             }
+        }
+
+        for(Effect effect:effectRM){
+            effects.remove(effect);
         }
     }
 

@@ -12,14 +12,15 @@ import ml.huytools.ycnanswer.Models.CauHoi;
 import ml.huytools.ycnanswer.Presenters.GamePresenter;
 import ml.huytools.ycnanswer.R;
 import ml.huytools.ycnanswer.Views.GameViews.Components.CountDown;
+import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownAudio;
 
 
 public class GameActivity extends AppCompatActivity
         implements GamePresenter.View {
 
     GamePresenter presenter;
-    AnimationView tableLevelQuestion;
     CountDown countDown;
+    CountDownAudio countDownAudio;
 
     ImageView imv_tableLevelQuestion;
     TextView txv_question;
@@ -33,31 +34,33 @@ public class GameActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        /// E
-        countDown = findViewById(R.id.countDown);
-        countDown.setTimeCountDown(30);
-
-        txv_question = findViewById(R.id.txv_cauhoi);
-        txv_paA = findViewById(R.id.txv_paA);
-        txv_paB = findViewById(R.id.txv_paB);
-        txv_paC = findViewById(R.id.txv_paC);
-        txv_paD = findViewById(R.id.txv_paD);
-        imv_tableLevelQuestion = findViewById(R.id.iv_tb_level_question);
-
-        /// table question
-        tableLevelQuestion = new AnimationView(this, R.drawable.sprite_levelscore,
-                AssetConfig.LEVEL_QUESTION_WIDTH_FRAME,
-                AssetConfig.LEVEL_QUESTION_HEIGHT_FRAME,
-                AssetConfig.LEVEL_QUESTION_MAP_FRAME);
+        /// init
+        initView();
+        initCountDown();
 
         /// P
         presenter = new GamePresenter(this);
         presenter.Start();
     }
 
+    private void initView(){
+        countDown = findViewById(R.id.countDown);
+        txv_question = findViewById(R.id.txv_cauhoi);
+        txv_paA = findViewById(R.id.txv_paA);
+        txv_paB = findViewById(R.id.txv_paB);
+        txv_paC = findViewById(R.id.txv_paC);
+        txv_paD = findViewById(R.id.txv_paD);
+        imv_tableLevelQuestion = findViewById(R.id.iv_tb_level_question);
+    }
+
+    private void initCountDown(){
+        countDownAudio = new CountDownAudio();
+        countDown.setCallback(countDownAudio);
+        countDown.setTimeCountDown(30);
+    }
+
     @Override
     public void SetQuestionLevelTable(int level) {
-        tableLevelQuestion.drawFrame(imv_tableLevelQuestion, level);
     }
 
     @Override
