@@ -2,7 +2,9 @@ package ml.huytools.ycnanswer.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,6 +15,7 @@ import ml.huytools.ycnanswer.Presenters.GamePresenter;
 import ml.huytools.ycnanswer.R;
 import ml.huytools.ycnanswer.Views.GameViews.Components.CountDown;
 import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownAudio;
+import ml.huytools.ycnanswer.Views.GameViews.Components.Loading;
 
 
 public class GameActivity extends AppCompatActivity
@@ -29,18 +32,33 @@ public class GameActivity extends AppCompatActivity
     TextView txv_paC;
     TextView txv_paD;
 
+    MediaPlayer mpTimeout;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        //Test
+        Loading loading = Loading.Create(this);
+
         /// init
         initView();
+        initAudio();
         initCountDown();
 
         /// P
         presenter = new GamePresenter(this);
         presenter.Start();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    private void initAudio(){
+        mpTimeout = MediaPlayer.create(getApplicationContext(), R.raw.outtime);
     }
 
     private void initView(){
@@ -55,8 +73,9 @@ public class GameActivity extends AppCompatActivity
 
     private void initCountDown(){
         countDownAudio = new CountDownAudio();
+        countDownAudio.setAudioTimeout(mpTimeout);
         countDown.setCallback(countDownAudio);
-        countDown.setTimeCountDown(30);
+        countDown.setTimeCountDown(5);
     }
 
     @Override

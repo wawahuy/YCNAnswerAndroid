@@ -1,5 +1,8 @@
 package ml.huytools.ycnanswer.Views.GameViews.Components;
 
+import android.content.Context;
+import android.media.MediaPlayer;
+
 /***
  * CountDownAudio.java
  * Author: Nguyen Gia Huy
@@ -7,18 +10,22 @@ package ml.huytools.ycnanswer.Views.GameViews.Components;
  * Start: 19/11/2019
  * Update: 20/11/2019
  *
- * CountDownAudio la mot Callback cua CountDown
- * Them hieu ung am thanh cho CountDown
  *
  */
 public class CountDownAudio implements CountDown.Callback {
+
+    MediaPlayer mpTimeOut;
+
+    public void setAudioTimeout(MediaPlayer timeout){
+        mpTimeOut = timeout;
+    }
+
     @Override
     public void OnEnd() {
-
+        mpTimeOut.start();
     }
 
     @Override
     public void OnTick(int cur) {
-
     }
 }
