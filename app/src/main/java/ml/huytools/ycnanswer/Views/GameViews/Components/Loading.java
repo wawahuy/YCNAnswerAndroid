@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import ml.huytools.ycnanswer.R;
+import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectCircleRotate;
+import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
 import ml.huytools.ycnanswer.Views.GameViews.RenderLooper;
 
 /***
@@ -28,10 +30,14 @@ import ml.huytools.ycnanswer.Views.GameViews.RenderLooper;
  */
 public class Loading extends SurfaceView implements RenderLooper.ILooper, SurfaceHolder.Callback {
 
+    final int EDGE = 60;
+
     RenderLooper looper;
     SurfaceHolder holder;
-
     Paint paintBg;
+    EffectManager effectManager;
+
+    int centerX, centerY;
 
     public Loading(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -41,7 +47,6 @@ public class Loading extends SurfaceView implements RenderLooper.ILooper, Surfac
         getHolder().setFormat(PixelFormat.RGBA_8888);
 
         init();
-
     }
 
     public static Loading Create(Activity activity){
@@ -65,6 +70,12 @@ public class Loading extends SurfaceView implements RenderLooper.ILooper, Surfac
         paintBg = new Paint();
         paintBg.setARGB(25, 0, 0, 0);
 
+        effectManager = new EffectManager();
+        effectManager.add(new EffectCircleRotate(10, 60, 0));
+        effectManager.add(new EffectCircleRotate(10, 60, 20));
+        effectManager.add(new EffectCircleRotate(10, 60, 40));
+        effectManager.add(new EffectCircleRotate(10, 60, 60));
+
         looper = new RenderLooper(this);
         looper.setFPS(30);
         holder.addCallback(this);
@@ -73,6 +84,9 @@ public class Loading extends SurfaceView implements RenderLooper.ILooper, Surfac
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         draw();
+
+
+
         looper.execute();
     }
 
@@ -86,7 +100,7 @@ public class Loading extends SurfaceView implements RenderLooper.ILooper, Surfac
 
     @Override
     public void update() {
-
+        effectManager.update();
     }
 
     @Override
@@ -97,6 +111,7 @@ public class Loading extends SurfaceView implements RenderLooper.ILooper, Surfac
             canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
 
             canvas.drawARGB(100, 0, 0, 0);
+            effectManager.draw(canvas);
 
             holder.unlockCanvasAndPost(canvas);
         }
