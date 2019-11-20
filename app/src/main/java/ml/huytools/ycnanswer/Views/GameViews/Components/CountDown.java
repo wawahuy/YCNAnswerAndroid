@@ -96,7 +96,8 @@ public class CountDown extends SurfaceView implements RenderLooper.ILooper, Surf
 
         /// Khoi tao vong lap re-draw
         looper = new RenderLooper(this);
-        looper.setFPS(25);
+        looper.setFPS(30);
+        looper.startThread();
     }
 
     public void setCallback(Callback callback){
@@ -108,6 +109,7 @@ public class CountDown extends SurfaceView implements RenderLooper.ILooper, Surf
     }
 
     public void start(){
+        effectManager.removeAll();
         hasCallEnd = false;
         timeCurrent = timeCountDown;
     }
@@ -117,7 +119,7 @@ public class CountDown extends SurfaceView implements RenderLooper.ILooper, Surf
     }
 
     @Override
-    public void update() {
+    public void onUpdate() {
 
         // Kiem tra khi timeout (timeCurrent <= 0)
         if(canDeepSleep()){
@@ -173,36 +175,29 @@ public class CountDown extends SurfaceView implements RenderLooper.ILooper, Surf
             effectManager.add(effect);
         }
 
-        effectManager.update();
+        effectManager.update(sleep);
     }
 
     @Override
-    public void draw() {
-        Canvas canvas = holder.lockCanvas();
-        if (canvas == null) {
-        } else {
-            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
+    public void onDraw(Canvas canvas) {
+        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
 
-            // draw effect
-            effectManager.draw(canvas);
+        // draw effect
+        effectManager.draw(canvas);
 
-            // draw full bar load
-            canvas.drawCircle(cx, cy, cw, barPaint);
+        // draw full bar load
+        canvas.drawCircle(cx, cy, cw, barPaint);
 
-            // draw bar out
-            int barOutAngle = (timeCountDown - timeCurrent)*360/timeCountDown;
-            canvas.drawArc(rectF, 270, barOutAngle, true, backgroundPaint);
+        // draw bar out
+        int barOutAngle = (timeCountDown - timeCurrent) * 360 / timeCountDown;
+        canvas.drawArc(rectF, 270, barOutAngle, true, backgroundPaint);
 
-            // draw bg
-            canvas.drawCircle(cx, cy, cw-BAR_SIZE, backgroundPaint);
+        // draw bg
+        canvas.drawCircle(cx, cy, cw - BAR_SIZE, backgroundPaint);
 
-            // draw text
-            int t = timeCurrent/1000;
-            canvas.drawText(Integer.toString(t), cx, yt, textPaint);
-
-
-            holder.unlockCanvasAndPost(canvas);
-        }
+        // draw text
+        int t = timeCurrent / 1000;
+        canvas.drawText(Integer.toString(t), cx, yt, textPaint);
     }
 
     @Override
@@ -211,19 +206,21 @@ public class CountDown extends SurfaceView implements RenderLooper.ILooper, Surf
     }
 
     @Override
+    public SurfaceHolder getSurfaceHolder() {
+        return holder;
+    }
+
+    @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         /// Init
         Canvas canvas = holder.lockCanvas();
-        cy = canvas.getHeight()/2;
         cx = canvas.getWidth()/2;
+        cy = canvas.getHeight()/2;
         cw = cx/2;
         ch = cy/2;
         yt = cy - (int)(textPaint.descent() + textPaint.ascent()) / 2;
         rectF = new RectF(cw, ch, cx+cw, cy+ch);
         holder.unlockCanvasAndPost(canvas);
-
-        /// Run
-        looper.execute();
     }
 
     @Override

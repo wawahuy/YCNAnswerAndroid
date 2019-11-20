@@ -51,7 +51,6 @@ public class Loading extends SurfaceView implements RenderLooper.ILooper, Surfac
 
     public static Loading Create(Activity activity){
         Loading loading = new Loading(activity.getBaseContext(), null);
-
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
@@ -61,33 +60,35 @@ public class Loading extends SurfaceView implements RenderLooper.ILooper, Surfac
     }
 
     public void removeOnView(){
+        looper.stopThread();
         ((ViewGroup)this.getParent()).removeView(this);
     }
 
     public void init(){
         holder = getHolder();
-
         paintBg = new Paint();
         paintBg.setARGB(25, 0, 0, 0);
-
         effectManager = new EffectManager();
-        effectManager.add(new EffectCircleRotate(10, 60, 0));
-        effectManager.add(new EffectCircleRotate(10, 60, 20));
-        effectManager.add(new EffectCircleRotate(10, 60, 40));
-        effectManager.add(new EffectCircleRotate(10, 60, 60));
 
         looper = new RenderLooper(this);
         looper.setFPS(30);
         holder.addCallback(this);
+        looper.startThread();
+    }
+
+    private void addEffect(){
+        for(int i=0; i<10; i++){
+            effectManager.add(new EffectCircleRotate(centerX, centerY,10, 60, 110*i));
+        }
     }
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        draw();
-
-
-
-        looper.execute();
+        Canvas canvas = surfaceHolder.lockCanvas();
+        centerX = canvas.getWidth()/2;
+        centerY = canvas.getHeight()/2;
+        addEffect();
+        surfaceHolder.unlockCanvasAndPost(canvas);
     }
 
     @Override
@@ -99,26 +100,25 @@ public class Loading extends SurfaceView implements RenderLooper.ILooper, Surfac
     }
 
     @Override
-    public void update() {
-        effectManager.update();
+    public void onUpdate() {
+        Log.v("Log", "ii");
+        effectManager.update(looper.getSleep());
     }
 
     @Override
-    public void draw() {
-        Canvas canvas = holder.lockCanvas();
-        if (canvas == null) {
-        } else {
-            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
-
-            canvas.drawARGB(100, 0, 0, 0);
-            effectManager.draw(canvas);
-
-            holder.unlockCanvasAndPost(canvas);
-        }
+    public void onDraw(Canvas canvas) {
+        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
+        canvas.drawARGB(100, 0, 0, 0);
+        effectManager.draw(canvas);
     }
 
     @Override
     public boolean canDeepSleep() {
         return false;
+    }
+
+    @Override
+    public SurfaceHolder getSurfaceHolder() {
+        return holder;
     }
 }
