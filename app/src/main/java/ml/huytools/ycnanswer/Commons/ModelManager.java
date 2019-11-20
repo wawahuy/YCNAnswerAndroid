@@ -9,6 +9,14 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.function.Consumer;
 
+/***
+ * ModelManager.java
+ * Author: Nguyen Gia Huy
+ * Project: https://github.com/wawahuy/YCNAnswerAndroid
+ * Start: 15/11/2019
+ * Update: 20/11/2019
+ *
+ */
 public class ModelManager<T extends Model> extends LinkedList<T> {
 
     public String toJson(){

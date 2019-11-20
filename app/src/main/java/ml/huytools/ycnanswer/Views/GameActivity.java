@@ -2,25 +2,29 @@ package ml.huytools.ycnanswer.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.AsyncTask;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import ml.huytools.ycnanswer.Commons.AnimationView;
 import ml.huytools.ycnanswer.Models.CauHoi;
 import ml.huytools.ycnanswer.Presenters.GamePresenter;
 import ml.huytools.ycnanswer.R;
-import ml.huytools.ycnanswer.Views.Game.CountDown;
+import ml.huytools.ycnanswer.Views.GameViews.Components.CountDown;
+import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownAudio;
+import ml.huytools.ycnanswer.Views.GameViews.Components.Loading;
 
 
 public class GameActivity extends AppCompatActivity
         implements GamePresenter.View {
 
     GamePresenter presenter;
+    ResourceManager resourceManager;
     CountDown countDown;
-    AnimationView tableLevelQuestion;
+    CountDownAudio countDownAudio;
 
     ImageView imv_tableLevelQuestion;
     TextView txv_question;
@@ -34,23 +38,13 @@ public class GameActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        /// E
-        txv_question = findViewById(R.id.txv_cauhoi);
-        txv_paA = findViewById(R.id.txv_paA);
-        txv_paB = findViewById(R.id.txv_paB);
-        txv_paC = findViewById(R.id.txv_paC);
-        txv_paD = findViewById(R.id.txv_paD);
-        imv_tableLevelQuestion = findViewById(R.id.iv_tb_level_question);
+        //Test
+        Loading loading = Loading.Create(this);
 
-        /// O
-        ImageView imvCounDown = findViewById(R.id.imvCountDown);
-        countDown = new CountDown(this, imvCounDown);
-
-        /// table question
-        tableLevelQuestion = new AnimationView(this, R.drawable.sprite_levelscore,
-                AssetConfig.LEVEL_QUESTION_WIDTH_FRAME,
-                AssetConfig.LEVEL_QUESTION_HEIGHT_FRAME,
-                AssetConfig.LEVEL_QUESTION_MAP_FRAME);
+        /// init
+        resourceManager = ResourceManager.getInstance(this);
+        initView();
+        initCountDown();
 
         /// P
         presenter = new GamePresenter(this);
@@ -58,8 +52,29 @@ public class GameActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    private void initView(){
+        countDown = findViewById(R.id.countDown);
+        txv_question = findViewById(R.id.txv_cauhoi);
+        txv_paA = findViewById(R.id.txv_paA);
+        txv_paB = findViewById(R.id.txv_paB);
+        txv_paC = findViewById(R.id.txv_paC);
+        txv_paD = findViewById(R.id.txv_paD);
+        imv_tableLevelQuestion = findViewById(R.id.iv_tb_level_question);
+    }
+
+    private void initCountDown(){
+        countDownAudio = new CountDownAudio();
+        countDownAudio.setAudioTimeout(resourceManager.audioTimeout);
+        countDown.setCallback(countDownAudio);
+        countDown.setTimeCountDown(5);
+    }
+
+    @Override
     public void SetQuestionLevelTable(int level) {
-        tableLevelQuestion.drawFrame(imv_tableLevelQuestion, level);
     }
 
     @Override

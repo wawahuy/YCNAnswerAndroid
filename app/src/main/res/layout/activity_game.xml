@@ -33,9 +33,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="5"
-                    android:orientation="horizontal">
-
-                </LinearLayout>
+                    android:orientation="horizontal"/>
 
                 <LinearLayout
                     android:layout_width="0dp"
@@ -44,13 +42,12 @@
                     android:layout_weight="2"
                     android:orientation="horizontal">
 
-                    <ImageView
-                        android:id="@+id/imvCountDown"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
+                    <ml.huytools.ycnanswer.Views.GameViews.Components.CountDown
+                        android:id="@+id/countDown"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
-                        app:srcCompat="@drawable/sprite_time_zero" />
+                        android:layout_marginStart="10dp" />
                 </LinearLayout>
 
                 <LinearLayout
