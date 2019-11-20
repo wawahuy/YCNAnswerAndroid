@@ -1,7 +1,10 @@
 package ml.huytools.ycnanswer.Views.GameViews;
 
+import android.graphics.Canvas;
 import android.os.AsyncTask;
 import android.os.SystemClock;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 
 /***
  * RenderLooper.java
@@ -11,23 +14,30 @@ import android.os.SystemClock;
  * Update: 20/11/2019
  *
  */
-public class RenderLooper extends AsyncTask<Void, Void, Void> {
+public class RenderLooper extends Thread {
     ILooper looper;
     boolean loop;
     int sleep;
 
+    SurfaceHolder sfHolder;
+
     public RenderLooper(ILooper looper){
+        super();
         this.loop = true;
         this.sleep = 1000/30;
         this.looper = looper;
+        sfHolder = looper.getSurfaceHolder();
     }
 
-    public void stop(){
+    public void startThread(){
+        super.start();
+    }
+
+    public void stopThread(){
         this.loop = false;
     }
 
     public void setFPS(int fps){
-        assert (fps < 60);
         this.sleep = 1000/fps;
     }
 
@@ -36,38 +46,46 @@ public class RenderLooper extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(Void... voids) {
+    public void run() {
+        super.run();
+        Canvas canvas = null;
+
         while (loop){
-            looper.update();
-            publishProgress();
+
+            // logic
+            looper.onUpdate();
+
+            // draw
+            canvas = sfHolder.lockCanvas();
+            if(canvas != null){
+                synchronized (sfHolder){
+                    looper.onDraw(canvas);
+                }
+                sfHolder.unlockCanvasAndPost(canvas);
+            }
+
             if(looper.canDeepSleep()){
                 SystemClock.sleep(250);
+//                try {
+//                    sleep(250);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
             } else {
                 SystemClock.sleep(sleep);
+//                try {
+//                    sleep(sleep);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
             }
         }
-        return null;
-    }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-    }
-
-    @Override
-    protected void onProgressUpdate(Void... values) {
-        super.onProgressUpdate(values);
-        looper.draw();
     }
 
     public interface ILooper {
-        void update();
-        void draw();
+        void onUpdate();
+        void onDraw(Canvas canvas);
         boolean canDeepSleep();
+        SurfaceHolder getSurfaceHolder();
     }
 }

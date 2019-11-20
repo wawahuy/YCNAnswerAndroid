@@ -12,6 +12,6 @@ import android.graphics.Canvas;
  *
  */
 public interface IRender {
-    void update();
+    void update(int sleep);
     void draw(Canvas canvas);
 }

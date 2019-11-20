@@ -38,8 +38,6 @@ public class GameActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        //Test
-        Loading loading = Loading.Create(this);
 
         /// init
         resourceManager = ResourceManager.getInstance(this);
@@ -54,6 +52,8 @@ public class GameActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
+        //Test
+        Loading loading = Loading.Create(this);
     }
 
     private void initView(){

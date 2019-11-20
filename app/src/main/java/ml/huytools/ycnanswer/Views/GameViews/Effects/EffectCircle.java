@@ -47,7 +47,7 @@ public class EffectCircle extends Effect {
 
 
     @Override
-    public void update() {
+    public void update(int sleep) {
         a-= upd_colorAlpha;
         r-= upd_color;
         g-= upd_color;
