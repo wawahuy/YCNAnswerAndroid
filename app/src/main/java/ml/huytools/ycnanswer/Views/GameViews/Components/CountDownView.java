@@ -18,7 +18,7 @@ import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
  * Author: Nguyen Gia Huy
  * Project: https://github.com/wawahuy/YCNAnswerAndroid
  * Start: 19/11/2019
- * Update: 20/11/2019
+ * Update: 21/11/2019
  *
  *
  */
@@ -80,6 +80,7 @@ public class CountDownView extends CustomSurfaceView {
 
         /// init list effect
         effectManager = new EffectManager();
+
     }
 
     public void setCallback(Callback callback){
@@ -94,10 +95,16 @@ public class CountDownView extends CustomSurfaceView {
         effectManager.removeAll();
         hasCallEnd = false;
         timeCurrent = timeCountDown;
+
+        /// add loop
+        super.registerLoop();
     }
 
     public void stop(){
         timeCurrent = -1;
+
+        /// unregister
+        super.unregisterLoop();
     }
 
     @Override
@@ -110,6 +117,11 @@ public class CountDownView extends CustomSurfaceView {
             if(!hasCallEnd){
                 hasCallEnd = true;
                 if(callback != null){
+
+                    /// unregister
+                    super.unregisterLoop();
+
+                    /// call
                     callback.OnEnd();
                 }
             }
@@ -190,6 +202,8 @@ public class CountDownView extends CustomSurfaceView {
         ch = cy/2;
         yt = cy - (int)(textPaint.descent() + textPaint.ascent()) / 2;
         rectF = new RectF(cw, ch, cx+cw, cy+ch);
+        /// remove loop
+        super.unregisterLoop();
     }
 
 

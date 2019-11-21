@@ -7,6 +7,14 @@ import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+/***
+ * CustomSurfaceView.java
+ * Author: Nguyen Gia Huy
+ * Project: https://github.com/wawahuy/YCNAnswerAndroid
+ * Start: 21/11/2019
+ * Update:
+ *
+ */
 public abstract class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Callback, IRender {
     protected SurfaceHolder holder;
 
@@ -20,8 +28,8 @@ public abstract class CustomSurfaceView extends SurfaceView implements SurfaceHo
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
         Canvas canvas = holder.lockCanvas();
         OnInit(canvas);
-        RenderingLoop.getInstance().add(this);
         holder.unlockCanvasAndPost(canvas);
+        registerLoop();
     }
 
     @Override
@@ -37,6 +45,10 @@ public abstract class CustomSurfaceView extends SurfaceView implements SurfaceHo
 
     public void unregisterLoop(){
         RenderingLoop.getInstance().remove(this);
+    }
+
+    public void registerLoop(){
+        RenderingLoop.getInstance().add(this);
     }
 
     public void transparent(){

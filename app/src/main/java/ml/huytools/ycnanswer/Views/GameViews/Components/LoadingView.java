@@ -19,7 +19,7 @@ import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
  * Author: Nguyen Gia Huy
  * Project: https://github.com/wawahuy/YCNAnswerAndroid
  * Start: 20/11/2019
- * Update:
+ * Update: 21/11/2019
  *
  *
  */
