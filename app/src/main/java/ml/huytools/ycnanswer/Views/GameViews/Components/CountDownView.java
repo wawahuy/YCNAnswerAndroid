@@ -4,16 +4,13 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 
+import ml.huytools.ycnanswer.Views.GameViews.CustomSurfaceView;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectCircle;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
-import ml.huytools.ycnanswer.Views.GameViews.RenderLooper;
 
 
 /***
@@ -25,15 +22,12 @@ import ml.huytools.ycnanswer.Views.GameViews.RenderLooper;
  *
  *
  */
-public class CountDownView extends SurfaceView implements RenderLooper.ILooper, SurfaceHolder.Callback {
+public class CountDownView extends CustomSurfaceView {
 
     /// Vien cua thanh xoay nguoc
     final int BAR_SIZE = 20;
 
-    SurfaceHolder holder;
-    RenderLooper looper;
     EffectManager effectManager;
-
     Paint textPaint;
     Paint barPaint;
     Paint backgroundPaint;
@@ -60,13 +54,9 @@ public class CountDownView extends SurfaceView implements RenderLooper.ILooper, 
 
     public CountDownView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
-        // Transparent
-        setZOrderOnTop(true);
-        getHolder().setFormat(PixelFormat.RGBA_8888);
+        super.transparent();
 
         /// default
-        holder = getHolder();
         timeCurrent = 0;
         timeCountDown = 100000;
         step = 0;
@@ -90,14 +80,6 @@ public class CountDownView extends SurfaceView implements RenderLooper.ILooper, 
 
         /// init list effect
         effectManager = new EffectManager();
-
-        /// dang ki su kien SurfaceHolder
-        holder.addCallback(this);
-
-        /// Khoi tao vong lap re-draw
-        looper = new RenderLooper(this);
-        looper.setFPS(30);
-        looper.startThread();
     }
 
     public void setCallback(Callback callback){
@@ -119,10 +101,10 @@ public class CountDownView extends SurfaceView implements RenderLooper.ILooper, 
     }
 
     @Override
-    public void onUpdate() {
+    public void OnUpdate(int sleep) {
 
         // Kiem tra khi timeout (timeCurrent <= 0)
-        if(canDeepSleep()){
+        if(timeCurrent<=0){
 
             // Call event
             if(!hasCallEnd){
@@ -135,7 +117,6 @@ public class CountDownView extends SurfaceView implements RenderLooper.ILooper, 
         }
 
         // tinh step frame
-        int sleep = looper.getSleep();
         timeCurrent -= sleep;
         step += sleep;
 
@@ -175,15 +156,15 @@ public class CountDownView extends SurfaceView implements RenderLooper.ILooper, 
             effectManager.add(effect);
         }
 
-        effectManager.update(sleep);
+        effectManager.OnUpdate(sleep);
     }
 
     @Override
-    public void onDraw(Canvas canvas) {
+    public void OnDraw(Canvas canvas) {
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
 
         // draw effect
-        effectManager.draw(canvas);
+        effectManager.OnDraw(canvas);
 
         // draw full bar load
         canvas.drawCircle(cx, cy, cw, barPaint);
@@ -200,36 +181,17 @@ public class CountDownView extends SurfaceView implements RenderLooper.ILooper, 
         canvas.drawText(Integer.toString(t), cx, yt, textPaint);
     }
 
-    @Override
-    public boolean canDeepSleep() {
-        return timeCurrent <= 0;
-    }
 
     @Override
-    public SurfaceHolder getSurfaceHolder() {
-        return holder;
-    }
-
-    @Override
-    public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        /// Init
-        Canvas canvas = holder.lockCanvas();
+    public void OnInit(Canvas canvas) {
         cx = canvas.getWidth()/2;
         cy = canvas.getHeight()/2;
         cw = cx/2;
         ch = cy/2;
         yt = cy - (int)(textPaint.descent() + textPaint.ascent()) / 2;
         rectF = new RectF(cw, ch, cx+cw, cy+ch);
-        holder.unlockCanvasAndPost(canvas);
     }
 
-    @Override
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-    }
 
     public interface Callback {
         void OnEnd();

@@ -47,7 +47,7 @@ public class EffectCircle extends Effect {
 
 
     @Override
-    public void update(int sleep) {
+    public void OnUpdate(int sleep) {
         a-= upd_colorAlpha;
         r-= upd_color;
         g-= upd_color;
@@ -58,7 +58,7 @@ public class EffectCircle extends Effect {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void OnDraw(Canvas canvas) {
         canvas.drawCircle( x, y, radius, paint );
     }
 

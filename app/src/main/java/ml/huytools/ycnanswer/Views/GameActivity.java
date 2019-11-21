@@ -12,6 +12,7 @@ import ml.huytools.ycnanswer.Presenters.GamePresenter;
 import ml.huytools.ycnanswer.R;
 import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownView;
 import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownAudio;
+import ml.huytools.ycnanswer.Views.GameViews.Components.LoadingView;
 
 
 public class GameActivity extends AppCompatActivity
@@ -34,6 +35,7 @@ public class GameActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        LoadingView.Create(this);
 
         /// init
         resourceManager = ResourceManager.getInstance(this);

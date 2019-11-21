@@ -5,17 +5,14 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import ml.huytools.ycnanswer.Views.GameViews.CustomSurfaceView;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectCircleRotate;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
-import ml.huytools.ycnanswer.Views.GameViews.RenderLooper;
 
 /***
  * Loading.java
@@ -26,12 +23,9 @@ import ml.huytools.ycnanswer.Views.GameViews.RenderLooper;
  *
  *
  */
-public class LoadingView extends SurfaceView implements RenderLooper.ILooper, SurfaceHolder.Callback {
-
+public class LoadingView extends CustomSurfaceView {
     final int EDGE = 60;
 
-    RenderLooper looper;
-    SurfaceHolder holder;
     Paint paintBg;
     EffectManager effectManager;
 
@@ -39,12 +33,10 @@ public class LoadingView extends SurfaceView implements RenderLooper.ILooper, Su
 
     public LoadingView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
-        // Transparent
-        setZOrderOnTop(true);
-        getHolder().setFormat(PixelFormat.RGBA_8888);
-
-        init();
+        super.transparent();
+        paintBg = new Paint();
+        paintBg.setARGB(25, 0, 0, 0);
+        effectManager = new EffectManager();
     }
 
     public static LoadingView Create(Activity activity){
@@ -58,20 +50,8 @@ public class LoadingView extends SurfaceView implements RenderLooper.ILooper, Su
     }
 
     public void removeOnView(){
-        looper.stopThread();
+        super.unregisterLoop();
         ((ViewGroup)this.getParent()).removeView(this);
-    }
-
-    public void init(){
-        holder = getHolder();
-        paintBg = new Paint();
-        paintBg.setARGB(25, 0, 0, 0);
-        effectManager = new EffectManager();
-
-        looper = new RenderLooper(this);
-        looper.setFPS(30);
-        holder.addCallback(this);
-        looper.startThread();
     }
 
     private void addEffect(){
@@ -81,41 +61,23 @@ public class LoadingView extends SurfaceView implements RenderLooper.ILooper, Su
     }
 
     @Override
-    public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        Canvas canvas = surfaceHolder.lockCanvas();
+    public void OnInit(Canvas canvas) {
         centerX = canvas.getWidth()/2;
         centerY = canvas.getHeight()/2;
         addEffect();
-        surfaceHolder.unlockCanvasAndPost(canvas);
+    }
+
+
+    @Override
+    public void OnUpdate(int sleep) {
+        effectManager.OnUpdate(sleep);
     }
 
     @Override
-    public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-    }
-
-    @Override
-    public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
-    }
-
-    @Override
-    public void onUpdate() {
-        effectManager.update(looper.getSleep());
-    }
-
-    @Override
-    public void onDraw(Canvas canvas) {
+    public void OnDraw(Canvas canvas) {
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
         canvas.drawARGB(100, 0, 0, 0);
-        effectManager.draw(canvas);
+        effectManager.OnDraw(canvas);
     }
 
-    @Override
-    public boolean canDeepSleep() {
-        return false;
-    }
-
-    @Override
-    public SurfaceHolder getSurfaceHolder() {
-        return holder;
-    }
 }
