@@ -42,7 +42,7 @@
                     android:layout_weight="2"
                     android:orientation="horizontal">
 
-                    <ml.huytools.ycnanswer.Views.GameViews.Components.CountDown
+                    <ml.huytools.ycnanswer.Views.GameViews.Components.CountDownView
                         android:id="@+id/countDown"
                         android:layout_width="100dp"
                         android:layout_height="100dp"

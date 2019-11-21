@@ -50,6 +50,7 @@ public class RenderLooper extends Thread {
         super.run();
         Canvas canvas = null;
 
+
         while (loop){
 
             // logic

@@ -2,20 +2,16 @@ package ml.huytools.ycnanswer.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import ml.huytools.ycnanswer.Models.CauHoi;
 import ml.huytools.ycnanswer.Presenters.GamePresenter;
 import ml.huytools.ycnanswer.R;
-import ml.huytools.ycnanswer.Views.GameViews.Components.CountDown;
+import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownView;
 import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownAudio;
-import ml.huytools.ycnanswer.Views.GameViews.Components.Loading;
 
 
 public class GameActivity extends AppCompatActivity
@@ -23,7 +19,7 @@ public class GameActivity extends AppCompatActivity
 
     GamePresenter presenter;
     ResourceManager resourceManager;
-    CountDown countDown;
+    CountDownView countDown;
     CountDownAudio countDownAudio;
 
     ImageView imv_tableLevelQuestion;
@@ -52,8 +48,6 @@ public class GameActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        //Test
-        Loading loading = Loading.Create(this);
     }
 
     private void initView(){

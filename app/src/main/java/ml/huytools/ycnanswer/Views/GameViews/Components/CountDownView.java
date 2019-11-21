@@ -25,7 +25,7 @@ import ml.huytools.ycnanswer.Views.GameViews.RenderLooper;
  *
  *
  */
-public class CountDown extends SurfaceView implements RenderLooper.ILooper, SurfaceHolder.Callback {
+public class CountDownView extends SurfaceView implements RenderLooper.ILooper, SurfaceHolder.Callback {
 
     /// Vien cua thanh xoay nguoc
     final int BAR_SIZE = 20;
@@ -50,15 +50,15 @@ public class CountDown extends SurfaceView implements RenderLooper.ILooper, Surf
 
     /// cx, cy la trong tam
     /// cw, ch bang 1/4 do dai cua view
-    /// yt la toa do y de can giua theo y
+    /// yt la toa do y de can giua theo y cho text
     int cx, cy, cw, ch, yt;
     RectF rectF;
 
-    /// Su kien moi Tick va Timeout
+    /// Su kien Tick va Timeout
     boolean hasCallEnd;
     Callback callback;
 
-    public CountDown(Context context, AttributeSet attrs) {
+    public CountDownView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         // Transparent

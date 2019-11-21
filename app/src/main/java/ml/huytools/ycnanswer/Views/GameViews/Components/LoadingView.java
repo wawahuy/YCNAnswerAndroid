@@ -8,13 +8,11 @@ import android.graphics.Paint;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import ml.huytools.ycnanswer.R;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectCircleRotate;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
 import ml.huytools.ycnanswer.Views.GameViews.RenderLooper;
@@ -28,7 +26,7 @@ import ml.huytools.ycnanswer.Views.GameViews.RenderLooper;
  *
  *
  */
-public class Loading extends SurfaceView implements RenderLooper.ILooper, SurfaceHolder.Callback {
+public class LoadingView extends SurfaceView implements RenderLooper.ILooper, SurfaceHolder.Callback {
 
     final int EDGE = 60;
 
@@ -39,7 +37,7 @@ public class Loading extends SurfaceView implements RenderLooper.ILooper, Surfac
 
     int centerX, centerY;
 
-    public Loading(Context context, AttributeSet attrs) {
+    public LoadingView(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         // Transparent
@@ -49,8 +47,8 @@ public class Loading extends SurfaceView implements RenderLooper.ILooper, Surfac
         init();
     }
 
-    public static Loading Create(Activity activity){
-        Loading loading = new Loading(activity.getBaseContext(), null);
+    public static LoadingView Create(Activity activity){
+        LoadingView loading = new LoadingView(activity.getBaseContext(), null);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.MATCH_PARENT,
                 RelativeLayout.LayoutParams.MATCH_PARENT);
@@ -101,7 +99,6 @@ public class Loading extends SurfaceView implements RenderLooper.ILooper, Surfac
 
     @Override
     public void onUpdate() {
-        Log.v("Log", "ii");
         effectManager.update(looper.getSleep());
     }
 
