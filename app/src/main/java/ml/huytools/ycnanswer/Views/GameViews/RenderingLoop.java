@@ -11,6 +11,8 @@ import android.view.SurfaceHolder;
 import java.util.LinkedList;
 import java.util.List;
 
+import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
+
 /***
  * RenderingLoop.java
  * Author: Nguyen Gia Huy
@@ -37,8 +39,18 @@ public class RenderingLoop extends Thread {
         customSurfaceViews = new LinkedList<>();
         actionQueue = new LinkedList<>();
         setFPSMax(FPS);
+        sleep = 1000/4;
         loop = true;
-        start();
+
+        //fix surface view don't attach windows
+        //https://github.com/anastr/FlatTimeCollection/issues/5
+        //run on main thread
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                RenderingLoop.this.start();
+            }
+        });
     }
 
     @Override
@@ -53,29 +65,20 @@ public class RenderingLoop extends Thread {
 
     @Override
     public void run() {
-        SurfaceHolder holder;
-        Canvas canvas;
+        //tinh thoi gian ngu
+        long sl;
 
-        /// Can fix khi thoi gian update lan ap thoi gian render
-        /// Su dung bien luu thoi gian 1 frame va can giai quyet no
-        /// ........ UPDATE ..............
         while (loop){
+            sl = System.currentTimeMillis();
+
             //logic
             for(CustomSurfaceView surfaceView:customSurfaceViews) {
-                surfaceView.OnUpdate(sleep);
+                surfaceView.update();
             }
 
             //draw
             for(CustomSurfaceView surfaceView:customSurfaceViews) {
-                holder = surfaceView.getHolder();
-                canvas = holder.lockCanvas();
-                if(canvas == null)
-                    continue;
-
-                synchronized (holder){
-                    surfaceView.OnDraw(canvas);
-                }
-                holder.unlockCanvasAndPost(canvas);
+                surfaceView.draw();
             }
 
             //upd list
@@ -86,8 +89,10 @@ public class RenderingLoop extends Thread {
                 actionQueue.clear();
             }
 
+            sl = System.currentTimeMillis() - sl;
+
             //sleep
-            SystemClock.sleep(sleep);
+            SystemClock.sleep(sl > sleep ? 1 : sleep);
         }
     }
 
@@ -98,7 +103,8 @@ public class RenderingLoop extends Thread {
             @Override
             public void run() {
                 if(!customSurfaceViews.contains(render)){
-                    Log.v("Log", "Add surfaceView to rendering!");
+                    Log.v("Log", "Add Loop surfaceView to rendering!");
+                    render.refreshTimeUpdate();
                     customSurfaceViews.add(render);
                     setFPSMax(FPS);
                 }
@@ -111,7 +117,7 @@ public class RenderingLoop extends Thread {
             @Override
             public void run() {
                 if(customSurfaceViews.contains(render)){
-                    Log.v("Log", "Remove queue surfaceView to rendering!");
+                    Log.v("Log", "Remove Loop surfaceView to rendering!");
                     customSurfaceViews.remove(render);
 
                     if(customSurfaceViews.size()<= 0){

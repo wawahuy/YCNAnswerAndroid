@@ -13,6 +13,7 @@ import ml.huytools.ycnanswer.R;
 import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownView;
 import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownAudio;
 import ml.huytools.ycnanswer.Views.GameViews.Components.LoadingView;
+import ml.huytools.ycnanswer.Views.GameViews.Components.TableMLView;
 
 
 public class GameActivity extends AppCompatActivity implements GamePresenter.View {
@@ -21,8 +22,8 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
     ResourceManager resourceManager;
     CountDownView countDown;
     CountDownAudio countDownAudio;
+    TableMLView tableMLView;
 
-    ImageView imv_tableLevelQuestion;
     TextView txv_question;
     TextView txv_paA;
     TextView txv_paB;
@@ -53,18 +54,21 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
 
     private void initView(){
         countDown = findViewById(R.id.countDown);
+        tableMLView = findViewById(R.id.iv_tb_level_question);
         txv_question = findViewById(R.id.txv_cauhoi);
         txv_paA = findViewById(R.id.txv_paA);
         txv_paB = findViewById(R.id.txv_paB);
         txv_paC = findViewById(R.id.txv_paC);
         txv_paD = findViewById(R.id.txv_paD);
-        imv_tableLevelQuestion = findViewById(R.id.iv_tb_level_question);
     }
 
     private void initCountDown(){
+        //set audio
         countDownAudio = new CountDownAudio();
         countDownAudio.setAudioTimeout(resourceManager.audioTimeout);
         countDown.setCallback(countDownAudio);
+
+        //set time countdown
         countDown.setTimeCountDown(5);
     }
 

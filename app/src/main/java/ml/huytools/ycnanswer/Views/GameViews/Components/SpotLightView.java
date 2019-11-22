@@ -54,7 +54,6 @@ public class SpotLightView extends CustomSurfaceView {
     }
 
 
-
     /**
      * One SpotLight
      */
@@ -62,8 +61,9 @@ public class SpotLightView extends CustomSurfaceView {
         final boolean DIR_SE = true;
         final boolean DIR_ES = false;
 
-        float speed;
-        int x, y, h, r1, r2, s;
+        float speed, spA;
+
+        int x, y, h, r1, r2, s, l;
         Path path;
         Paint paint;
         int angleS, angleE, angleC;
@@ -80,8 +80,10 @@ public class SpotLightView extends CustomSurfaceView {
             this.angleE = angleE;
             this.angleC = 0;
             this.speed = 4;
+            this.spA = 4;
             this.dir = DIR_SE;
-            this.s = (angleE-angleS)/Math.abs(angleE-angleS);
+            this.l = this.angleE-this.angleS;
+            this.s = l/Math.abs(l);
 
             path = new Path();
             path.moveTo(-r1, 0);
@@ -120,14 +122,16 @@ public class SpotLightView extends CustomSurfaceView {
         @Override
         public void OnUpdate(int sleep) {
             if(this.dir == DIR_SE){
-                this.angleC += this.speed*this.s;
+                this.angleC += this.spA*this.s;
                 if(checkOutSE()){
                     this.dir = DIR_ES;
+                    this.spA = this.speed;
                 }
             } else {
-                this.angleC -= this.speed*this.s;
+                this.angleC -= this.spA*this.s;
                 if(checkOutES()){
                     this.dir = DIR_SE;
+                    this.spA = this.speed;
                 }
             }
         }
