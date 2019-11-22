@@ -28,10 +28,10 @@ public class EffectManager implements IRender {
     }
 
     @Override
-    public void update(int sleep){
+    public void OnUpdate(int sleep){
         LinkedList<Effect> effectRM = new LinkedList<>();
         for(Effect effect:effects){
-            effect.update(sleep);
+            effect.OnUpdate(sleep);
             if(effect.canRemove()){
                 effectRM.add(effect);
             }
@@ -43,9 +43,9 @@ public class EffectManager implements IRender {
     }
 
     @Override
-    public void draw(Canvas canvas){
+    public void OnDraw(Canvas canvas){
         for(Effect effect:effects){
-            effect.draw(canvas);
+            effect.OnDraw(canvas);
         }
     }
 }

@@ -42,7 +42,7 @@ public class EffectCircleRotate extends Effect {
     }
 
     @Override
-    public void update(int sleep) {
+    public void OnUpdate(int sleep) {
         if(delay > 0){
             delay -= sleep;
             return;
@@ -65,7 +65,7 @@ public class EffectCircleRotate extends Effect {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void OnDraw(Canvas canvas) {
         canvas.save();
         canvas.translate(cx, cy);
         canvas.rotate(angle);
