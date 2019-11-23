@@ -7,6 +7,15 @@ import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
 
+
+/***
+ * ApiProvider.java
+ * Author: Nguyen Gia Huy
+ * Project: https://github.com/wawahuy/YCNAnswerAndroid
+ * Start: 16/11/2019
+ * Update: 20/11/2019
+ *
+ */
 public class ApiProvider {
 
     public static String Token;
@@ -17,4 +26,8 @@ public class ApiProvider {
         return myConnection;
     }
 
+
+    public static String Get(){
+        return "{}";
+    }
 }

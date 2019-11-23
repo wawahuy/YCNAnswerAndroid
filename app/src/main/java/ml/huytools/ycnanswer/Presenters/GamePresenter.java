@@ -5,64 +5,74 @@ import android.widget.Toast;
 
 import java.util.Iterator;
 
+import ml.huytools.ycnanswer.Commons.ApiProvider;
 import ml.huytools.ycnanswer.Commons.ModelManager;
 import ml.huytools.ycnanswer.Commons.Presenter;
 import ml.huytools.ycnanswer.Commons.Resource;
+import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
 import ml.huytools.ycnanswer.Models.CauHoi;
 import ml.huytools.ycnanswer.R;
 
 public class GamePresenter extends Presenter<GamePresenter.View> {
 
+    public interface View {
+        ///--------------
+        void OpenLoading();
+        void CloseLoading();
+
+        ///--------------
+        void ConfigTableML(ModelManager<CHDiemCauHoi> chDiemCauHoi);
+        void SetLevelTableML(int level);
+
+        ///--------------
+        void UpdateQuestion(CauHoi cauHoi);
+
+        ///--------------
+        void ConfigCountDownTime(int second);
+        void RestartCountDown();
+
+        ///--------------
+        void RunEffectLight();
+    }
+
+    ;
+
     public enum ANSWER {A, B, C, D}
 
     ;
 
-    ModelManager<CauHoi> dsCsauHoi;
-    Iterator<CauHoi> cauHoiIterator;
-    int levelQuestion;
+    ModelManager<CHDiemCauHoi> chDiemCauHoi;
+
+
+    ;
 
     public GamePresenter(Context context) {
         super(context);
-
-        /// Test Cau hoi
-        dsCsauHoi = ModelManager.ParseJSON(CauHoi.class, Resource.readRawTextFile(context, R.raw.test_question));
-
-        levelQuestion = 0;
-        cauHoiIterator = dsCsauHoi.iterator();
     }
 
+    //// ------------ Start Game ---------------
     @Override
     protected void OnStart() {
-        nextAnswer();
+        load();
     }
 
-    public void Answer(ANSWER answer) {
-        ///// Test
-        Toast.makeText(context, "Test test test", Toast.LENGTH_LONG).show();
+    public void load(){
+    }
 
+    /// ------------ Cau hoi -------------------
+    public void Answer(ANSWER answer) {
         nextAnswer();
     }
 
     private void nextAnswer() {
-        if(!cauHoiIterator.hasNext()){
-            Toast.makeText(context, "Test nhung het cau hoi roi thay oi!", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        increaseTableLevelQuestion();
-        view.UpdateQuestion(cauHoiIterator.next());
         view.RestartCountDown();
     }
 
-    private void increaseTableLevelQuestion() {
-        view.SetQuestionLevelTable(levelQuestion);
-        levelQuestion++;
+
+    /// ------------ Bang diem -----------------
+    private void increaseTableML() {
     }
 
-    public interface View {
-        void SetQuestionLevelTable(int level);
-        void UpdateQuestion(CauHoi cauHoi);
-        void RestartCountDown();
-    }
+
 
 }
