@@ -9,6 +9,8 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 
+import ml.huytools.ycnanswer.Commons.ModelManager;
+import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
 import ml.huytools.ycnanswer.Views.GameViews.CustomSurfaceView;
 
 public class TableMLView extends CustomSurfaceView {
@@ -20,6 +22,7 @@ public class TableMLView extends CustomSurfaceView {
     Paint paintText;
     Paint paintTextCheckPoint;
 
+    ModelManager<CHDiemCauHoi> chDiemCauHoi;
 
     public TableMLView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -54,7 +57,6 @@ public class TableMLView extends CustomSurfaceView {
 
     @Override
     public void OnUpdate(int sleep) {
-
     }
 
     @Override
@@ -62,6 +64,10 @@ public class TableMLView extends CustomSurfaceView {
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
         canvas.drawRect(bg, paintBg);
         canvas.drawRoundRect(border, 15, 15, paintBorder);
+    }
 
+    public void Config(ModelManager<CHDiemCauHoi> chDiemCauHoi){
+        this.chDiemCauHoi = chDiemCauHoi;
+        draw();
     }
 }

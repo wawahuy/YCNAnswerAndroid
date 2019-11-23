@@ -26,4 +26,8 @@ public class ApiProvider {
         return myConnection;
     }
 
+
+    public static String Get(){
+        return "{}";
+    }
 }

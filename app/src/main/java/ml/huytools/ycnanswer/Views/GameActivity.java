@@ -2,17 +2,21 @@ package ml.huytools.ycnanswer.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import ml.huytools.ycnanswer.Commons.ModelManager;
+import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
 import ml.huytools.ycnanswer.Models.CauHoi;
 import ml.huytools.ycnanswer.Presenters.GamePresenter;
 import ml.huytools.ycnanswer.R;
 import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownView;
 import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownAudio;
 import ml.huytools.ycnanswer.Views.GameViews.Components.LoadingView;
+import ml.huytools.ycnanswer.Views.GameViews.Components.SpotLightView;
 import ml.huytools.ycnanswer.Views.GameViews.Components.TableMLView;
 
 
@@ -22,7 +26,9 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
     ResourceManager resourceManager;
     CountDownView countDown;
     CountDownAudio countDownAudio;
+    SpotLightView spotLightView;
     TableMLView tableMLView;
+    LoadingView loadingView;
 
     TextView txv_question;
     TextView txv_paA;
@@ -34,8 +40,6 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-
-//        LoadingView.Create(this);
 
         /// init
         resourceManager = ResourceManager.getInstance(this);
@@ -52,9 +56,12 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
         super.onStart();
     }
 
+
+    /// ----------------- Init -------------------
     private void initView(){
         countDown = findViewById(R.id.countDown);
         tableMLView = findViewById(R.id.iv_tb_level_question);
+        spotLightView = findViewById(R.id.spotLight);
         txv_question = findViewById(R.id.txv_cauhoi);
         txv_paA = findViewById(R.id.txv_paA);
         txv_paB = findViewById(R.id.txv_paB);
@@ -67,15 +74,32 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
         countDownAudio = new CountDownAudio();
         countDownAudio.setAudioTimeout(resourceManager.audioTimeout);
         countDown.setCallback(countDownAudio);
+    }
 
-        //set time countdown
-        countDown.setTimeCountDown(5);
+
+    /// ----------- Loading --------------------
+    @Override
+    public void OpenLoading() {
+        loadingView = LoadingView.Create(this);
     }
 
     @Override
-    public void SetQuestionLevelTable(int level) {
+    public void CloseLoading() {
+        loadingView.removeOnView();
     }
 
+    /// ------------- Bang diem ------------------
+    @Override
+    public void ConfigTableML(ModelManager<CHDiemCauHoi> chDiemCauHoi) {
+        tableMLView.Config(chDiemCauHoi);
+    }
+
+    @Override
+    public void SetLevelTableML(int level) {
+    }
+
+
+    /// ------------- Cau Hoi --------------------
     @Override
     public void UpdateQuestion(CauHoi cauHoi) {
         txv_question.setText(cauHoi.getCauhoi());
@@ -85,39 +109,44 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
         txv_paD.setText(cauHoi.getPaD());
     }
 
+    public void OnAnswer(View view){
+        GamePresenter.ANSWER answer;
+        switch (view.getId()){
+            case R.id.txv_paA: answer = GamePresenter.ANSWER.A; break;
+            case R.id.txv_paB: answer = GamePresenter.ANSWER.B; break;
+            case R.id.txv_paC: answer = GamePresenter.ANSWER.C; break;
+            default:
+                answer = GamePresenter.ANSWER.D;
+                break;
+        }
+
+        presenter.Answer(answer);
+    }
+
+
+
+    /// ------------- Dem Nguoc --------------------
     @Override
     public void RestartCountDown() {
         countDown.start();
     }
 
-
-    public void OnAnswer(View view){
-        GamePresenter.ANSWER answer;
-        switch (view.getId()){
-            case R.id.txv_paA:
-                answer = GamePresenter.ANSWER.A;
-                break;
-
-            case R.id.txv_paB:
-                answer = GamePresenter.ANSWER.B;
-                break;
-
-            case R.id.txv_paC:
-                answer = GamePresenter.ANSWER.C;
-                break;
-
-                default:
-                answer = GamePresenter.ANSWER.D;
-                break;
-        }
-        presenter.Answer(answer);
+    @Override
+    public void ConfigCountDownTime(int second) {
+        countDown.setTimeCountDown(second);
     }
 
 
-    /***
-     * Update Full Screen
-     * @param hasFocus
-     */
+
+    /// ------------- Light ------------------------
+    @Override
+    public void RunEffectLight() {
+
+    }
+
+
+
+    /// -------------- Full screen, hide navigation bar ---------
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
