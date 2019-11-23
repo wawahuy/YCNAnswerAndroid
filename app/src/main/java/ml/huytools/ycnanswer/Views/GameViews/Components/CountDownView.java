@@ -202,8 +202,12 @@ public class CountDownView extends CustomSurfaceView {
         ch = cy/2;
         yt = cy - (int)(textPaint.descent() + textPaint.ascent()) / 2;
         rectF = new RectF(cw, ch, cx+cw, cy+ch);
-        /// remove loop
-        super.unregisterLoop();
+    }
+
+    @Override
+    public void OnStart() {
+        //comment super don't register loop
+        //super.OnStart();
     }
 
 
