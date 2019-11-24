@@ -123,9 +123,15 @@ public class ApiProvider {
             return this;
         }
 
-        public void Then(Callback callback){
+        public Async SetRequestCode(int code){
+            requestCode = code;
+            return this;
+        }
+
+        public Async Then(Callback callback){
             this.callback = callback;
             this.thread.start();
+            return this;
         }
 
         @Override
@@ -137,13 +143,13 @@ public class ApiProvider {
             handler.post(new Runnable() {
                 @Override
                 public void run() {
-                    Async.this.callback.OnComplete(output, Async.this.requestCode);
+                    Async.this.callback.OnAPIResult(output, Async.this.requestCode);
                 }
             });
         }
 
         public interface Callback {
-            void OnComplete(Output output, int requestCode);
+            void OnAPIResult(Output output, int requestCode);
         }
 
         private interface AnyRun {
