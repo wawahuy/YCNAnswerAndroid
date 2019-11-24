@@ -36,14 +36,18 @@ public class Loader extends Thread {
         });
     }
 
-    public void restart(){
-        handler.post(new Runnable() {
+    public void restart(int delay){
+        handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 Loader.this.isStop = true;
                 Loader.Create(Loader.this.callback);
             }
-        });
+        }, delay);
+    }
+
+    public void restart(){
+        restart(1);
     }
 
     @Override

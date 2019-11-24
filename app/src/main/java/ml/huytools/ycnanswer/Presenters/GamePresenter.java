@@ -11,9 +11,6 @@ import ml.huytools.ycnanswer.Models.CauHoi;
 
 public class GamePresenter extends Presenter<GamePresenter.View> implements Loader.Callback {
 
-
-
-
     public interface View {
         ///--------------
         void OpenLoading();
@@ -36,15 +33,11 @@ public class GamePresenter extends Presenter<GamePresenter.View> implements Load
 
     ;
 
-    //// Enum
     public enum ANSWER {A, B, C, D}
-
-
-    /// Variable
     ModelManager<CHDiemCauHoi> chDiemCauHoi;
 
+    ;
 
-    ///
     public GamePresenter(Context context) {
         super(context);
     }
@@ -54,12 +47,21 @@ public class GamePresenter extends Presenter<GamePresenter.View> implements Load
     //// ------------ Start Game ---------------
     @Override
     protected void OnStart() {
+        /// Loading
+        view.OpenLoading();
         Loader.Create(this);
     }
 
     @Override
     public void OnBackgroundLoad(Loader loader) {
-//        chDiemCauHoi = APIProvider.GET(APIUri.CAU_HINH_CAU_HOI).toModelManager(CHDiemCauHoi.class);
+        /// Load Config Bang Cau Hoi
+        loader.change("Download config table answer...");
+        chDiemCauHoi = APIProvider.GET(APIUri.CAU_HINH_CAU_HOI).toModelManager(CHDiemCauHoi.class);
+        if(chDiemCauHoi == null){
+            loader.change("Download config table answer [Error]");
+            loader.restart(2000);
+            return;
+        }
     }
 
     @Override
@@ -68,6 +70,7 @@ public class GamePresenter extends Presenter<GamePresenter.View> implements Load
 
     @Override
     public void OnFinishLoad(Loader loader) {
+        view.CloseLoading();
     }
 
 

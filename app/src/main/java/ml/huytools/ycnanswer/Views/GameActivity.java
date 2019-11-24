@@ -28,7 +28,6 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
     CountDownAudio countDownAudio;
     SpotLightView spotLightView;
     TableMLView tableMLView;
-    LoadingView loadingView;
 
     TextView txv_question;
     TextView txv_paA;
@@ -80,12 +79,12 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
     /// ----------- Loading --------------------
     @Override
     public void OpenLoading() {
-        loadingView = LoadingView.Create(this);
+        setContentView(R.layout.activity_main);
     }
 
     @Override
     public void CloseLoading() {
-        loadingView.removeOnView();
+        setContentView(R.layout.activity_main);
     }
 
     /// ------------- Bang diem ------------------
