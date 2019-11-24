@@ -1,19 +1,18 @@
 package ml.huytools.ycnanswer.Presenters;
 
 import android.content.Context;
-import android.widget.Toast;
 
-import java.util.Iterator;
-
-import ml.huytools.ycnanswer.Commons.ApiProvider;
+import ml.huytools.ycnanswer.Commons.APIProvider;
+import ml.huytools.ycnanswer.Commons.Loader;
 import ml.huytools.ycnanswer.Commons.ModelManager;
 import ml.huytools.ycnanswer.Commons.Presenter;
-import ml.huytools.ycnanswer.Commons.Resource;
 import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
 import ml.huytools.ycnanswer.Models.CauHoi;
-import ml.huytools.ycnanswer.R;
 
-public class GamePresenter extends Presenter<GamePresenter.View> {
+public class GamePresenter extends Presenter<GamePresenter.View> implements Loader.Callback {
+
+
+
 
     public interface View {
         ///--------------
@@ -37,27 +36,45 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
 
     ;
 
+    //// Enum
     public enum ANSWER {A, B, C, D}
 
-    ;
 
+    /// Variable
     ModelManager<CHDiemCauHoi> chDiemCauHoi;
 
 
-    ;
-
+    ///
     public GamePresenter(Context context) {
         super(context);
     }
 
+
+
     //// ------------ Start Game ---------------
     @Override
     protected void OnStart() {
-        load();
+
+        /// Xem Loader trong Commons
+        /// Khoi tao load tren Thread
+        Loader.Create(this).start();
     }
 
-    public void load(){
+    @Override
+    public void OnBackgroundLoad(Loader loader) {
+        chDiemCauHoi = APIProvider.GET(APIUri.CAU_HINH_CAU_HOI).toModelManager(CHDiemCauHoi.class);
     }
+
+    @Override
+    public void OnChangeLoad(Object object, Loader loader) {
+        view.RestartCountDown();
+    }
+
+    @Override
+    public void OnFinishLoad(Loader loader) {
+    }
+
+
 
     /// ------------ Cau hoi -------------------
     public void Answer(ANSWER answer) {
