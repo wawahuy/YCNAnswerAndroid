@@ -16,28 +16,20 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
 
 
 /***
- * ApiProvider.java
+ * APIProvider.java
  * Author: Nguyen Gia Huy
  * Project: https://github.com/wawahuy/YCNAnswerAndroid
  * Start: 16/11/2019
  * Update: 24/11/2019
  *
  */
-public class ApiProvider {
+public class APIProvider {
 
     static String token;
     static String host;
@@ -45,7 +37,7 @@ public class ApiProvider {
     /***
      * Output
      */
-    static public class Output {
+    static public class Output<T extends Model> {
         public boolean Status;
         public String Message;
         public Object Data;
@@ -70,6 +62,20 @@ public class ApiProvider {
         public boolean isDJArray(){
             return Data instanceof JSONArray;
         }
+
+
+        public ModelManager<T> toModelManager(Class<T> clazz){
+            if(Data == null || !isDJArray())
+                return null;
+            return ModelManager.ParseJSON(clazz, Data.toString());
+        }
+
+        public Model toModel(Class<T> clazz){
+            if(Data == null || !isDJObject())
+                return null;
+            return Model.ParseJson(clazz, Data.toString());
+        }
+
     }
 
     /**
@@ -83,10 +89,10 @@ public class ApiProvider {
         Handler handler;
         int requestCode;
 
-        private Async(Async.AnyRun runnable){
+        private Async(Async.AnyRun run){
             thread = new Thread(this);
             params = new Uri.Builder();
-            this.runnable = runnable;
+            runnable = run;
             handler = new Handler(Looper.myLooper());
         }
 
@@ -99,7 +105,7 @@ public class ApiProvider {
             return ANY(new Async.AnyRun() {
                 @Override
                 public Output run(Async async) {
-                    return ApiProvider.GET(uri);
+                    return APIProvider.GET(uri);
                 }
             });
         }
@@ -108,7 +114,7 @@ public class ApiProvider {
             return ANY(new Async.AnyRun() {
                 @Override
                 public Output run(Async async) {
-                    return ApiProvider.POST(uri, async.params);
+                    return APIProvider.POST(uri, async.params);
                 }
             });
         }
@@ -240,7 +246,7 @@ public class ApiProvider {
             e.printStackTrace();
         }
 
-        return null;
+        return new Output();
     }
 
     private static Output ANY_NO_DATA(String uri, final String method){
@@ -298,11 +304,11 @@ public class ApiProvider {
 
     /// ----------------------
     public static void SetToken(String token){
-        ApiProvider.token = token;
+        APIProvider.token = token;
     }
 
     public static void SetHost(String host){
-        ApiProvider.host = host;
+        APIProvider.host = host;
     }
 
 
