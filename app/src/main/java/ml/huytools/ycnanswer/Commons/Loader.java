@@ -23,8 +23,8 @@ public class Loader extends Thread {
         this.handler = new Handler(Looper.myLooper());
     }
 
-    public static Loader Create(Callback callback){
-        return new Loader(callback);
+    public static void Create(Callback callback){
+        new Loader(callback).start();
     }
 
     public void change(final Object object){
@@ -41,7 +41,7 @@ public class Loader extends Thread {
             @Override
             public void run() {
                 Loader.this.isStop = true;
-                Loader.Create(Loader.this.callback).start();
+                Loader.Create(Loader.this.callback);
             }
         });
     }
