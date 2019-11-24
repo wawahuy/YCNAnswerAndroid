@@ -54,20 +54,16 @@ public class GamePresenter extends Presenter<GamePresenter.View> implements Load
     //// ------------ Start Game ---------------
     @Override
     protected void OnStart() {
-
-        /// Xem Loader trong Commons
-        /// Khoi tao load tren Thread
-        Loader.Create(this).start();
+        Loader.Create(this);
     }
 
     @Override
     public void OnBackgroundLoad(Loader loader) {
-        chDiemCauHoi = APIProvider.GET(APIUri.CAU_HINH_CAU_HOI).toModelManager(CHDiemCauHoi.class);
+//        chDiemCauHoi = APIProvider.GET(APIUri.CAU_HINH_CAU_HOI).toModelManager(CHDiemCauHoi.class);
     }
 
     @Override
     public void OnChangeLoad(Object object, Loader loader) {
-        view.RestartCountDown();
     }
 
     @Override
