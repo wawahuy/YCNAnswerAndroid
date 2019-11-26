@@ -80,19 +80,30 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
                         return chDiemCauHoi = APIProvider.GET(APIUri.CAU_HINH_CAU_HOI).toModelManager(CHDiemCauHoi.class);
                     }
                 });
-                AddLoad(new Load<ModelManager<CHDiemCauHoi>>("Load config answer...", "Load config answer error"){
+
+                AddLoad(new Load<ModelManager<CHDiemCauHoi>>("Load config answer2...", "Load config answer error"){
                     @Override
                     protected ModelManager<CHDiemCauHoi> OnRun() {
                         return chDiemCauHoi = APIProvider.GET(APIUri.CAU_HINH_CAU_HOI).toModelManager(CHDiemCauHoi.class);
                     }
                 });
-                AddLoad(new Load<ModelManager<CHDiemCauHoi>>("Load config answer...", "Load config answer error"){
+
+                AddLoad(new Load<ModelManager<CHDiemCauHoi>>("Load config answer3...", "Load config answer error"){
+                    @Override
+                    protected ModelManager<CHDiemCauHoi> OnRun() {
+                        return chDiemCauHoi = APIProvider.GET(APIUri.CAU_HINH_CAU_HOI).toModelManager(CHDiemCauHoi.class);
+                    }
+                });
+
+                AddLoad(new Load<ModelManager<CHDiemCauHoi>>("Load config answer4...", "Load config answer error"){
                     @Override
                     protected ModelManager<CHDiemCauHoi> OnRun() {
                         return chDiemCauHoi = APIProvider.GET(APIUri.CAU_HINH_CAU_HOI).toModelManager(CHDiemCauHoi.class);
                     }
                 });
             }
+
+
 
             @Override
             protected void OnCompleteLoad() {

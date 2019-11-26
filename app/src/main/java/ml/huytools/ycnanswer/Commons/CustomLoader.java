@@ -71,7 +71,7 @@ public abstract class CustomLoader extends Loader<Object> implements Loader.Call
             switch (loadCurrent.isLoad()){
                 case PRE:
                     loadCurrent.start();
-                    OnUpdateText(loadCurrent.textBeforeLoad);
+                    changeTextUI(loadCurrent.textBeforeLoad);
                     break;
 
                 case POST:
