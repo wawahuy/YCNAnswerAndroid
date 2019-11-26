@@ -2,23 +2,38 @@ package ml.huytools.ycnanswer.Commons;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.telecom.Call;
 
+/***
+ * APIProvider.java
+ * Author: Nguyen Gia Huy
+ * Project: https://github.com/wawahuy/YCNAnswerAndroid
+ * Start: 16/11/2019
+ * Update: 24/11/2019
+ *
+ */
+public class Loader<T> extends Thread {
 
-public class Loader extends Thread {
-
-    public interface Callback {
+    public interface Callback<T> {
         void OnBackgroundLoad(Loader loader);
-        void OnChangeLoad(Object object, Loader loader);
+        void OnChangeLoad(Loader loader, T... message);
         void OnFinishLoad(Loader loader);
     }
 
-    Callback callback;
-    Handler handler;
     Thread thread;
+    Callback callback;
     boolean isStop;
+    protected Handler handler;
 
 
-    private Loader(Callback callback){
+    protected Loader(){
+    }
+
+    protected Loader(Callback callback){
+        Init(callback);
+    }
+
+    protected void Init(Callback callback){
         this.callback = callback;
         this.handler = new Handler(Looper.myLooper());
     }
@@ -27,20 +42,20 @@ public class Loader extends Thread {
         new Loader(callback).start();
     }
 
-    public void change(final Object object){
+    public void change(final T... message){
         handler.post(new Runnable() {
             @Override
             public void run() {
-                callback.OnChangeLoad(object, Loader.this);
+                callback.OnChangeLoad(Loader.this, message);
             }
         });
     }
 
     public void restart(int delay){
+        isStop = true;
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                Loader.this.isStop = true;
                 Loader.Create(Loader.this.callback);
             }
         }, delay);
