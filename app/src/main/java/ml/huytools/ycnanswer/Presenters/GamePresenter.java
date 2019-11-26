@@ -6,8 +6,10 @@ import ml.huytools.ycnanswer.Commons.APIProvider;
 import ml.huytools.ycnanswer.Commons.CustomLoader;
 import ml.huytools.ycnanswer.Commons.ModelManager;
 import ml.huytools.ycnanswer.Commons.Presenter;
+import ml.huytools.ycnanswer.Commons.Resource;
 import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
 import ml.huytools.ycnanswer.Models.CauHoi;
+import ml.huytools.ycnanswer.R;
 
 public class GamePresenter extends Presenter<GamePresenter.View> {
 
@@ -50,13 +52,21 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
     //// ------------ Start Game ---------------
     @Override
     protected void OnStart() {
-        loadGame();
+        loadGameDebug();
     }
 
 
 
     /// -------------- Load ------------------
+    private void loadGameDebug() {
+
+        /// Debug
+        chDiemCauHoi = ModelManager.ParseJSON(CHDiemCauHoi.class, Resource.readRawTextFile(context, R.raw.test_cau_hinh_diem_cau_hoi));
+    }
+
+
     private void loadGame(){
+            ///-------- Need Update ----------------
         new CustomLoader(){
             @Override
             protected void OnUpdateProgress(int p) {
@@ -80,30 +90,7 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
                         return chDiemCauHoi = APIProvider.GET(APIUri.CAU_HINH_CAU_HOI).toModelManager(CHDiemCauHoi.class);
                     }
                 });
-
-                AddLoad(new Load<ModelManager<CHDiemCauHoi>>("Load config answer2...", "Load config answer error"){
-                    @Override
-                    protected ModelManager<CHDiemCauHoi> OnRun() {
-                        return chDiemCauHoi = APIProvider.GET(APIUri.CAU_HINH_CAU_HOI).toModelManager(CHDiemCauHoi.class);
-                    }
-                });
-
-                AddLoad(new Load<ModelManager<CHDiemCauHoi>>("Load config answer3...", "Load config answer error"){
-                    @Override
-                    protected ModelManager<CHDiemCauHoi> OnRun() {
-                        return chDiemCauHoi = APIProvider.GET(APIUri.CAU_HINH_CAU_HOI).toModelManager(CHDiemCauHoi.class);
-                    }
-                });
-
-                AddLoad(new Load<ModelManager<CHDiemCauHoi>>("Load config answer4...", "Load config answer error"){
-                    @Override
-                    protected ModelManager<CHDiemCauHoi> OnRun() {
-                        return chDiemCauHoi = APIProvider.GET(APIUri.CAU_HINH_CAU_HOI).toModelManager(CHDiemCauHoi.class);
-                    }
-                });
             }
-
-
 
             @Override
             protected void OnCompleteLoad() {
