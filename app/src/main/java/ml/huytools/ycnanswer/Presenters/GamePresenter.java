@@ -3,18 +3,20 @@ package ml.huytools.ycnanswer.Presenters;
 import android.content.Context;
 
 import ml.huytools.ycnanswer.Commons.APIProvider;
-import ml.huytools.ycnanswer.Commons.Loader;
+import ml.huytools.ycnanswer.Commons.CustomLoader;
 import ml.huytools.ycnanswer.Commons.ModelManager;
 import ml.huytools.ycnanswer.Commons.Presenter;
 import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
 import ml.huytools.ycnanswer.Models.CauHoi;
 
-public class GamePresenter extends Presenter<GamePresenter.View> implements Loader.Callback {
+public class GamePresenter extends Presenter<GamePresenter.View> {
 
     public interface View {
         ///--------------
         void OpenLoading();
         void CloseLoading();
+        void UpdateLoadingText(String message);
+        void UpdateLoadingBar(int per);
 
         ///--------------
         void ConfigTableML(ModelManager<CHDiemCauHoi> chDiemCauHoi);
@@ -35,6 +37,7 @@ public class GamePresenter extends Presenter<GamePresenter.View> implements Load
 
     public enum ANSWER {A, B, C, D}
     ModelManager<CHDiemCauHoi> chDiemCauHoi;
+    CustomLoader loading;
 
     ;
 
@@ -47,31 +50,57 @@ public class GamePresenter extends Presenter<GamePresenter.View> implements Load
     //// ------------ Start Game ---------------
     @Override
     protected void OnStart() {
-        /// Loading
-        view.OpenLoading();
-        Loader.Create(this);
+        loadGame();
     }
 
-    @Override
-    public void OnBackgroundLoad(Loader loader) {
-        /// Load Config Bang Cau Hoi
-        loader.change("Download config table answer...");
-        chDiemCauHoi = APIProvider.GET(APIUri.CAU_HINH_CAU_HOI).toModelManager(CHDiemCauHoi.class);
-        if(chDiemCauHoi == null){
-            loader.change("Download config table answer [Error]");
-            loader.restart(2000);
-            return;
-        }
+
+
+    /// -------------- Load ------------------
+    private void loadGame(){
+        new CustomLoader(){
+            @Override
+            protected void OnUpdateProgress(int p) {
+                view.UpdateLoadingBar(p);
+            }
+
+            @Override
+            protected void OnUpdateText(String text) {
+                view.UpdateLoadingText(text);
+            }
+
+            @Override
+            protected void OnStartLoad() {
+                /// Mo view loading
+                view.OpenLoading();
+
+                /// Load Cau Hinh Diem Cau Hoi
+                AddLoad(new Load<ModelManager<CHDiemCauHoi>>("Load config answer...", "Load config answer error"){
+                    @Override
+                    protected ModelManager<CHDiemCauHoi> OnRun() {
+                        return chDiemCauHoi = APIProvider.GET(APIUri.CAU_HINH_CAU_HOI).toModelManager(CHDiemCauHoi.class);
+                    }
+                });
+                AddLoad(new Load<ModelManager<CHDiemCauHoi>>("Load config answer...", "Load config answer error"){
+                    @Override
+                    protected ModelManager<CHDiemCauHoi> OnRun() {
+                        return chDiemCauHoi = APIProvider.GET(APIUri.CAU_HINH_CAU_HOI).toModelManager(CHDiemCauHoi.class);
+                    }
+                });
+                AddLoad(new Load<ModelManager<CHDiemCauHoi>>("Load config answer...", "Load config answer error"){
+                    @Override
+                    protected ModelManager<CHDiemCauHoi> OnRun() {
+                        return chDiemCauHoi = APIProvider.GET(APIUri.CAU_HINH_CAU_HOI).toModelManager(CHDiemCauHoi.class);
+                    }
+                });
+            }
+
+            @Override
+            protected void OnCompleteLoad() {
+                view.CloseLoading();
+            }
+        }.start();
     }
 
-    @Override
-    public void OnChangeLoad(Object object, Loader loader) {
-    }
-
-    @Override
-    public void OnFinishLoad(Loader loader) {
-        view.CloseLoading();
-    }
 
 
 

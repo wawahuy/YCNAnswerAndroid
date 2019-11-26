@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import ml.huytools.ycnanswer.Commons.ModelManager;
@@ -76,15 +77,27 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
     }
 
 
-    /// ----------- Loading --------------------
+    /// ----------- CustomLoader --------------------
     @Override
     public void OpenLoading() {
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.game_loading);
     }
 
     @Override
     public void CloseLoading() {
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_game);
+        initView();
+        initCountDown();
+    }
+
+    @Override
+    public void UpdateLoadingText(String message) {
+        ((TextView) findViewById(R.id.txvLoad)).setText(message);
+    }
+
+    @Override
+    public void UpdateLoadingBar(int p) {
+        ((ProgressBar)findViewById(R.id.barLoad)).setProgress(p);
     }
 
     /// ------------- Bang diem ------------------
