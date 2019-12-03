@@ -1,33 +1,30 @@
-{
-  "status" : true,
-  "message": "",
-  "data" : [
+[
     {
       "id": 1,
       "thu_tu": 1,
       "diem": 1000,
-      "moc": true
+      "moc": false
     },
 
     {
       "id": 2,
       "thu_tu": 2,
       "diem": 2000,
-      "moc": true
+      "moc": false
     },
 
     {
       "id": 3,
       "thu_tu": 3,
       "diem": 3000,
-      "moc": true
+      "moc": false
     },
 
     {
       "id": 4,
       "thu_tu": 4,
       "diem": 4000,
-      "moc": true
+      "moc": false
     },
 
     {
@@ -41,28 +38,28 @@
       "id": 6,
       "thu_tu": 6,
       "diem": 6000,
-      "moc": true
+      "moc": false
     },
 
     {
       "id": 7,
       "thu_tu": 7,
       "diem": 7000,
-      "moc": true
+      "moc": false
     },
 
     {
       "id": 8,
       "thu_tu": 8,
       "diem": 8000,
-      "moc": true
+      "moc": false
     },
 
     {
       "id": 9,
       "thu_tu": 9,
       "diem": 9000,
-      "moc": true
+      "moc": false
     },
 
     {
@@ -76,37 +73,42 @@
       "id": 11,
       "thu_tu": 11,
       "diem": 11000,
-      "moc": true
+      "moc": false
     },
 
     {
       "id": 12,
       "thu_tu": 12,
       "diem": 12000,
-      "moc": true
+      "moc": false
     },
 
     {
       "id": 13,
       "thu_tu": 13,
       "diem": 13000,
-      "moc": true
+      "moc": false
     },
 
     {
       "id": 14,
       "thu_tu": 14,
       "diem": 14000,
-      "moc": true
+      "moc": false
     },
 
     {
       "id": 15,
       "thu_tu": 15,
       "diem": 15000,
-      "moc": true
+      "moc": false
+    },
+
+
+    {
+      "id": 16,
+      "thu_tu": 16,
+      "diem": 15000,
+      "moc": false
     }
   ]
-
-
-}

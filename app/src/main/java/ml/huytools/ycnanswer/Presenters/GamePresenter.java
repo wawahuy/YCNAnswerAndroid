@@ -53,6 +53,9 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
     @Override
     protected void OnStart() {
         loadGameDebug();
+
+        ///
+        view.ConfigTableML(chDiemCauHoi);
     }
 
 
@@ -61,7 +64,8 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
     private void loadGameDebug() {
 
         /// Debug
-        chDiemCauHoi = ModelManager.ParseJSON(CHDiemCauHoi.class, Resource.readRawTextFile(context, R.raw.test_cau_hinh_diem_cau_hoi));
+        String s = Resource.readRawTextFile(context, R.raw.test_cau_hinh_diem_cau_hoi);
+        chDiemCauHoi = ModelManager.ParseJSON(CHDiemCauHoi.class, s);
     }
 
 

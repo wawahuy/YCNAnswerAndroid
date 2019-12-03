@@ -14,4 +14,7 @@ public class CHDiemCauHoi extends Model {
     @JsonName
     public int thu_tu;
 
+    @JsonName
+    public boolean moc;
+
 }
