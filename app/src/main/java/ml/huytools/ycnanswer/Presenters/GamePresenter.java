@@ -23,6 +23,7 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
         ///--------------
         void ConfigTableML(ModelManager<CHDiemCauHoi> chDiemCauHoi);
         void SetLevelTableML(int level);
+        void IncreaseLevelTableML();
 
         ///--------------
         void UpdateQuestion(CauHoi cauHoi);
@@ -53,6 +54,9 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
     @Override
     protected void OnStart() {
         loadGameDebug();
+
+        ///
+        view.ConfigTableML(chDiemCauHoi);
     }
 
 
@@ -61,7 +65,8 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
     private void loadGameDebug() {
 
         /// Debug
-        chDiemCauHoi = ModelManager.ParseJSON(CHDiemCauHoi.class, Resource.readRawTextFile(context, R.raw.test_cau_hinh_diem_cau_hoi));
+        String s = Resource.readRawTextFile(context, R.raw.test_cau_hinh_diem_cau_hoi);
+        chDiemCauHoi = ModelManager.ParseJSON(CHDiemCauHoi.class, s);
     }
 
 
@@ -105,6 +110,7 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
     /// ------------ Cau hoi -------------------
     public void Answer(ANSWER answer) {
         nextAnswer();
+        increaseTableML();
     }
 
     private void nextAnswer() {
@@ -114,6 +120,7 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
 
     /// ------------ Bang diem -----------------
     private void increaseTableML() {
+        view.IncreaseLevelTableML();
     }
 
 

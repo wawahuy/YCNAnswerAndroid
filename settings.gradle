@@ -1,1 +1,1 @@
-include ':app', ':YuhAndroidMVC', ':YuhAndroidMVC', ':YuhMVC'
+include ':app', ':YuhAndroidMVC', ':YuhAndroidMVC', ':YuhMVC', ':lib'

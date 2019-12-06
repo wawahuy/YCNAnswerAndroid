@@ -110,6 +110,11 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
     public void SetLevelTableML(int level) {
     }
 
+    @Override
+    public void IncreaseLevelTableML() {
+        tableMLView.incPos();
+    }
+
 
     /// ------------- Cau Hoi --------------------
     @Override
