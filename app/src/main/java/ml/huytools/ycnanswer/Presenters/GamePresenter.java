@@ -23,6 +23,7 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
         ///--------------
         void ConfigTableML(ModelManager<CHDiemCauHoi> chDiemCauHoi);
         void SetLevelTableML(int level);
+        void IncreaseLevelTableML();
 
         ///--------------
         void UpdateQuestion(CauHoi cauHoi);
@@ -109,6 +110,7 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
     /// ------------ Cau hoi -------------------
     public void Answer(ANSWER answer) {
         nextAnswer();
+        increaseTableML();
     }
 
     private void nextAnswer() {
@@ -118,6 +120,7 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
 
     /// ------------ Bang diem -----------------
     private void increaseTableML() {
+        view.IncreaseLevelTableML();
     }
 
 

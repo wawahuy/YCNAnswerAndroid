@@ -9,6 +9,7 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 
+import java.text.NumberFormat;
 import java.util.LinkedList;
 
 import ml.huytools.ycnanswer.Commons.ModelManager;
@@ -24,10 +25,11 @@ public class TableMLView extends CustomSurfaceView {
     RectF border, bg;
     Paint paintBorder;
     Paint paintBg;
+    Paint paintSelect;
     Paint paintText;
     Paint paintTextCheckPoint;
 
-    int w, h, yLine, hLine, hReal, yReal;
+    int w, h, hLine, hReal, pos;
 
     ModelManager<CHDiemCauHoi> chDiemCauHoi;
 
@@ -41,17 +43,26 @@ public class TableMLView extends CustomSurfaceView {
         paintBorder.setStrokeWidth(20);
         paintBorder.setAntiAlias(true);
 
+
         paintBg = new Paint();
         paintBg.setARGB(255, 3, 14, 51);
         paintBg.setAntiAlias(true);
 
+        paintSelect = new Paint();
+        paintSelect.setARGB(255, 255, 204, 0);
+        paintSelect.setAntiAlias(true);
+
         paintText = new Paint();
         paintText.setARGB(255, 102, 189, 204);
         paintText.setAntiAlias(true);
+        paintText.setTypeface(Typeface.DEFAULT_BOLD);
 
         paintTextCheckPoint = new Paint();
         paintTextCheckPoint.setARGB(255, 255, 255, 255);
         paintTextCheckPoint.setAntiAlias(true);
+        paintTextCheckPoint.setTypeface(Typeface.DEFAULT_BOLD);
+
+        pos = 0;
     }
 
     @Override
@@ -82,9 +93,15 @@ public class TableMLView extends CustomSurfaceView {
 
         int i = 0;
         for(CHDiemCauHoi cauHoi:chDiemCauHoi){
-            int y = hReal - hLine*i + PADDING_LINE;
-            canvas.drawText(Integer.toString(cauHoi.thu_tu), BORDER_SIZE*4, y, cauHoi.moc ? paintTextCheckPoint : paintText);
-            canvas.drawText(Integer.toString(cauHoi.diem), w*0.3f, y, cauHoi.moc ? paintTextCheckPoint : paintText);
+            int y = (hReal - hLine*i) - PADDING_LINE*3;
+
+            if(pos==cauHoi.thu_tu){
+                canvas.drawRoundRect(BORDER_SIZE*2, y, w-BORDER_SIZE*3, y + hLine, BORDER_SIZE, BORDER_SIZE, paintSelect);
+            }
+
+            int yt = (int)(y + hLine*0.75f);
+            canvas.drawText(Integer.toString(cauHoi.thu_tu), BORDER_SIZE*4, yt, cauHoi.moc ? paintTextCheckPoint : paintText);
+            canvas.drawText(scoreFormat(cauHoi.diem), w*0.3f, yt, cauHoi.moc ? paintTextCheckPoint : paintText);
             i++;
         }
     }
@@ -101,12 +118,35 @@ public class TableMLView extends CustomSurfaceView {
 
 
     private void change(){
-        yReal = BORDER_SIZE+PADDING_LINE;
-        hReal = h-(BORDER_SIZE+PADDING_LINE)*4;
+        //yReal = BORDER_SIZE+PADDING_LINE*3;
+        hReal = h-(BORDER_SIZE+PADDING_LINE*3)*2;
         hLine = hReal/chDiemCauHoi.size();
-        yLine = PADDING_LINE;
+        pos = 1;
 
-        paintText.setTextSize(hLine-PADDING_LINE*2);
+        paintText.setTextSize(hLine-PADDING_LINE*2 );
         paintTextCheckPoint.setTextSize(hLine-PADDING_LINE*2);
+    }
+
+    private String scoreFormat(int score){
+       return String.format("%,d", score).replaceAll("\\.", " ");
+    }
+
+    public void setPos(int pos){
+        this.pos = pos;
+        draw();
+    }
+
+    public int getPos(){
+        return this.pos;
+    }
+
+    public void incPos(){
+        pos++;
+        draw();
+    }
+
+    public void decPos(){
+        pos--;
+        draw();
     }
 }

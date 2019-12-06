@@ -111,4 +111,24 @@
       "diem": 15000,
       "moc": false
     }
+
+,
+
+
+  {
+    "id": 17,
+    "thu_tu": 18,
+    "diem": 150000,
+    "moc": false
+  }
+
+,
+
+
+  {
+    "id": 18,
+    "thu_tu": 18,
+    "diem": 15000000,
+    "moc": false
+  }
   ]
