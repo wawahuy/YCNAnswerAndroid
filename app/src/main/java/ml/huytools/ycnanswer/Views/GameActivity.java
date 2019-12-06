@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import ml.huytools.ycnanswer.Commons.ModelManager;
@@ -28,7 +29,6 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
     CountDownAudio countDownAudio;
     SpotLightView spotLightView;
     TableMLView tableMLView;
-    LoadingView loadingView;
 
     TextView txv_question;
     TextView txv_paA;
@@ -77,15 +77,27 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
     }
 
 
-    /// ----------- Loading --------------------
+    /// ----------- CustomLoader --------------------
     @Override
     public void OpenLoading() {
-        loadingView = LoadingView.Create(this);
+        setContentView(R.layout.game_loading);
     }
 
     @Override
     public void CloseLoading() {
-        loadingView.removeOnView();
+        setContentView(R.layout.activity_game);
+        initView();
+        initCountDown();
+    }
+
+    @Override
+    public void UpdateLoadingText(String message) {
+        ((TextView) findViewById(R.id.txvLoad)).setText(message);
+    }
+
+    @Override
+    public void UpdateLoadingBar(int p) {
+        ((ProgressBar)findViewById(R.id.barLoad)).setProgress(p);
     }
 
     /// ------------- Bang diem ------------------
@@ -96,6 +108,11 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
 
     @Override
     public void SetLevelTableML(int level) {
+    }
+
+    @Override
+    public void IncreaseLevelTableML() {
+        tableMLView.incPos();
     }
 
 
