@@ -1,17 +1,10 @@
-package ml.huytools.ycnanswer.Views.GameViews;
+package ml.huytools.ycnanswer.Commons.Views;
 
-import android.graphics.Canvas;
 import android.os.Handler;
-import android.os.Looper;
-import android.os.MessageQueue;
 import android.os.SystemClock;
 import android.util.Log;
-import android.view.SurfaceHolder;
 
 import java.util.LinkedList;
-import java.util.List;
-
-import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
 
 /***
  * RenderingLoop.java

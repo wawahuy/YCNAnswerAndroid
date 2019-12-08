@@ -2,6 +2,9 @@ package ml.huytools.ycnanswer.Commons;
 
 import android.graphics.PointF;
 
+import ml.huytools.ycnanswer.Commons.Math.Vector2D;
+import ml.huytools.ycnanswer.Commons.Math.YMath;
+
 /***
  *
  *
@@ -11,18 +14,18 @@ import android.graphics.PointF;
  */
 public class CubicBezier {
 
-    enum TIMING {
+    public enum TIMING {
         Ease, EaseInOut, EaseIn, EaseOut, Linear
     }
 
-    PointF p0, p1;
+    Vector2D p0, p1, p2, p3;
 
-    public CubicBezier(PointF p0, PointF p1){
-        set(p0, p1);
+    public CubicBezier(Vector2D p1, Vector2D p2){
+        set(p1, p2);
     }
 
-    public CubicBezier(float x0, float y0, float x1, float y1){
-        set(x0, y0, x1, y1);
+    public CubicBezier(float x1, float y1, float x2, float y2){
+        set(x1, y1, x2, y2);
     }
 
     public CubicBezier(TIMING timing){
@@ -45,18 +48,23 @@ public class CubicBezier {
         }
     }
 
-    public void set(float x0, float y0, float x1, float y1){
-        set(new PointF(x0, y0), new PointF(x1, y1));
+    public void set(float x1, float y1, float x2, float y2){
+        set(new Vector2D(x1, y1), new Vector2D(x2, y2));
     }
 
-    public void set(PointF p0, PointF p1){
-        this.p0 = p0;
+    public void set(Vector2D p1, Vector2D p2){
+        this.p0 = new Vector2D(0, 0);
         this.p1 = p1;
+        this.p2 = p2;
+        this.p3 = new Vector2D(1,1);
     }
 
-    public PointF B(float t){
-        PointF pointF = new PointF();
-
-        return pointF;
+    public Vector2D B(float t){
+        Vector2D pc1 = p0.mul((float) Math.pow(1-t, 3));
+        Vector2D pc2 = p1.mul(3*t*(float) Math.pow(1-t, 2));
+        Vector2D pc3 = p2.mul(3*t*t*(1-t));
+        Vector2D pc4 = p3.mul(t*t*t);
+        return YMath.Add(pc1, pc2, pc3, pc4);
     }
+
 }

@@ -9,13 +9,9 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 
-import java.text.NumberFormat;
-import java.util.LinkedList;
-
 import ml.huytools.ycnanswer.Commons.ModelManager;
 import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
-import ml.huytools.ycnanswer.Models.CauHoi;
-import ml.huytools.ycnanswer.Views.GameViews.CustomSurfaceView;
+import ml.huytools.ycnanswer.Commons.Views.CustomSurfaceView;
 
 public class TableMLView extends CustomSurfaceView {
 

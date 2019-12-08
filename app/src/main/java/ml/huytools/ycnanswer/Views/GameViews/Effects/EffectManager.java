@@ -2,10 +2,9 @@ package ml.huytools.ycnanswer.Views.GameViews.Effects;
 
 import android.graphics.Canvas;
 
-import java.util.Collection;
 import java.util.LinkedList;
 
-import ml.huytools.ycnanswer.Views.GameViews.IRender;
+import ml.huytools.ycnanswer.Commons.Views.IRender;
 
 public class EffectManager implements IRender {
 

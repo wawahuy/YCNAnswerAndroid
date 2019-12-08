@@ -8,7 +8,7 @@ import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 
-import ml.huytools.ycnanswer.Views.GameViews.CustomSurfaceView;
+import ml.huytools.ycnanswer.Commons.Views.CustomSurfaceView;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectCircle;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
 
