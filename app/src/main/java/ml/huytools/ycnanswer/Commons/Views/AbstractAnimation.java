@@ -71,6 +71,11 @@ public abstract class AbstractAnimation implements IRender {
     }
 
 
+    public boolean isLoop() {
+        return isLoop;
+    }
+
+
     public void reset(){
         timeStart = System.currentTimeMillis();
         isReverseCurrent = false;
