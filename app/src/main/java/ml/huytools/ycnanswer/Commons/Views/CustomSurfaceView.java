@@ -1,14 +1,11 @@
-package ml.huytools.ycnanswer.Views.GameViews;
+package ml.huytools.ycnanswer.Commons.Views;
 
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-
-import java.sql.Time;
 
 /***
  * CustomSurfaceView.java

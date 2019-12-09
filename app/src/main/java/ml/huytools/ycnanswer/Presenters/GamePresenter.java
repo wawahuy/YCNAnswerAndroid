@@ -1,12 +1,17 @@
 package ml.huytools.ycnanswer.Presenters;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.os.SystemClock;
+import android.util.Log;
 
 import ml.huytools.ycnanswer.Commons.APIProvider;
 import ml.huytools.ycnanswer.Commons.CustomLoader;
 import ml.huytools.ycnanswer.Commons.ModelManager;
 import ml.huytools.ycnanswer.Commons.Presenter;
 import ml.huytools.ycnanswer.Commons.Resource;
+import ml.huytools.ycnanswer.Commons.Views.AbstractAnimation;
+import ml.huytools.ycnanswer.Commons.Views.CubicBezier;
 import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
 import ml.huytools.ycnanswer.Models.CauHoi;
 import ml.huytools.ycnanswer.R;

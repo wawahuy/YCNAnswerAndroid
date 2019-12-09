@@ -8,15 +8,9 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.Shader;
-import android.os.Build;
 import android.util.AttributeSet;
-import android.util.Log;
 
-import androidx.annotation.RequiresApi;
-
-import java.util.Vector;
-
-import ml.huytools.ycnanswer.Views.GameViews.CustomSurfaceView;
+import ml.huytools.ycnanswer.Commons.Views.CustomSurfaceView;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.Effect;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
 
