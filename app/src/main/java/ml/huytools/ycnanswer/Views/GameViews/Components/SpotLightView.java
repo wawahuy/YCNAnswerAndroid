@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.Shader;
 import android.util.AttributeSet;
 
+import ml.huytools.ycnanswer.Commons.Views.CubicBezier;
 import ml.huytools.ycnanswer.Commons.Views.CustomSurfaceView;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.Effect;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
@@ -52,10 +53,6 @@ public class SpotLightView extends CustomSurfaceView {
      * One SpotLight
      */
     class SpotLightChild extends Effect {
-        final boolean DIR_SE = true;
-        final boolean DIR_ES = false;
-
-        float speed, spA;
 
         int x, y, h, r1, r2, s, l;
         Path path;
@@ -73,9 +70,6 @@ public class SpotLightView extends CustomSurfaceView {
             this.angleS = angleS;
             this.angleE = angleE;
             this.angleC = 0;
-            this.speed = 4;
-            this.spA = 4;
-            this.dir = DIR_SE;
             this.l = this.angleE-this.angleS;
             this.s = l/Math.abs(l);
 
@@ -89,45 +83,25 @@ public class SpotLightView extends CustomSurfaceView {
             paint.setStyle(Paint.Style.FILL);
             paint.setARGB(40, 255, 255, 255);
             paint.setShader(new LinearGradient(0, 0, 0, h,0xffffffff, 0x00ffffff, Shader.TileMode.MIRROR));
+
+            setInfinite(true);
+            setReverse(true);
+            setTiming(new CubicBezier(0.58f, 0, 0.58f, 1));
+            setTime(1000);
         }
 
 
-        public void setSpeed(float speed){
-            this.speed = speed;
-        }
 
         @Override
         public boolean canRemove() {
-            return false;
+            return !isLoop();
         }
 
-        public boolean checkOutSE(){
-            return this.s > 0 ?
-                        this.angleC > this.angleE :
-                        this.angleC < this.angleE;
-        }
 
-        public boolean checkOutES(){
-            return this.s > 0 ?
-                    this.angleC < this.angleS :
-                    this.angleC > this.angleS;
-        }
 
         @Override
-        public void OnUpdate(int sleep) {
-            if(this.dir == DIR_SE){
-                this.angleC += this.spA*this.s;
-                if(checkOutSE()){
-                    this.dir = DIR_ES;
-                    this.spA = this.speed;
-                }
-            } else {
-                this.angleC -= this.spA*this.s;
-                if(checkOutES()){
-                    this.dir = DIR_SE;
-                    this.spA = this.speed;
-                }
-            }
+        protected void OnUpdateAnimation(float per) {
+            angleC = angleS + (int)(per/100.0f*(angleE-angleS));
         }
 
         @Override

@@ -24,7 +24,7 @@ public class RenderingLoop extends Thread {
     LinkedList<CustomSurfaceView> customSurfaceViews;
     LinkedList<Runnable> actionQueue;
 
-    int FPS = 30;
+    int FPS = 40;
     int sleep;
     boolean loop;
 
