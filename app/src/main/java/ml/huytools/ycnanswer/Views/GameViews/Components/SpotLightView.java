@@ -131,6 +131,11 @@ public class SpotLightView extends CustomSurfaceView {
         }
 
         @Override
+        protected void OnUpdateAnimation(float per) {
+
+        }
+
+        @Override
         public void OnDraw(Canvas canvas) {
             canvas.save();
             canvas.translate(x, y);

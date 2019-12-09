@@ -65,6 +65,11 @@ public class EffectCircleRotate extends Effect {
     }
 
     @Override
+    protected void OnUpdateAnimation(float per) {
+
+    }
+
+    @Override
     public void OnDraw(Canvas canvas) {
         canvas.save();
         canvas.translate(cx, cy);
