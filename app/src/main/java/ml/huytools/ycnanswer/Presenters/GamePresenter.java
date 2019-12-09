@@ -1,14 +1,17 @@
 package ml.huytools.ycnanswer.Presenters;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.os.SystemClock;
 import android.util.Log;
 
 import ml.huytools.ycnanswer.Commons.APIProvider;
-import ml.huytools.ycnanswer.Commons.CubicBezier;
 import ml.huytools.ycnanswer.Commons.CustomLoader;
 import ml.huytools.ycnanswer.Commons.ModelManager;
 import ml.huytools.ycnanswer.Commons.Presenter;
 import ml.huytools.ycnanswer.Commons.Resource;
+import ml.huytools.ycnanswer.Commons.Views.AbstractAnimation;
+import ml.huytools.ycnanswer.Commons.Views.CubicBezier;
 import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
 import ml.huytools.ycnanswer.Models.CauHoi;
 import ml.huytools.ycnanswer.R;
@@ -56,11 +59,6 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
     @Override
     protected void OnStart() {
         loadGameDebug();
-
-        CubicBezier cubicBezier = new CubicBezier(CubicBezier.TIMING.Linear);
-        for (float i=0; i<=1.1; i+=0.1f){
-            Log.v("Log", i+": "+cubicBezier.B(i).toString());
-        }
 
         ///
         view.ConfigTableML(chDiemCauHoi);

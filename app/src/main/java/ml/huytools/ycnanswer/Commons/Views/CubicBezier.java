@@ -1,4 +1,4 @@
-package ml.huytools.ycnanswer.Commons;
+package ml.huytools.ycnanswer.Commons.Views;
 
 import android.graphics.PointF;
 
