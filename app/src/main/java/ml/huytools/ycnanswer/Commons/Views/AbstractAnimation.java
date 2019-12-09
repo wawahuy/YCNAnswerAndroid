@@ -91,24 +91,23 @@ public abstract class AbstractAnimation implements IRender {
         long t = System.currentTimeMillis();
         long dt = t - timeStart;
 
-        if(dt > time){
+        if(dt <= time) {
+            float timePer = dt * 100 / (float) time;
+
+            /// Cubic bezier
+            /// x axis is time
+            /// y axis is progression
+            Vector2D cTim = timing.B((isReverseCurrent ? 100 - timePer : timePer) / 100.0f);
+
+            OnUpdateAnimation(cTim.y * 100);
+        } else {
             if(isInfinite){
-                timeStart = t;
+                timeStart = t - (long)(sleep*1.5f);
                 isReverseCurrent = isReverse ? !isReverseCurrent : false;
             } else {
                 isLoop = false;
             }
-            return;
         }
-
-        float timePer = dt*100/(float)time;
-
-        /// Cubic bezier
-        /// x axis is time
-        /// y axis is progression
-        Vector2D cTim = timing.B((isReverseCurrent ? 100 - timePer : timePer)/100.0f);
-
-        OnUpdateAnimation(cTim.y*100);
     }
 
 
