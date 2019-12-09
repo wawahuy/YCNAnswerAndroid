@@ -5,6 +5,10 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
 
+/**
+ * Effect này chưa sử dụng Animation Abstract
+ * Cần được xây dựng lại
+ */
 public class EffectCircleRotate extends Effect {
 
     final int ANGLE_START = 270;

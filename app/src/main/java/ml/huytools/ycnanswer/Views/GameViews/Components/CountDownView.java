@@ -9,6 +9,7 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 
 import ml.huytools.ycnanswer.Commons.Math.Vector2D;
+import ml.huytools.ycnanswer.Commons.Math.Vector3D;
 import ml.huytools.ycnanswer.Commons.Views.CustomSurfaceView;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectCircle;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
@@ -43,10 +44,8 @@ public class CountDownView extends CustomSurfaceView {
     /// Dung de tao su kien tick, va effect
     int step;
 
-    /// cx, cy la trong tam
-    /// cw, ch bang 1/4 do dai cua view
-    /// yt la toa do y de can giua theo y cho text
-    int cx, cy, cw, ch, yt;
+    int yTextTrans;
+    Vector2D centerPosition, quarterSize;
     RectF rectF;
 
     /// Su kien Tick va Timeout
@@ -135,22 +134,15 @@ public class CountDownView extends CustomSurfaceView {
 
         /// Cap nhat mau
         float per = timeCurrent*100/timeCountDown;
-        int r, g, b;
+        Vector3D color; // r, g, b as x, y, z
         if(per > 66){
-            r = 89;
-            g = 168;
-            b = 105;
+            color = new Vector3D(89, 168, 105);
         } else if(per > 33){
-            r = 255;
-            g = 102;
-            b = 0;
+            color = new Vector3D(255, 102, 0);
         } else {
-            r = 250;
-            g = 20;
-            b = 0;
+            color = new Vector3D(250, 20, 0);
         }
-        barPaint.setARGB(255, r, g, b);
-
+        barPaint.setARGB(255, (int)color.x, (int)color.y, (int)color.z);
 
         // tick
         if(step > 999){
@@ -161,10 +153,10 @@ public class CountDownView extends CustomSurfaceView {
 
             // effect
             step = 0;
-            EffectCircle effect = new EffectCircle(new Vector2D(cx, cy));
-            effect.setColor(r, g, b);
+            EffectCircle effect = new EffectCircle(centerPosition);
+            effect.setColor(color);
             effect.setAlphaAnimation(255, 0);
-            effect.setRadiusAnimation(cw - 5, cx);
+            effect.setRadiusAnimation((int)quarterSize.x - 5, (int)centerPosition.x);
             effect.setTime(1000);
             effectManager.add(effect);
         }
@@ -180,29 +172,27 @@ public class CountDownView extends CustomSurfaceView {
         effectManager.OnDraw(canvas);
 
         // draw full bar load
-        canvas.drawCircle(cx, cy, cw, barPaint);
+        canvas.drawCircle(centerPosition.x, centerPosition.y, quarterSize.x, barPaint);
 
         // draw bar out
         int barOutAngle = (timeCountDown - timeCurrent) * 360 / timeCountDown;
         canvas.drawArc(rectF, 270, barOutAngle, true, backgroundPaint);
 
         // draw bg
-        canvas.drawCircle(cx, cy, cw - BAR_SIZE, backgroundPaint);
+        canvas.drawCircle(centerPosition.x, centerPosition.y, quarterSize.x - BAR_SIZE, backgroundPaint);
 
         // draw text
         int t = timeCurrent / 1000;
-        canvas.drawText(Integer.toString(t), cx, yt, textPaint);
+        canvas.drawText(Integer.toString(t), centerPosition.x, yTextTrans, textPaint);
     }
 
 
     @Override
     public void OnInit(Canvas canvas) {
-        cx = canvas.getWidth()/2;
-        cy = canvas.getHeight()/2;
-        cw = cx/2;
-        ch = cy/2;
-        yt = cy - (int)(textPaint.descent() + textPaint.ascent()) / 2;
-        rectF = new RectF(cw, ch, cx+cw, cy+ch);
+        centerPosition = new Vector2D(canvas.getWidth()/2, canvas.getHeight()/2);
+        quarterSize = centerPosition.div(2.0f);
+        yTextTrans = (int)centerPosition.y - (int)(textPaint.descent() + textPaint.ascent()) / 2;
+        rectF = new RectF(quarterSize.x, quarterSize.y, centerPosition.x+quarterSize.x, quarterSize.y+centerPosition.y);
     }
 
     @Override
