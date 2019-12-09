@@ -1,6 +1,5 @@
 package ml.huytools.ycnanswer.Views.GameViews.Components;
 
-import android.content.Context;
 import android.media.MediaPlayer;
 
 /***
@@ -12,7 +11,7 @@ import android.media.MediaPlayer;
  *
  *
  */
-public class CountDownAudio implements CountDown.Callback {
+public class CountDownAudio implements CountDownView.Callback {
 
     MediaPlayer mpTimeOut;
 

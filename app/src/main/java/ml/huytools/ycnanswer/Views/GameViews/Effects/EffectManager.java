@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 
 import java.util.LinkedList;
 
-import ml.huytools.ycnanswer.Views.GameViews.IRender;
+import ml.huytools.ycnanswer.Commons.Views.IRender;
 
 public class EffectManager implements IRender {
 
@@ -18,15 +18,19 @@ public class EffectManager implements IRender {
         effects.add(effect);
     }
 
+    public void removeAll(){
+        effects.clear();
+    }
+
     public void remove(Effect effect){
         effects.remove(effect);
     }
 
     @Override
-    public void update(){
+    public void OnUpdate(int sleep){
         LinkedList<Effect> effectRM = new LinkedList<>();
         for(Effect effect:effects){
-            effect.update();
+            effect.OnUpdate(sleep);
             if(effect.canRemove()){
                 effectRM.add(effect);
             }
@@ -38,9 +42,9 @@ public class EffectManager implements IRender {
     }
 
     @Override
-    public void draw(Canvas canvas){
+    public void OnDraw(Canvas canvas){
         for(Effect effect:effects){
-            effect.draw(canvas);
+            effect.OnDraw(canvas);
         }
     }
 }

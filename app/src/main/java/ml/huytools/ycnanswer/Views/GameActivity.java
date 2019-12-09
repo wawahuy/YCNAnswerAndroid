@@ -2,31 +2,34 @@ package ml.huytools.ycnanswer.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.media.MediaPlayer;
+import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import ml.huytools.ycnanswer.Commons.ModelManager;
+import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
 import ml.huytools.ycnanswer.Models.CauHoi;
 import ml.huytools.ycnanswer.Presenters.GamePresenter;
 import ml.huytools.ycnanswer.R;
-import ml.huytools.ycnanswer.Views.GameViews.Components.CountDown;
+import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownView;
 import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownAudio;
-import ml.huytools.ycnanswer.Views.GameViews.Components.Loading;
+import ml.huytools.ycnanswer.Views.GameViews.Components.LoadingView;
+import ml.huytools.ycnanswer.Views.GameViews.Components.SpotLightView;
+import ml.huytools.ycnanswer.Views.GameViews.Components.TableMLView;
 
 
-public class GameActivity extends AppCompatActivity
-        implements GamePresenter.View {
+public class GameActivity extends AppCompatActivity implements GamePresenter.View {
 
     GamePresenter presenter;
     ResourceManager resourceManager;
-    CountDown countDown;
+    CountDownView countDown;
     CountDownAudio countDownAudio;
+    SpotLightView spotLightView;
+    TableMLView tableMLView;
 
-    ImageView imv_tableLevelQuestion;
     TextView txv_question;
     TextView txv_paA;
     TextView txv_paB;
@@ -37,9 +40,6 @@ public class GameActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
-
-        //Test
-        Loading loading = Loading.Create(this);
 
         /// init
         resourceManager = ResourceManager.getInstance(this);
@@ -56,27 +56,67 @@ public class GameActivity extends AppCompatActivity
         super.onStart();
     }
 
+
+    /// ----------------- Init -------------------
     private void initView(){
         countDown = findViewById(R.id.countDown);
+        tableMLView = findViewById(R.id.iv_tb_level_question);
+        spotLightView = findViewById(R.id.spotLight);
         txv_question = findViewById(R.id.txv_cauhoi);
         txv_paA = findViewById(R.id.txv_paA);
         txv_paB = findViewById(R.id.txv_paB);
         txv_paC = findViewById(R.id.txv_paC);
         txv_paD = findViewById(R.id.txv_paD);
-        imv_tableLevelQuestion = findViewById(R.id.iv_tb_level_question);
     }
 
     private void initCountDown(){
+        //set audio
         countDownAudio = new CountDownAudio();
         countDownAudio.setAudioTimeout(resourceManager.audioTimeout);
         countDown.setCallback(countDownAudio);
-        countDown.setTimeCountDown(5);
+    }
+
+
+    /// ----------- CustomLoader --------------------
+    @Override
+    public void OpenLoading() {
+        setContentView(R.layout.game_loading);
     }
 
     @Override
-    public void SetQuestionLevelTable(int level) {
+    public void CloseLoading() {
+        setContentView(R.layout.activity_game);
+        initView();
+        initCountDown();
     }
 
+    @Override
+    public void UpdateLoadingText(String message) {
+        ((TextView) findViewById(R.id.txvLoad)).setText(message);
+    }
+
+    @Override
+    public void UpdateLoadingBar(int p) {
+        ((ProgressBar)findViewById(R.id.barLoad)).setProgress(p);
+    }
+
+    /// ------------- Bang diem ------------------
+    @Override
+    public void ConfigTableML(ModelManager<CHDiemCauHoi> chDiemCauHoi) {
+        tableMLView.Config(chDiemCauHoi);
+    }
+
+    @Override
+    public void SetLevelTableML(int level) {
+    }
+
+    @Override
+    public void IncreaseLevelTableML() {
+        tableMLView.incPos();
+    }
+
+
+    /// ------------- Cau Hoi --------------------
     @Override
     public void UpdateQuestion(CauHoi cauHoi) {
         txv_question.setText(cauHoi.getCauhoi());
@@ -86,39 +126,44 @@ public class GameActivity extends AppCompatActivity
         txv_paD.setText(cauHoi.getPaD());
     }
 
+    public void OnAnswer(View view){
+        GamePresenter.ANSWER answer;
+        switch (view.getId()){
+            case R.id.txv_paA: answer = GamePresenter.ANSWER.A; break;
+            case R.id.txv_paB: answer = GamePresenter.ANSWER.B; break;
+            case R.id.txv_paC: answer = GamePresenter.ANSWER.C; break;
+            default:
+                answer = GamePresenter.ANSWER.D;
+                break;
+        }
+
+        presenter.Answer(answer);
+    }
+
+
+
+    /// ------------- Dem Nguoc --------------------
     @Override
     public void RestartCountDown() {
         countDown.start();
     }
 
-
-    public void OnAnswer(View view){
-        GamePresenter.ANSWER answer;
-        switch (view.getId()){
-            case R.id.txv_paA:
-                answer = GamePresenter.ANSWER.A;
-                break;
-
-            case R.id.txv_paB:
-                answer = GamePresenter.ANSWER.B;
-                break;
-
-            case R.id.txv_paC:
-                answer = GamePresenter.ANSWER.C;
-                break;
-
-                default:
-                answer = GamePresenter.ANSWER.D;
-                break;
-        }
-        presenter.Answer(answer);
+    @Override
+    public void ConfigCountDownTime(int second) {
+        countDown.setTimeCountDown(second);
     }
 
 
-    /***
-     * Update Full Screen
-     * @param hasFocus
-     */
+
+    /// ------------- Light ------------------------
+    @Override
+    public void RunEffectLight() {
+
+    }
+
+
+
+    /// -------------- Full screen, hide navigation bar ---------
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
