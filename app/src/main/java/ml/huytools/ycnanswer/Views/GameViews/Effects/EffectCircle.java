@@ -4,10 +4,11 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 import ml.huytools.ycnanswer.Commons.Math.Vector2D;
+import ml.huytools.ycnanswer.Commons.Math.Vector3D;
 
 public class EffectCircle extends Effect {
 
-    int r, g, b;
+    Vector3D color;
     Vector2D position;
     int radiusCurrent, radiusStart, radiusEnd;
     int alphaCurrent, alphaStart, alphaEnd;
@@ -19,14 +20,12 @@ public class EffectCircle extends Effect {
         paint.setStrokeWidth(6);
         paint.setAntiAlias(true);
         this.position = position;
-        setColor(255, 255, 255);
+        setColor(new Vector3D(255, 255, 255));
     }
 
-    public void setColor(int r, int g, int b){
-        this.r = r;
-        this.g = g;
-        this.b = b;
-        paint.setARGB(255, r, g, b);
+    public void setColor(Vector3D color){
+        this.color = color;
+        paint.setARGB(255, (int)color.x, (int)color.y, (int)color.z);
     }
 
     public void setAlphaAnimation(int start, int end){
@@ -54,7 +53,7 @@ public class EffectCircle extends Effect {
 
     @Override
     public void OnDraw(Canvas canvas) {
-        paint.setARGB(alphaCurrent, r, g, b);
+        paint.setARGB(alphaCurrent, (int)color.x, (int)color.y, (int)color.z);
         canvas.drawCircle( position.x, position.y, radiusCurrent, paint );
     }
 
