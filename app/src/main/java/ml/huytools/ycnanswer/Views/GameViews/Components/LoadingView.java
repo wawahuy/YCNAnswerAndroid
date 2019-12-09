@@ -10,12 +10,12 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import ml.huytools.ycnanswer.Views.GameViews.CustomSurfaceView;
+import ml.huytools.ycnanswer.Commons.Views.CustomSurfaceView;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectCircleRotate;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
 
 /***
- * Loading.java
+ * CustomLoader.java
  * Author: Nguyen Gia Huy
  * Project: https://github.com/wawahuy/YCNAnswerAndroid
  * Start: 20/11/2019

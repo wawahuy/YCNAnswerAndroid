@@ -8,7 +8,8 @@ import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 
-import ml.huytools.ycnanswer.Views.GameViews.CustomSurfaceView;
+import ml.huytools.ycnanswer.Commons.Math.Vector2D;
+import ml.huytools.ycnanswer.Commons.Views.CustomSurfaceView;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectCircle;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
 
@@ -160,11 +161,11 @@ public class CountDownView extends CustomSurfaceView {
 
             // effect
             step = 0;
-            EffectCircle effect = new EffectCircle(cw, cx, cy);
-            effect.setColor(255,r, g, b);
-            effect.setAlphaUpdate(20);
-            effect.setRadiusUpdate(5);
-            effect.setColorUpdate(0);
+            EffectCircle effect = new EffectCircle(new Vector2D(cx, cy));
+            effect.setColor(r, g, b);
+            effect.setAlphaAnimation(255, 0);
+            effect.setRadiusAnimation(cw - 5, cx);
+            effect.setTime(1000);
             effectManager.add(effect);
         }
 
@@ -202,8 +203,12 @@ public class CountDownView extends CustomSurfaceView {
         ch = cy/2;
         yt = cy - (int)(textPaint.descent() + textPaint.ascent()) / 2;
         rectF = new RectF(cw, ch, cx+cw, cy+ch);
-        /// remove loop
-        super.unregisterLoop();
+    }
+
+    @Override
+    public void OnStart() {
+        //comment super don't register loop
+        //super.OnStart();
     }
 
 

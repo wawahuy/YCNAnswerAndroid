@@ -3,67 +3,63 @@ package ml.huytools.ycnanswer.Views.GameViews.Effects;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import ml.huytools.ycnanswer.Commons.Math.Vector2D;
+
 public class EffectCircle extends Effect {
 
-    int r, g, b, a;
-    int radius, x, y;
-    float upd_radius, upd_colorAlpha, upd_color;
+    int r, g, b;
+    Vector2D position;
+    int radiusCurrent, radiusStart, radiusEnd;
+    int alphaCurrent, alphaStart, alphaEnd;
     Paint paint;
-    float t;
 
-    public EffectCircle(int radius, int x, int y){
+    public EffectCircle(Vector2D position){
         paint = new Paint();
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(6);
         paint.setAntiAlias(true);
-        this.radius = radius;
-        this.x = x;
-        this.y = y;
-        setColor(255, 255, 255, 255);
-        this.upd_radius = 1;
-        this.upd_colorAlpha = 1;
-        this.t = 1;
+        this.position = position;
+        setColor(255, 255, 255);
     }
 
-    public void setColor(int a, int r, int g, int b){
+    public void setColor(int r, int g, int b){
         this.r = r;
         this.g = g;
         this.b = b;
-        this.a = a;
-        paint.setARGB(a, r, g, b);
+        paint.setARGB(255, r, g, b);
     }
 
-    public void setRadiusUpdate(float update){
-        this.upd_radius = update;
+    public void setAlphaAnimation(int start, int end){
+        alphaStart = start;
+        alphaEnd = end;
     }
 
-    public void setAlphaUpdate(float update){
-        this.upd_colorAlpha = update;
+    public void setRadiusAnimation(int start, int end){
+        radiusStart = start;
+        radiusEnd = end;
     }
-
-    public void setColorUpdate(float update){
-        this.upd_color = update;
-    }
-
 
     @Override
-    public void OnUpdate(int sleep) {
-        a-= upd_colorAlpha;
-        r-= upd_color;
-        g-= upd_color;
-        b-= upd_color;
-        this.setColor(a, r, g, b);
+    public void reset() {
+        super.reset();
+        alphaCurrent = 0;
+        radiusCurrent = 0;
+    }
 
-        radius += upd_radius;
+    @Override
+    protected void OnUpdateAnimation(float per) {
+        alphaCurrent = alphaStart + (int)(per/100.0f*(alphaEnd-alphaStart));
+        radiusCurrent = radiusStart + (int)(per/100.0f*(radiusEnd - radiusStart));
     }
 
     @Override
     public void OnDraw(Canvas canvas) {
-        canvas.drawCircle( x, y, radius, paint );
+        paint.setARGB(alphaCurrent, r, g, b);
+        canvas.drawCircle( position.x, position.y, radiusCurrent, paint );
     }
 
     @Override
     public boolean canRemove() {
-        return a < 0;
+        return !isLoop();
     }
 }

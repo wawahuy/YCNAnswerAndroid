@@ -1,4 +1,4 @@
-package ml.huytools.ycnanswer.Views.GameViews;
+package ml.huytools.ycnanswer.Commons.Views;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -11,12 +11,13 @@ import android.view.SurfaceView;
  * CustomSurfaceView.java
  * Author: Nguyen Gia Huy
  * Project: https://github.com/wawahuy/YCNAnswerAndroid
- * Start: 21/11/2019
+ * Start: 23/11/2019
  * Update:
  *
  */
 public abstract class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Callback, IRender {
     protected SurfaceHolder holder;
+    private long time;
 
     public CustomSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -29,7 +30,7 @@ public abstract class CustomSurfaceView extends SurfaceView implements SurfaceHo
         Canvas canvas = holder.lockCanvas();
         OnInit(canvas);
         holder.unlockCanvasAndPost(canvas);
-        registerLoop();
+        OnStart();
     }
 
     @Override
@@ -43,6 +44,10 @@ public abstract class CustomSurfaceView extends SurfaceView implements SurfaceHo
 
     public abstract void OnInit(Canvas canvas);
 
+    public void OnStart(){
+        registerLoop();
+    }
+
     public void unregisterLoop(){
         RenderingLoop.getInstance().remove(this);
     }
@@ -55,4 +60,25 @@ public abstract class CustomSurfaceView extends SurfaceView implements SurfaceHo
         setZOrderOnTop(true);
         getHolder().setFormat(PixelFormat.RGBA_8888);
     }
+
+    public void refreshTimeUpdate(){
+        time = System.currentTimeMillis();
+    }
+
+    public void draw(){
+        Canvas canvas = holder.lockCanvas();
+        if(canvas != null) {
+            synchronized (holder) {
+                OnDraw(canvas);
+            }
+            holder.unlockCanvasAndPost(canvas);
+        }
+    }
+
+    public void update(){
+        long time_old = time;
+        refreshTimeUpdate();
+        OnUpdate((int)(time-time_old));
+    }
+
 }
