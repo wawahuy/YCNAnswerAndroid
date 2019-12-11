@@ -46,9 +46,10 @@ public class EffectCircle extends Effect {
     }
 
     @Override
-    protected void OnUpdateAnimation(float per) {
+    protected boolean OnUpdateAnimation(float per) {
         alphaCurrent = alphaStart + (int)(per/100.0f*(alphaEnd-alphaStart));
         radiusCurrent = radiusStart + (int)(per/100.0f*(radiusEnd - radiusStart));
+        return true;
     }
 
     @Override

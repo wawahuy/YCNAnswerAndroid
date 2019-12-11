@@ -69,8 +69,9 @@ public class LoadingView extends CustomSurfaceView {
 
 
     @Override
-    public void OnUpdate(int sleep) {
+    public boolean OnUpdate(int sleep) {
         effectManager.OnUpdate(sleep);
+        return true;
     }
 
     @Override

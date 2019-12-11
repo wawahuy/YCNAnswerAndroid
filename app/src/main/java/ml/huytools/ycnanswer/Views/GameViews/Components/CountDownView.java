@@ -108,7 +108,7 @@ public class CountDownView extends CustomSurfaceView {
     }
 
     @Override
-    public void OnUpdate(int sleep) {
+    public boolean OnUpdate(int sleep) {
 
         // Kiem tra khi timeout (timeCurrent <= 0)
         if(timeCurrent<=0){
@@ -125,7 +125,7 @@ public class CountDownView extends CustomSurfaceView {
                     callback.OnEnd();
                 }
             }
-            return;
+            return false;
         }
 
         // tinh step frame
@@ -162,6 +162,8 @@ public class CountDownView extends CustomSurfaceView {
         }
 
         effectManager.OnUpdate(sleep);
+
+        return true;
     }
 
     @Override
