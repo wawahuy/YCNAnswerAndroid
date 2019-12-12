@@ -23,7 +23,7 @@ public class FPSDebugView extends CustomSurfaceView {
 
         textPaint = new Paint();
         textPaint.setColor(Color.WHITE);
-        textPaint.setTextSize(60);
+        textPaint.setTextSize(40);
         textPaint.setAntiAlias(true);
 
         fps = 0;
@@ -57,6 +57,6 @@ public class FPSDebugView extends CustomSurfaceView {
     @Override
     public void OnDraw(Canvas canvas) {
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
-        canvas.drawText(Integer.toString(fpsShow) +" FPS", 40, 50, textPaint);
+        canvas.drawText(Integer.toString(fpsShow) +" FPS", 40, 60, textPaint);
     }
 }
