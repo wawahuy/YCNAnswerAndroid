@@ -22,6 +22,8 @@ public abstract class AbstractAnimation implements IRender {
     /// Lập vô hạn
     boolean isInfinite;
 
+    /// Callback
+    Runnable cbWhenNewLoop;
 
     /// ------------
     private long timeStart;
@@ -36,6 +38,7 @@ public abstract class AbstractAnimation implements IRender {
         isReverse = false;
         isInfinite = false;
         timing = new CubicBezier(CubicBezier.TIMING.Linear);
+        cbWhenNewLoop = null;
         reset();
     }
 
@@ -84,6 +87,10 @@ public abstract class AbstractAnimation implements IRender {
         isLoop = true;
     }
 
+    public void setCallbackWhenEndTiming(Runnable callbackWhenEndTiming){
+        cbWhenNewLoop = callbackWhenEndTiming;
+    }
+
     @Override
     public boolean OnUpdate(int sleep) {
 
@@ -98,6 +105,10 @@ public abstract class AbstractAnimation implements IRender {
                 timeStart = t - (long) (time * 0.01f);
                 dt = t - timeStart;
                 isReverseCurrent = isReverse ? !isReverseCurrent : false;
+
+                if(cbWhenNewLoop != null){
+                    cbWhenNewLoop.run();
+                }
             } else {
                 isLoop = false;
             }

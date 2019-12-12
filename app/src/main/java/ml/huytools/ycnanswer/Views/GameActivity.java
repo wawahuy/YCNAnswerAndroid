@@ -10,6 +10,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import ml.huytools.ycnanswer.Commons.ModelManager;
+import ml.huytools.ycnanswer.Commons.Views.RenderingLoop;
 import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
 import ml.huytools.ycnanswer.Models.CauHoi;
 import ml.huytools.ycnanswer.Presenters.GamePresenter;
@@ -162,7 +163,13 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
     /// ------------- Light ------------------------
     @Override
     public void RunEffectLight() {
-
+        /// Run on thread RenderingLoop.class
+       spotLightView.post(new Runnable() {
+            @Override
+            public void run() {
+                spotLightView.runFlickerAmbientLight();
+            }
+        });
     }
 
 
