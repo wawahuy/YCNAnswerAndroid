@@ -27,6 +27,8 @@ public abstract class AbstractAnimation implements IRender {
     private long timeStart;
     private boolean isLoop;
     private boolean isReverseCurrent;
+    /// test public
+    public long dt;
 
 
     public AbstractAnimation(){
@@ -83,35 +85,37 @@ public abstract class AbstractAnimation implements IRender {
     }
 
     @Override
-    public void OnUpdate(int sleep) {
+    public boolean OnUpdate(int sleep) {
 
         if(!isLoop)
-            return;
+            return false;
 
         long t = System.currentTimeMillis();
-        long dt = t - timeStart;
+        dt = t - timeStart;
 
-        if(dt <= time) {
-            float timePer = dt * 100 / (float) time;
-
-            /// Cubic bezier
-            /// x axis is time
-            /// y axis is progression
-            Vector2D cTim = timing.B((isReverseCurrent ? 100 - timePer : timePer) / 100.0f);
-
-            OnUpdateAnimation(cTim.y * 100);
-        } else {
-            if(isInfinite){
-                timeStart = t - (long)(sleep*1.5f);
+        if(dt > time) {
+            if (isInfinite) {
+                timeStart = t - (long) (time * 0.01f);
+                dt = t - timeStart;
                 isReverseCurrent = isReverse ? !isReverseCurrent : false;
             } else {
                 isLoop = false;
             }
         }
+
+
+        float timePer = dt * 100 / (float) time;
+
+        /// Cubic bezier
+        /// x axis is time
+        /// y axis is progression
+        Vector2D cTim = timing.B((isReverseCurrent ? 100 - timePer : timePer) / 100.0f);
+
+        return OnUpdateAnimation(cTim.y * 100);
     }
 
 
     //// Update with per 0->100
-    protected abstract void OnUpdateAnimation(float per);
+    protected abstract boolean OnUpdateAnimation(float per);
 
 }

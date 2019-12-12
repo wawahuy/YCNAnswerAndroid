@@ -24,7 +24,7 @@ public class RenderingLoop extends Thread {
     LinkedList<CustomSurfaceView> customSurfaceViews;
     LinkedList<Runnable> actionQueue;
 
-    int FPS = 40;
+    int FPS = 60;
     int sleep;
     boolean loop;
 
@@ -60,19 +60,19 @@ public class RenderingLoop extends Thread {
     public void run() {
         //tinh thoi gian ngu
         long sl;
+        boolean update;
 
         while (loop){
             sl = System.currentTimeMillis();
 
             //logic
             for(CustomSurfaceView surfaceView:customSurfaceViews) {
-                surfaceView.update();
+                update = surfaceView.update();
+                if(update){
+                    surfaceView.draw();
+                }
             }
 
-            //draw
-            for(CustomSurfaceView surfaceView:customSurfaceViews) {
-                surfaceView.draw();
-            }
 
             //upd list
             if(actionQueue.size() > 0){

@@ -9,7 +9,9 @@ import android.graphics.Path;
 import android.graphics.PorterDuff;
 import android.graphics.Shader;
 import android.util.AttributeSet;
+import android.util.Log;
 
+import ml.huytools.ycnanswer.Commons.Views.AbstractAnimation;
 import ml.huytools.ycnanswer.Commons.Views.CubicBezier;
 import ml.huytools.ycnanswer.Commons.Views.CustomSurfaceView;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.Effect;
@@ -35,11 +37,12 @@ public class SpotLightView extends CustomSurfaceView {
         effectManager.add(new SpotLightChild(xc*2, -5, h/2-10, 10, 100, 45, -45));
         effectManager.add(new SpotLightChild(w-xc*2, -5, h/2-10, 10, 100, -45, 45));
         effectManager.add(new SpotLightChild(w-xc, -5, h/2-10, 10, 100, 45, -45));
-    }
+}
 
     @Override
-    public void OnUpdate(int sleep) {
+    public boolean OnUpdate(int sleep) {
         effectManager.OnUpdate(sleep);
+        return true;
     }
 
     @Override
@@ -100,8 +103,9 @@ public class SpotLightView extends CustomSurfaceView {
 
 
         @Override
-        protected void OnUpdateAnimation(float per) {
+        protected boolean OnUpdateAnimation(float per) {
             angleC = angleS + (int)(per/100.0f*(angleE-angleS));
+            return true;
         }
 
         @Override

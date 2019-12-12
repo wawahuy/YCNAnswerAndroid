@@ -75,10 +75,10 @@ public abstract class CustomSurfaceView extends SurfaceView implements SurfaceHo
         }
     }
 
-    public void update(){
+    public boolean update(){
         long time_old = time;
         refreshTimeUpdate();
-        OnUpdate((int)(time-time_old));
+        return OnUpdate((int)(time-time_old));
     }
 
 }
