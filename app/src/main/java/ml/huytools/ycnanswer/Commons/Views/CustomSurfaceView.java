@@ -18,11 +18,13 @@ import android.view.SurfaceView;
 public abstract class CustomSurfaceView extends SurfaceView implements SurfaceHolder.Callback, IRender {
     protected SurfaceHolder holder;
     private long time;
+    private boolean isPaused;
 
     public CustomSurfaceView(Context context, AttributeSet attrs) {
         super(context, attrs);
         holder = getHolder();
         holder.addCallback(this);
+        isPaused = false;
     }
 
     @Override
@@ -65,6 +67,11 @@ public abstract class CustomSurfaceView extends SurfaceView implements SurfaceHo
         time = System.currentTimeMillis();
     }
 
+    public boolean post(Runnable runnable){
+        RenderingLoop.getInstance().post(runnable);
+        return false;
+    }
+
     public void draw(){
         Canvas canvas = holder.lockCanvas();
         if(canvas != null) {
@@ -76,9 +83,20 @@ public abstract class CustomSurfaceView extends SurfaceView implements SurfaceHo
     }
 
     public boolean update(){
+        if(isPaused)
+            return false;
+
         long time_old = time;
         refreshTimeUpdate();
         return OnUpdate((int)(time-time_old));
+    }
+
+    public void pause(){
+        isPaused = true;
+    }
+
+    public void start(){
+        isPaused = false;
     }
 
 }

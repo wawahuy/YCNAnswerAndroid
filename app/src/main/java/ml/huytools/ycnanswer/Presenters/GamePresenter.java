@@ -116,6 +116,7 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
     public void Answer(ANSWER answer) {
         nextAnswer();
         increaseTableML();
+        view.RunEffectLight();
     }
 
     private void nextAnswer() {

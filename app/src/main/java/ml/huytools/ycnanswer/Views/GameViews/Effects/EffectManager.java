@@ -6,7 +6,7 @@ import java.util.LinkedList;
 
 import ml.huytools.ycnanswer.Commons.Views.IRender;
 
-public class EffectManager implements IRender {
+public class EffectManager<T extends Effect> implements IRender {
 
     LinkedList<Effect> effects;
 
@@ -16,6 +16,12 @@ public class EffectManager implements IRender {
 
     public void add(Effect effect){
         effects.add(effect);
+    }
+
+    public void add(LinkedList<T> effects){
+        for(Effect effect:effects){
+            this.effects.add(effect);
+        }
     }
 
     public void removeAll(){
@@ -37,6 +43,7 @@ public class EffectManager implements IRender {
         }
 
         for(Effect effect:effectRM){
+            effect.runEventRemove();
             effects.remove(effect);
         }
 

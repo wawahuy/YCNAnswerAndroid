@@ -127,4 +127,8 @@ public class RenderingLoop extends Thread {
     }
 
 
+    public void post(Runnable runnable){
+        actionQueue.add(runnable);
+    }
+
 }

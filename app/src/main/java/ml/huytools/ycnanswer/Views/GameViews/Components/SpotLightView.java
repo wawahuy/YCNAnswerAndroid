@@ -7,10 +7,15 @@ import android.graphics.LinearGradient;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PorterDuff;
+import android.graphics.Rect;
 import android.graphics.Shader;
 import android.util.AttributeSet;
 import android.util.Log;
 
+import java.util.LinkedList;
+import java.util.function.Consumer;
+
+import ml.huytools.ycnanswer.Commons.Math.Vector2D;
 import ml.huytools.ycnanswer.Commons.Views.AbstractAnimation;
 import ml.huytools.ycnanswer.Commons.Views.CubicBezier;
 import ml.huytools.ycnanswer.Commons.Views.CustomSurfaceView;
@@ -19,7 +24,9 @@ import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
 
 public class SpotLightView extends CustomSurfaceView {
 
+    Vector2D size;
     EffectManager effectManager;
+    LinkedList<SpotLightChild> spotLightChildren;
 
     public SpotLightView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -31,18 +38,70 @@ public class SpotLightView extends CustomSurfaceView {
         int w = canvas.getWidth();
         int h = canvas.getHeight();
         int xc = w/7;
+        size = new Vector2D(w, h);
 
+        /// SpotLight
+        spotLightChildren = new LinkedList<>();
+        spotLightChildren.add(new SpotLightChild(xc, -5, h/2-10, 10, 120, -45, 45));
+        spotLightChildren.add(new SpotLightChild(xc*2, -5, h/2-10, 10, 120, 45, -45));
+        spotLightChildren.add(new SpotLightChild(w-xc*2, -5, h/2-10, 10, 120, -45, 45));
+        spotLightChildren.add(new SpotLightChild(w-xc, -5, h/2-10, 10, 120, 45, -45));
+
+        /// SpotLight to Effect
         effectManager = new EffectManager();
-        effectManager.add(new SpotLightChild(xc, -5, h/2-10, 10, 100, -45, 45));
-        effectManager.add(new SpotLightChild(xc*2, -5, h/2-10, 10, 100, 45, -45));
-        effectManager.add(new SpotLightChild(w-xc*2, -5, h/2-10, 10, 100, -45, 45));
-        effectManager.add(new SpotLightChild(w-xc, -5, h/2-10, 10, 100, 45, -45));
-}
+        effectManager.add(spotLightChildren);
+    }
+
+
+    public void runFlickerAmbientLight(){
+        /// Update speed spotlight
+        this.setSpeedSpotLight(200);
+
+        /// Add effect flicker
+        FlickerAmbientLight flickerAmbientLight = new FlickerAmbientLight(size);
+
+        /// Rollback speed spotlight
+        flickerAmbientLight.setEventRemoveListener(new Runnable() {
+            @Override
+            public void run() {
+                SpotLightView.this.setSpeedSpotLight(1000);
+            }
+        });
+
+        effectManager.add(flickerAmbientLight);
+    }
+
+
+    public void setSpeedSpotLight(final int ms){
+        for(final SpotLightChild spotLightChild:spotLightChildren){
+            /// Khi time trên cubic bezier được cập nhật mới
+            /// nếu gọi time trước đó là old và time mới là new
+            /// old < new, progression tức trục y nằm trong khoản 0.2->0.8 sẽ xãy ra giật do percent bị thay đổi đột ngột
+            /// do vậy đăng kí hành động với AbstractAnimation nhầm chỉ cập nhật khi y là cực đại hoặc cực tiểu
+            if(spotLightChild.getTime() < ms) {
+                /// Đăng kí sự kiến gọi khi vòng đời TIMING kết thúc
+                spotLightChild.setCallbackWhenEndTiming(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(spotLightChild == null)
+                            return;
+
+                        /// cập nhật lại time
+                        spotLightChild.setTime(ms);
+
+                        /// xóa sự kiện
+                        spotLightChild.setCallbackWhenEndTiming(null);
+                    }
+                });
+            } else {
+                spotLightChild.setTime(ms);
+            }
+        }
+    }
 
     @Override
     public boolean OnUpdate(int sleep) {
-        effectManager.OnUpdate(sleep);
-        return true;
+        return effectManager.OnUpdate(sleep);
     }
 
     @Override
@@ -115,6 +174,58 @@ public class SpotLightView extends CustomSurfaceView {
             canvas.rotate(angleC);
             canvas.drawPath(path,paint);
             canvas.restore();
+        }
+    }
+
+    /**
+     * Flicker
+     */
+    public static class FlickerAmbientLight extends Effect {
+
+        Vector2D size;
+        Rect rect;
+        Paint paint;
+        float perOld;
+        boolean lightStage;
+
+        public FlickerAmbientLight(Vector2D size) {
+            this.size = size;
+            setInfinite(false);
+            setTiming(new CubicBezier(CubicBezier.TIMING.EaseOut));
+            setTime(1000);
+
+            paint = new Paint();
+            paint.setAntiAlias(true);
+            paint.setARGB(150, 255, 255, 255);
+
+            rect = new Rect(0, 0, (int)size.x, (int)size.y);
+            perOld = 0;
+            lightStage = false;
+        }
+
+        @Override
+        public boolean canRemove() {
+            return !isLoop();
+        }
+
+        @Override
+        protected boolean OnUpdateAnimation(float per) {
+            /// 0->0.2+->0.4->...->1.0
+            float dper = per - perOld;
+            if(dper >= 20){
+                perOld = per;
+                dper = 0;
+            }
+
+            int alpha = (int)(dper/100.0f*230);
+            paint.setARGB(lightStage ? 230-alpha : alpha, 255, 255, 255);
+
+            return true;
+        }
+
+        @Override
+        public void OnDraw(Canvas canvas) {
+            canvas.drawRect(rect, paint);
         }
     }
 }

@@ -1,6 +1,6 @@
 package ml.huytools.ycnanswer.Commons.Math;
 
-public class Vector3D {
+public class Vector3D<T extends Number> {
     public float x;
     public float y;
     public float z;
