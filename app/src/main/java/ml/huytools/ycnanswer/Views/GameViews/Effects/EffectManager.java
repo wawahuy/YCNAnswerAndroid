@@ -27,7 +27,7 @@ public class EffectManager implements IRender {
     }
 
     @Override
-    public void OnUpdate(int sleep){
+    public boolean OnUpdate(int sleep){
         LinkedList<Effect> effectRM = new LinkedList<>();
         for(Effect effect:effects){
             effect.OnUpdate(sleep);
@@ -39,6 +39,8 @@ public class EffectManager implements IRender {
         for(Effect effect:effectRM){
             effects.remove(effect);
         }
+
+        return true;
     }
 
     @Override
@@ -46,5 +48,9 @@ public class EffectManager implements IRender {
         for(Effect effect:effects){
             effect.OnDraw(canvas);
         }
+    }
+
+    public Effect get(int index){
+        return effects.get(index);
     }
 }

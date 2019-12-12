@@ -16,6 +16,7 @@ import ml.huytools.ycnanswer.Presenters.GamePresenter;
 import ml.huytools.ycnanswer.R;
 import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownView;
 import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownAudio;
+import ml.huytools.ycnanswer.Views.GameViews.Components.FPSDebugView;
 import ml.huytools.ycnanswer.Views.GameViews.Components.LoadingView;
 import ml.huytools.ycnanswer.Views.GameViews.Components.SpotLightView;
 import ml.huytools.ycnanswer.Views.GameViews.Components.TableMLView;
@@ -45,6 +46,9 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
         resourceManager = ResourceManager.getInstance(this);
         initView();
         initCountDown();
+
+        /// debug
+        FPSDebugView.AddOnActivity(this);
 
         /// P
         presenter = new GamePresenter(this);

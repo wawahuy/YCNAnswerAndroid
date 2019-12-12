@@ -78,7 +78,8 @@ public class TableMLView extends CustomSurfaceView {
     }
 
     @Override
-    public void OnUpdate(int sleep) {
+    public boolean OnUpdate(int sleep) {
+        return false;
     }
 
     @Override

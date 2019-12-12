@@ -46,10 +46,10 @@ public class EffectCircleRotate extends Effect {
     }
 
     @Override
-    public void OnUpdate(int sleep) {
+    public boolean OnUpdate(int sleep) {
         if(delay > 0){
             delay -= sleep;
-            return;
+            return false;
         }
 
         float dt = sleep/25.0f;
@@ -66,11 +66,13 @@ public class EffectCircleRotate extends Effect {
                 resA = true;
             }
         }
+
+        return true;
     }
 
     @Override
-    protected void OnUpdateAnimation(float per) {
-
+    protected boolean OnUpdateAnimation(float per) {
+        return false;
     }
 
     @Override
