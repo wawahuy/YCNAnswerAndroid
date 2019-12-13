@@ -215,7 +215,6 @@ public class CountDownView extends CustomSurfaceView {
     public void setTimeCurrent(int timeCurrent) {
         this.timeCurrent = timeCurrent;
         if(isPaused){
-            super.start();
             effectManager.removeAll();
             hasCallEnd = false;
             timeStart = System.currentTimeMillis();

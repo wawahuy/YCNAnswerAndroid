@@ -8,6 +8,7 @@ import android.util.Log;
 
 import ml.huytools.ycnanswer.Commons.APIProvider;
 import ml.huytools.ycnanswer.Commons.CustomLoader;
+import ml.huytools.ycnanswer.Commons.Model;
 import ml.huytools.ycnanswer.Commons.ModelManager;
 import ml.huytools.ycnanswer.Commons.Presenter;
 import ml.huytools.ycnanswer.Commons.Resource;
@@ -20,6 +21,8 @@ import ml.huytools.ycnanswer.R;
 public class GamePresenter extends Presenter<GamePresenter.View> {
 
     public interface View {
+        void ResumeUI(ResumeData model);
+
         ///--------------
         void OpenLoading();
         void CloseLoading();
@@ -44,6 +47,12 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
 
     ;
 
+    public static class ResumeData extends Model {
+        public int countDownCurrent;
+    }
+
+    ;
+
     public enum ANSWER {A, B, C, D}
     ModelManager<CHDiemCauHoi> chDiemCauHoi;
     CustomLoader loading;
@@ -51,15 +60,18 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
     ;
 
 
-
-
     //// ------------ Start Game ---------------
     @Override
-    protected void OnStart() {
+    protected void OnCreate() {
         loadGameDebug();
 
         ///
         view.ConfigTableML(chDiemCauHoi);
+    }
+
+    @Override
+    protected void OnResume(Model model){
+        view.ResumeUI((ResumeData) model);
     }
 
 

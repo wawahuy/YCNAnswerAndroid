@@ -1,6 +1,7 @@
 package ml.huytools.ycnanswer.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
@@ -13,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import ml.huytools.ycnanswer.Commons.Model;
 import ml.huytools.ycnanswer.Commons.ModelManager;
 import ml.huytools.ycnanswer.Commons.Presenter;
 import ml.huytools.ycnanswer.Commons.Views.RenderingLoop;
@@ -60,10 +62,25 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
         /// Tạo Presenter với activity hiện tại
         /// Ngăn chặn dữ liệu bị cập nhật lại trên View
         presenter = Presenter.of(this, GamePresenter.class);
-        presenter.Start();
-
     }
 
+    /// --------------- Resume Saved Data ------------------
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        /// Save Data
+        GamePresenter.ResumeData data = new GamePresenter.ResumeData();
+        data.countDownCurrent = countDown.getTimeCurrent();
+        presenter.postDataSaved(data);
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void ResumeUI(GamePresenter.ResumeData model) {
+        if(model != null){
+            countDown.setTimeCurrent(model.countDownCurrent);
+        }
+    }
 
 
     /// ----------------- Init -------------------

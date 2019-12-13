@@ -4,6 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+
 import java.lang.ref.WeakReference;
 
 /***
@@ -18,6 +25,7 @@ public abstract class Presenter<T> {
 
     protected WeakReference<Activity> activity;
     protected T view;
+    private Model dataSaved;
 
     protected Presenter(){
     }
@@ -31,19 +39,39 @@ public abstract class Presenter<T> {
         this.view = (T)activity;
     }
 
-    public void Start(){
-        this.OnStart();
+
+    /// Được gọi khi presenter lần đầu được khởi tạo
+    protected abstract void OnCreate();
+
+    /// Chỉ được gọi khi presenter được tạo lại
+    /// Khi activity bị xoay hay cấu hình bị thay đổi
+    protected void OnResume(Model dataSaved){ }
+
+
+    /// new data save
+    public void postDataSaved(Model model){
+        this.dataSaved = model;
     }
 
-    protected abstract void OnStart();
 
-    public static<T, V extends Presenter<T>> V of(Activity activity, Class<V> clazz){
-        Log.v("Log", "Presenter Create On Activity: "+activity.toString());
-
+    public static<T, V extends Presenter<T>> V of(AppCompatActivity activity, Class<V> clazz){
         try {
-            V presenter =  clazz.newInstance();
-            presenter.set(activity);
-            return presenter;
+            /// Sử dụng ViewModel của Android
+            /// Khắc phục tình trạng presenter được khởi tạo lại khi activity có thay đổi
+            PresenterSaved presenterSaved = ViewModelProviders.of(activity).get(PresenterSaved.class);
+
+            if(presenterSaved.presenter == null){
+                presenterSaved.presenter = clazz.newInstance();
+                presenterSaved.presenter.set(activity);
+                presenterSaved.presenter.OnCreate();
+                Log.v("Log", "Presenter Create On Activity: "+activity.toString());
+            } else {
+                presenterSaved.presenter.set(activity);
+                presenterSaved.presenter.OnResume(presenterSaved.presenter.dataSaved);
+            }
+
+            return (V) presenterSaved.presenter;
+
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         } catch (InstantiationException e) {
@@ -51,5 +79,10 @@ public abstract class Presenter<T> {
         }
 
         return null;
+    }
+
+    /// ViewModel
+    public static class PresenterSaved<T, V extends Presenter<T>> extends ViewModel {
+        public V presenter;
     }
 }
