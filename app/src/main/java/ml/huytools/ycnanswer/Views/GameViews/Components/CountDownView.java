@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import ml.huytools.ycnanswer.Commons.Math.Vector2D;
 import ml.huytools.ycnanswer.Commons.Math.Vector3D;
@@ -39,6 +40,7 @@ public class CountDownView extends CustomSurfaceView {
 
     /// Thoi gian dem nguoc hien tai
     int timeCurrent;
+    long timeStart;
 
     /// Tong thoi gian cua cac frame
     /// Dung de tao su kien tick, va effect
@@ -91,10 +93,13 @@ public class CountDownView extends CustomSurfaceView {
         this.timeCountDown = seconds*1000;
     }
 
+    @Override
     public void start(){
+        super.start();
         effectManager.removeAll();
         hasCallEnd = false;
         timeCurrent = timeCountDown;
+        timeStart = System.currentTimeMillis();
 
         /// add loop
         super.registerLoop();
@@ -129,7 +134,7 @@ public class CountDownView extends CustomSurfaceView {
         }
 
         // tinh step frame
-        timeCurrent -= sleep;
+        timeCurrent = timeCountDown - (int)(time - timeStart);
         step += sleep;
 
         /// Cap nhat mau
@@ -199,9 +204,25 @@ public class CountDownView extends CustomSurfaceView {
 
     @Override
     public void OnStart() {
-        //comment super don't register loop
-        //super.OnStart();
+        // comment super don't register loop
+        super.OnStart();
     }
+
+    public int getTimeCurrent() {
+        return timeCurrent;
+    }
+
+    public void setTimeCurrent(int timeCurrent) {
+        this.timeCurrent = timeCurrent;
+        if(isPaused){
+            super.start();
+            effectManager.removeAll();
+            hasCallEnd = false;
+            timeStart = System.currentTimeMillis();
+            super.registerLoop();
+        }
+    }
+
 
 
     public interface Callback {
