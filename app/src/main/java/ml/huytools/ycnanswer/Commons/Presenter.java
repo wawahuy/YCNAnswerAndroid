@@ -1,6 +1,17 @@
 package ml.huytools.ycnanswer.Commons;
 
+import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+
+import java.lang.ref.WeakReference;
 
 /***
  * Presenter.java
@@ -12,17 +23,66 @@ import android.content.Context;
  */
 public abstract class Presenter<T> {
 
-    protected Context context;
+    protected WeakReference<Activity> activity;
     protected T view;
+    private Model dataSaved;
 
-    public Presenter(Context view){
-        this.context = view;
-        this.view = (T)view;
+    protected Presenter(){
     }
 
-    public void Start(){
-        this.OnStart();
+    protected Presenter(Activity activity){
+        set(activity);
     }
 
-    protected abstract void OnStart();
+    public void set(Activity activity){
+        this.activity = new WeakReference<>(activity);
+        this.view = (T)activity;
+    }
+
+
+    /// Được gọi khi presenter lần đầu được khởi tạo
+    protected abstract void OnCreate();
+
+    /// Chỉ được gọi khi presenter được tạo lại
+    /// Khi activity bị xoay hay cấu hình bị thay đổi
+    protected void OnResume(Model dataSaved){ }
+
+
+    /// new data save
+    public void postDataSaved(Model model){
+        this.dataSaved = model;
+    }
+
+
+    public static<T, V extends Presenter<T>> V of(AppCompatActivity activity, Class<V> clazz){
+        try {
+            /// Sử dụng ViewModel của Android
+            /// Khắc phục tình trạng presenter được khởi tạo lại khi activity có thay đổi
+            PresenterSaved presenterSaved = ViewModelProviders.of(activity).get(PresenterSaved.class);
+
+            if(presenterSaved.presenter == null){
+                presenterSaved.presenter = clazz.newInstance();
+                presenterSaved.presenter.set(activity);
+                presenterSaved.presenter.OnCreate();
+                Log.v("Log", "Presenter Create On Activity: "+activity.toString());
+            } else {
+                presenterSaved.presenter.set(activity);
+                presenterSaved.presenter.OnResume(presenterSaved.presenter.dataSaved);
+            }
+
+            return (V) presenterSaved.presenter;
+
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    /// ViewModel
+    public static class PresenterSaved<T, V extends Presenter<T>> extends ViewModel {
+        public V presenter;
+    }
 }

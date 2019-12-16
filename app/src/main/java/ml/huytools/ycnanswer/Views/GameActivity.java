@@ -1,15 +1,22 @@
 package ml.huytools.ycnanswer.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import ml.huytools.ycnanswer.Commons.Model;
 import ml.huytools.ycnanswer.Commons.ModelManager;
+import ml.huytools.ycnanswer.Commons.Presenter;
 import ml.huytools.ycnanswer.Commons.Views.RenderingLoop;
 import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
 import ml.huytools.ycnanswer.Models.CauHoi;
@@ -24,7 +31,6 @@ import ml.huytools.ycnanswer.Views.GameViews.Components.TableMLView;
 
 
 public class GameActivity extends AppCompatActivity implements GamePresenter.View {
-
     GamePresenter presenter;
     ResourceManager resourceManager;
     CountDownView countDown;
@@ -43,6 +49,8 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
+        Log.v("Log", "Activity create: "+ toString());
+
         /// init
         resourceManager = ResourceManager.getInstance(this);
         initView();
@@ -51,14 +59,27 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
         /// debug
         FPSDebugView.AddOnActivity(this);
 
-        /// P
-        presenter = new GamePresenter(this);
-        presenter.Start();
+        /// Tạo Presenter với activity hiện tại
+        /// Ngăn chặn dữ liệu bị cập nhật lại trên View
+        presenter = Presenter.of(this, GamePresenter.class);
+    }
+
+    /// --------------- Resume Saved Data ------------------
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        /// Save Data
+        GamePresenter.ResumeData data = new GamePresenter.ResumeData();
+        data.countDownCurrent = countDown.getTimeCurrent();
+        presenter.postDataSaved(data);
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    public void ResumeUI(GamePresenter.ResumeData model) {
+        if(model != null){
+            countDown.setTimeCurrent(model.countDownCurrent);
+        }
     }
 
 

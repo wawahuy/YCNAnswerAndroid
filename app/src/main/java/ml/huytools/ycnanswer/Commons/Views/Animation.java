@@ -2,6 +2,9 @@ package ml.huytools.ycnanswer.Commons.Views;
 
 import android.graphics.Canvas;
 
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+
 import ml.huytools.ycnanswer.Commons.Annotation.JsonName;
 import ml.huytools.ycnanswer.Commons.Math.Vector2D;
 import ml.huytools.ycnanswer.Commons.Model;

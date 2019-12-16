@@ -1,5 +1,6 @@
 package ml.huytools.ycnanswer.Presenters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.os.SystemClock;
@@ -7,6 +8,7 @@ import android.util.Log;
 
 import ml.huytools.ycnanswer.Commons.APIProvider;
 import ml.huytools.ycnanswer.Commons.CustomLoader;
+import ml.huytools.ycnanswer.Commons.Model;
 import ml.huytools.ycnanswer.Commons.ModelManager;
 import ml.huytools.ycnanswer.Commons.Presenter;
 import ml.huytools.ycnanswer.Commons.Resource;
@@ -19,6 +21,8 @@ import ml.huytools.ycnanswer.R;
 public class GamePresenter extends Presenter<GamePresenter.View> {
 
     public interface View {
+        void ResumeUI(ResumeData model);
+
         ///--------------
         void OpenLoading();
         void CloseLoading();
@@ -43,25 +47,31 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
 
     ;
 
+    public static class ResumeData extends Model {
+        public int countDownCurrent;
+    }
+
+    ;
+
     public enum ANSWER {A, B, C, D}
     ModelManager<CHDiemCauHoi> chDiemCauHoi;
     CustomLoader loading;
 
     ;
 
-    public GamePresenter(Context context) {
-        super(context);
-    }
-
-
 
     //// ------------ Start Game ---------------
     @Override
-    protected void OnStart() {
+    protected void OnCreate() {
         loadGameDebug();
 
         ///
         view.ConfigTableML(chDiemCauHoi);
+    }
+
+    @Override
+    protected void OnResume(Model model){
+        view.ResumeUI((ResumeData) model);
     }
 
 
@@ -70,7 +80,7 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
     private void loadGameDebug() {
 
         /// Debug
-        String s = Resource.readRawTextFile(context, R.raw.test_cau_hinh_diem_cau_hoi);
+        String s = Resource.readRawTextFile(activity.get().getApplication(), R.raw.test_cau_hinh_diem_cau_hoi);
         chDiemCauHoi = ModelManager.ParseJSON(CHDiemCauHoi.class, s);
     }
 
