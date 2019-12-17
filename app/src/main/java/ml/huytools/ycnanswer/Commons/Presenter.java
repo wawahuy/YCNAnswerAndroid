@@ -2,6 +2,8 @@ package ml.huytools.ycnanswer.Commons;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -58,7 +60,7 @@ public abstract class Presenter<T> {
         try {
             /// Sử dụng ViewModel của Android
             /// Khắc phục tình trạng presenter được khởi tạo lại khi activity có thay đổi
-            PresenterSaved presenterSaved = ViewModelProviders.of(activity).get(PresenterSaved.class);
+            final PresenterSaved presenterSaved = ViewModelProviders.of(activity).get(PresenterSaved.class);
 
             if(presenterSaved.presenter == null){
                 presenterSaved.presenter = clazz.newInstance();
@@ -67,7 +69,16 @@ public abstract class Presenter<T> {
                 Log.v("Log", "Presenter Create On Activity: "+activity.toString());
             } else {
                 presenterSaved.presenter.set(activity);
+
+                /// Run Resume on Main Thread
+//                new Handler(Looper.myLooper()).post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        presenterSaved.presenter.OnResume(presenterSaved.presenter.dataSaved);
+//                    }
+//                });
                 presenterSaved.presenter.OnResume(presenterSaved.presenter.dataSaved);
+
             }
 
             return (V) presenterSaved.presenter;

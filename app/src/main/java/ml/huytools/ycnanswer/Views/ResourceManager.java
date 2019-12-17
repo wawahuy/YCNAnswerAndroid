@@ -5,7 +5,7 @@ import android.media.MediaPlayer;
 
 import ml.huytools.ycnanswer.Commons.ModelManager;
 import ml.huytools.ycnanswer.Commons.Resource;
-import ml.huytools.ycnanswer.Commons.Views.Animation;
+import ml.huytools.ycnanswer.Commons.Views.Animations.AnimationManager;
 import ml.huytools.ycnanswer.Commons.Views.Image;
 import ml.huytools.ycnanswer.R;
 
@@ -25,8 +25,8 @@ public class ResourceManager {
     /// Image
     public final Image imageMc;
 
-    /// Animation Frames
-    public final ModelManager<Animation.Frame> framesMc;
+    /// AnimationManager Frames
+    /// public final ModelManager<AnimationManager.Frame> framesMc;
 
 
     private ResourceManager(Context context) {
@@ -37,7 +37,7 @@ public class ResourceManager {
         imageMc = Image.LoadByResource(context.getResources(), R.drawable.sprite_mc);
 
         /// frames
-        framesMc = ModelManager.ParseJSON(Animation.Frame.class, Resource.readRawTextFile(context, R.raw.frames_mc));
+        /// framesMc = ModelManager.ParseJSON(AnimationManager.Frame.class, Resource.readRawTextFile(context, R.raw.frames_mc));
     }
 
 

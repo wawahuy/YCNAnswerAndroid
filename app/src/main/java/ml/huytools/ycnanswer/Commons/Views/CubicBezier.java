@@ -6,10 +6,11 @@ import ml.huytools.ycnanswer.Commons.Math.Vector2D;
 import ml.huytools.ycnanswer.Commons.Math.YMath;
 
 /***
- *
- *
- *
- *
+ * CubicBezier.java
+ * Author: Nguyen Gia Huy
+ * Project: https://github.com/wawahuy/YCNAnswerAndroid
+ * Start: 02/12/2019
+ * Update:
  *
  */
 public class CubicBezier {

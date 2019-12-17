@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -59,28 +60,35 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
         /// debug
         FPSDebugView.AddOnActivity(this);
 
-        /// Tạo Presenter với activity hiện tại
-        /// Ngăn chặn dữ liệu bị cập nhật lại trên View
+        /// Tạo Presenter gắn với activity hiện tại
         presenter = Presenter.of(this, GamePresenter.class);
     }
 
+
+
     /// --------------- Resume Saved Data ------------------
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        /// Save Data
-        GamePresenter.ResumeData data = new GamePresenter.ResumeData();
-        data.countDownCurrent = countDown.getTimeCurrent();
-        presenter.postDataSaved(data);
-
-        super.onSaveInstanceState(outState);
+    protected void onDestroy() {
+//        /// Save Data
+//        GamePresenter.ResumeData data = new GamePresenter.ResumeData();
+//        data.countDownStart = countDown.getTimeStart();
+//        data.levelTableML = tableMLView.getPos();
+//
+//        /// Lưu data vào presenter
+//        /// Nếu bắt đầu vòng đời mới presenter sẽ kích hoạt OnResume
+//        presenter.postDataSaved(data);
+        super.onDestroy();
     }
 
-    @Override
-    public void ResumeUI(GamePresenter.ResumeData model) {
-        if(model != null){
-            countDown.setTimeCurrent(model.countDownCurrent);
-        }
-    }
+//    @Override
+//    public void ResumeUI(final GamePresenter.ResumeData model) {
+//        if(model != null){
+//            countDown.setTimeStart(model.countDownStart);
+//            countDown.startIfNotPaused();
+//            tableMLView.setPos(model.levelTableML);
+//            tableMLView.draw();
+//        }
+//    }
 
 
     /// ----------------- Init -------------------

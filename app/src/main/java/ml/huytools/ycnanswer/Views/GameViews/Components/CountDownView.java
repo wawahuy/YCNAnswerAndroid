@@ -213,14 +213,29 @@ public class CountDownView extends CustomSurfaceView {
     }
 
     public void setTimeCurrent(int timeCurrent) {
-        this.timeCurrent = timeCurrent;
-        if(isPaused){
-            effectManager.removeAll();
-            hasCallEnd = false;
-            timeStart = System.currentTimeMillis();
-            super.registerLoop();
-        }
+//        timeStart = System.currentTimeMillis() + (timeCountDown - timeCurrent);
+//        if(isPaused){
+//            effectManager.removeAll();
+//            hasCallEnd = false;
+//            super.registerLoop();
+//        }
+        /// Update
     }
+
+    public long getTimeStart() {
+        return timeStart;
+    }
+
+    public void setTimeStart(long timeStart) {
+        this.timeStart = timeStart;
+    }
+
+    public void startIfNotPaused(){
+        effectManager.removeAll();
+        hasCallEnd = false;
+        super.registerLoop();
+    }
+
 
 
 

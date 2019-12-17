@@ -19,6 +19,12 @@ import java.util.function.Consumer;
  */
 public class ModelManager<T extends Model> extends LinkedList<T> {
 
+
+    public ModelManager(){
+
+    }
+
+
     public String toJson(){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("[ ");
@@ -44,15 +50,21 @@ public class ModelManager<T extends Model> extends LinkedList<T> {
 
     public static<T extends Model> ModelManager<T> ParseJSON(Class<T> clazz, JSONArray arrayJson){
         ModelManager<T> modelManager = new ModelManager<>();
+        modelManager.set(clazz, arrayJson);
+        return modelManager;
+    }
+
+
+    public void set(Class<T> clazz, JSONArray arrayJson){
         int size = arrayJson.length();
         for (int i=0; i<size; i++){
             try {
-                modelManager.add(Model.ParseJson(clazz, arrayJson.get(i).toString()));
+                add(Model.ParseJson(clazz, arrayJson.get(i).toString()));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
-        return modelManager;
     }
+
 
 }

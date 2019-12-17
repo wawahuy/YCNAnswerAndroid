@@ -6,7 +6,7 @@ import android.graphics.Paint;
 import android.util.Log;
 
 /**
- * Effect này chưa sử dụng Animation Abstract
+ * Effect này chưa sử dụng AnimationManager Abstract
  * Cần được xây dựng lại
  */
 public class EffectCircleRotate extends Effect {

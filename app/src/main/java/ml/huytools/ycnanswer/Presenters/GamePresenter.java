@@ -20,8 +20,11 @@ import ml.huytools.ycnanswer.R;
 
 public class GamePresenter extends Presenter<GamePresenter.View> {
 
+    /// Interface
+    /// Activity cần impl để Presenter có thể tương tác với Activity
+    /// Tách biệc hoạt động UI và Control
     public interface View {
-        void ResumeUI(ResumeData model);
+        //        void ResumeUI(ResumeData model);
 
         ///--------------
         void OpenLoading();
@@ -47,9 +50,13 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
 
     ;
 
-    public static class ResumeData extends Model {
-        public int countDownCurrent;
-    }
+    /// DataSaved
+    /// Dữ liệu bị thay đổi mõi khi cấu hình activity bị thay đổi
+    /// Model này sẽ chứa các thông tin thay đổi đó
+    //    public static class ResumeData extends Model {
+    //        public long countDownStart;
+    //        public int levelTableML;
+    //    }
 
     ;
 
@@ -69,9 +76,18 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
         view.ConfigTableML(chDiemCauHoi);
     }
 
+
+    /***
+     * OnResume được gọi mỗi khi vòng đời activity được tạo mới
+     * @param model
+     */
     @Override
     protected void OnResume(Model model){
-        view.ResumeUI((ResumeData) model);
+//        /// add lại table
+//        view.ConfigTableML(chDiemCauHoi);
+//
+//        /// Yêu cầu UI cập nhật Data ở view lại
+//        view.ResumeUI((ResumeData) model);
     }
 
 

@@ -1,9 +1,23 @@
-[
-  {
-    "x": 0,
-    "y": 0,
-    "w": 0,
-    "h": 0
-  }
+{
+  "images" : [
+    {
+      "id" : "i0",
+      "type": "resource",
+      "path": "",
+      "frames" : [
+        {"x":0, "y":0, "w":0, "h":0},
+        {"x":0, "y":0, "w":1, "h":1}
+      ]
+    }
+  ],
 
-]
+  "actions" : [
+    {
+      "name" : "idle",
+      "frames" : [
+        { "imgID": "i0", "framePos" : 0 },
+        { "imgID": "i0", "framePos" : 1 }
+      ]
+    }
+  ]
+}

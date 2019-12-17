@@ -35,7 +35,7 @@ public class SpotLightView extends CustomSurfaceView {
 
     @Override
     public void OnInit(Canvas canvas) {
-        int w = canvas.getWidth();
+        int w = canvas.getWidth() + 150;
         int h = canvas.getHeight();
         int xc = w/7;
         size = new Vector2D(w, h);
