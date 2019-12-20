@@ -3,6 +3,7 @@ package ml.huytools.ycnanswer.Commons.Views.Animations;
 import android.content.Context;
 import android.content.res.Resources;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
 import ml.huytools.ycnanswer.Commons.Annotation.JsonName;
@@ -62,37 +63,21 @@ public class AnimationData extends Model {
         for(Image image:images){
             image.init();
         }
-    }
 
-    public boolean check(){
-        /// Kiểm tra & lấy danh sách các image ID
-        LinkedList<String> imageIds = new LinkedList<>();
+        /// Init hashmap
+        LinkedHashMap<String, Image> imageLinkedHashMap = new LinkedHashMap<>();
         for(Image image:images){
-            if(!image.isLoaded){
-                return false;
-            }
-            imageIds.add(image.id);
+            imageLinkedHashMap.put(image.id, image);
         }
 
-        /// Kiểm tra các Actions
+        /// Cập nhật image trên action
         for(Action action:actions){
-            // Kiểm tra các frame có ID hợp lệ hay không
             for(Action.Frame frame:action.frames){
-                boolean check = false;
-                for(String imageID:imageIds){
-                    if(imageID.equals(frame.imgID)){
-                        check = true;
-                        break;
-                    }
-                }
-
-                if(!check){
-                    return false;
-                }
+                frame.image = imageLinkedHashMap.get(frame.imgID).frames.get(frame.framePos).imageCrop;
             }
         }
-        return true;
     }
+
 
 
 
@@ -149,7 +134,11 @@ public class AnimationData extends Model {
                     int r = Resource.getResourceID(path);
                     image = ml.huytools.ycnanswer.Commons.Views.Image.LoadByResource(r);
                     if(scaleX != 1.0f || scaleY != 1.0f){
-                        image = image.scale(new Vector2D(scaleX, scaleY));
+                        ml.huytools.ycnanswer.Commons.Views.Image imageScale = image.scale(new Vector2D(scaleX, scaleY));
+                        // free image
+                        image.free();
+                        // swap
+                        image = imageScale;
                     }
                     break;
             }
@@ -161,10 +150,10 @@ public class AnimationData extends Model {
 
             /// init crop image to mini - frames
             for(Image.Frame f:frames){
-                float x = App.convertDpToPixel(f.x)*scaleX;
-                float y = App.convertDpToPixel(f.y)*scaleY;
-                float w = App.convertDpToPixel(f.w)*scaleX;
-                float h = App.convertDpToPixel(f.h)*scaleY;
+                float x = App.convertDpToPixel(f.x*scaleX);
+                float y = App.convertDpToPixel(f.y*scaleY);
+                float w = App.convertDpToPixel(f.w*scaleX);
+                float h = App.convertDpToPixel(f.h*scaleY);
                 f.imageCrop = image.crop(new Vector2D(x, y), new Vector2D(w, h));
             }
         }
@@ -182,6 +171,15 @@ public class AnimationData extends Model {
         @JsonName
         public int time;
 
+        @JsonName
+        public String timing = "Linear";
+
+        @JsonName
+        public boolean reverse = false;
+
+        @JsonName
+        public boolean infinite = true;
+
         @JsonName(type = JsonName.Type.ModelManager, clazz = Action.Frame.class)
         public ModelManager<Action.Frame> frames;
 
@@ -191,6 +189,12 @@ public class AnimationData extends Model {
 
             @JsonName
             public int framePos;
+
+            ///
+            private ml.huytools.ycnanswer.Commons.Views.Image image;
+            public ml.huytools.ycnanswer.Commons.Views.Image getImage(){
+                return image;
+            }
         }
     }
 

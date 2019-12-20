@@ -49,11 +49,14 @@ public class Image {
      */
     public Image scale(Vector2D scale){
         Image image = new Image();
-        Matrix matrix = new Matrix();
-        matrix.postScale(scale.x, scale.y);
         float w = bitmap.getWidth()*scale.x;
-        float h = bitmap.getWidth()*scale.y;
-        image.bitmap = Bitmap.createBitmap(bitmap, 0, 0, (int)w, (int)h, matrix, false);
+        float h = bitmap.getHeight()*scale.y;
+        image.bitmap = Bitmap.createScaledBitmap(bitmap, (int)w, (int)h, false);
         return image;
+    }
+
+    public void free(){
+        bitmap.recycle();
+        bitmap = null;
     }
 }

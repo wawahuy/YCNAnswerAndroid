@@ -10,7 +10,7 @@ import ml.huytools.ycnanswer.Commons.Views.CustomSurfaceView;
 import ml.huytools.ycnanswer.R;
 
 public class MCView extends CustomSurfaceView {
-    AnimationData animationData;
+    AnimationManager animationManager;
     int pos = 0;
 
     public MCView(Context context, AttributeSet attrs) {
@@ -18,8 +18,8 @@ public class MCView extends CustomSurfaceView {
         transparent();
 
         /// Test
-        animationData = AnimationData.CreateByResource(R.raw.frames_mc);
-        AnimationManager animationManager = new AnimationManager(animationData);
+        AnimationData animationData = AnimationData.CreateByResource(R.raw.frames_mc);
+        animationManager = new AnimationManager(animationData);
     }
 
     @Override
@@ -29,13 +29,13 @@ public class MCView extends CustomSurfaceView {
 
     @Override
     public boolean OnUpdate(int sleep) {
-        pos++;
-        if(pos == 5) pos = 0;
+        animationManager.get("mc_default").OnUpdate(sleep);
         return true;
     }
 
     @Override
     public void OnDraw(Canvas canvas) {
-        canvas.drawBitmap(animationData.images.get(0).frames.get(animationData.actions.get(0).frames.get(pos).framePos).getImageCrop().getBitmap(), 0, 0, null);
+        clearTransparent(canvas);
+        animationManager.get("mc_default").OnDraw(canvas);
     }
 }

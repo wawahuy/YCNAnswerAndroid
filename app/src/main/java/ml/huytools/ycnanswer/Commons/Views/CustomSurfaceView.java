@@ -2,7 +2,9 @@ package ml.huytools.ycnanswer.Commons.Views;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -69,6 +71,10 @@ public abstract class CustomSurfaceView extends SurfaceView implements SurfaceHo
     public void transparent(){
         setZOrderOnTop(true);
         getHolder().setFormat(PixelFormat.RGBA_8888);
+    }
+
+    public void clearTransparent(Canvas canvas){
+        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
     }
 
     public void refreshTimeUpdate(){

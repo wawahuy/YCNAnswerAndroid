@@ -26,18 +26,20 @@ import ml.huytools.ycnanswer.Commons.Views.Image;
 
 
 public class AnimationManager {
-    AnimationData animationData;
     LinkedHashMap<String, Animation> animations;
 
     public AnimationManager(AnimationData animationData){
-        this.animationData = animationData;
-        initAnimation();
+        animations = new LinkedHashMap<>();
+        initAnimation(animationData);
     }
 
     public Animation get(String action){
         return animations.get(action);
     }
 
-    private void initAnimation(){
+    private void initAnimation(AnimationData animationData){
+        for(AnimationData.Action action:animationData.actions){
+            animations.put(action.name, new Animation(action));
+        }
     }
 }

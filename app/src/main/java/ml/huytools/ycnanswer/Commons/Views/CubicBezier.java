@@ -49,6 +49,25 @@ public class CubicBezier {
         }
     }
 
+    public static TIMING StringToTiming(String timing){
+        switch (timing){
+            case "Ease":
+                return TIMING.Ease;
+
+            case "EaseInOut":
+                return TIMING.EaseInOut;
+
+            case "EaseIn":
+                return TIMING.EaseIn;
+
+            case "EaseOut":
+                return TIMING.EaseOut;
+
+            default:
+                return TIMING.Linear;
+        }
+    }
+
     public void set(float x1, float y1, float x2, float y2){
         set(new Vector2D(x1, y1), new Vector2D(x2, y2));
     }

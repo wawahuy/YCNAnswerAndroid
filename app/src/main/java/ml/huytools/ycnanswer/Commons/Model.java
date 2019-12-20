@@ -136,6 +136,7 @@ public class Model<T extends Model> {
                                 Class<?> type = field.getType();
 
                                 /// float
+                                /// JsonObject không có float nên cần ép kiểu Double sàn Float
                                 if(type.isAssignableFrom(float.class)){
                                     field.setFloat(this, (float) jsonObject.getDouble(name));
                                 } else {
