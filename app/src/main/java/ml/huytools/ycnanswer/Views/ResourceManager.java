@@ -34,7 +34,7 @@ public class ResourceManager {
         audioTimeout = MediaPlayer.create(context, R.raw.outtime);
 
         /// image
-        imageMc = Image.LoadByResource(context.getResources(), R.drawable.sprite_mc);
+        imageMc = Image.LoadByResource(R.drawable.sprite_mc);
 
         /// frames
         /// framesMc = ModelManager.ParseJSON(AnimationManager.Frame.class, Resource.readRawTextFile(context, R.raw.frames_mc));

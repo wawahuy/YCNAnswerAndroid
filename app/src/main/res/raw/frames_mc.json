@@ -3,10 +3,15 @@
     {
       "id" : "i0",
       "type": "resource",
-      "path": "",
+      "path": "R.drawable.sprite_mc",
+      "scaleX": 0.25,
+      "scaleY": 0.25,
       "frames" : [
-        {"x":0, "y":0, "w":0, "h":0},
-        {"x":0, "y":0, "w":1, "h":1}
+        {"x":0, "y":0, "w":168, "h":256},
+        {"x":168, "y":0, "w":168, "h":256},
+        {"x":336, "y":0, "w":168, "h":256},
+        {"x":504, "y":0, "w":168, "h":256},
+        {"x":672, "y":0, "w":168, "h":256}
       ]
     }
   ],
@@ -14,9 +19,13 @@
   "actions" : [
     {
       "name" : "idle",
+      "time" : 1000,
       "frames" : [
         { "imgID": "i0", "framePos" : 0 },
-        { "imgID": "i0", "framePos" : 1 }
+        { "imgID": "i0", "framePos" : 1 },
+        { "imgID": "i0", "framePos" : 2 },
+        { "imgID": "i0", "framePos" : 3 },
+        { "imgID": "i0", "framePos" : 4 }
       ]
     }
   ]

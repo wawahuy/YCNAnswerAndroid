@@ -5,11 +5,14 @@ import android.graphics.Canvas;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import java.util.LinkedHashMap;
+
 import ml.huytools.ycnanswer.Commons.Annotation.JsonName;
 import ml.huytools.ycnanswer.Commons.Math.Vector2D;
 import ml.huytools.ycnanswer.Commons.Model;
 import ml.huytools.ycnanswer.Commons.ModelManager;
 import ml.huytools.ycnanswer.Commons.Views.AbstractAnimation;
+import ml.huytools.ycnanswer.Commons.Views.IRender;
 import ml.huytools.ycnanswer.Commons.Views.Image;
 
 /***
@@ -22,27 +25,19 @@ import ml.huytools.ycnanswer.Commons.Views.Image;
  */
 
 
-public class AnimationManager extends AbstractAnimation {
-    Image image;
-    Vector2D positionRender;
-    int positionFrameCurrent;
+public class AnimationManager {
+    AnimationData animationData;
+    LinkedHashMap<String, Animation> animations;
 
-    public AnimationManager(Image image){
-        this.image = image;
-        this.positionFrameCurrent = 0;
+    public AnimationManager(AnimationData animationData){
+        this.animationData = animationData;
+        initAnimation();
     }
 
-    public void setPosition(Vector2D position){
-        positionRender = position;
+    public Animation get(String action){
+        return animations.get(action);
     }
 
-    @Override
-    protected boolean OnUpdateAnimation(float per) {
-        return false;
+    private void initAnimation(){
     }
-
-    @Override
-    public void OnDraw(Canvas canvas) {
-    }
-
 }

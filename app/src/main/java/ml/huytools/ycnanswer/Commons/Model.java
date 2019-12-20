@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 
 import ml.huytools.ycnanswer.Commons.Annotation.JsonName;
 
@@ -110,6 +111,10 @@ public class Model<T extends Model> {
                 /// Khi Annonation không được định nghĩa value thì lấy tên field thay thế
                 name = (name == "" ? field.getName() : name);
                 try {
+                    if(!jsonObject.has(name)){
+                        continue;
+                    }
+
 
                     switch(annotation.type()){
                         case Model:
@@ -128,7 +133,14 @@ public class Model<T extends Model> {
                             break;
 
                             default:
-                                field.set(this, jsonObject.get(name));
+                                Class<?> type = field.getType();
+
+                                /// float
+                                if(type.isAssignableFrom(float.class)){
+                                    field.setFloat(this, (float) jsonObject.getDouble(name));
+                                } else {
+                                    field.set(this, jsonObject.get(name));
+                                }
                     }
 
                 } catch (IllegalAccessException e) {

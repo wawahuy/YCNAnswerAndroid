@@ -96,7 +96,7 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
     private void loadGameDebug() {
 
         /// Debug
-        String s = Resource.readRawTextFile(activity.get().getApplication(), R.raw.test_cau_hinh_diem_cau_hoi);
+        String s = Resource.readRawTextFile(R.raw.test_cau_hinh_diem_cau_hoi);
         chDiemCauHoi = ModelManager.ParseJSON(CHDiemCauHoi.class, s);
     }
 

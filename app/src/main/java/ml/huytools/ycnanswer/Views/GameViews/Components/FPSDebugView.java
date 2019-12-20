@@ -22,8 +22,8 @@ public class FPSDebugView extends CustomSurfaceView {
         transparent();
 
         textPaint = new Paint();
-        textPaint.setColor(Color.WHITE);
-        textPaint.setTextSize(40);
+        textPaint.setARGB(230, 200, 200, 200);
+        textPaint.setTextSize(30);
         textPaint.setAntiAlias(true);
 
         fps = 0;
