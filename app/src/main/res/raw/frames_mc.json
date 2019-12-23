@@ -4,8 +4,8 @@
       "id" : "i0",
       "type": "resource",
       "path": "R.drawable.sprite_mc",
-      "scaleX": 0.3,
-      "scaleY": 0.3,
+      "scaleX": 0.35,
+      "scaleY": 0.35,
       "frames" : [
         {"x":1,   "y":1, "w":169, "h":260},
         {"x":172, "y":1, "w":169, "h":260},
@@ -17,6 +17,17 @@
         {"x":343, "y":263, "w":169, "h":260},
         {"x":514, "y":263, "w":169, "h":260},
         {"x":685, "y":263, "w":169, "h":260}
+      ]
+    },
+    {
+      "id" : "mc_eye",
+      "type": "resource",
+      "path": "R.drawable.sprite_mc_eye",
+      "scaleX": 0.16,
+      "scaleY": 0.16,
+      "frames": [
+        {"x": 1, "y": 1,  "w": 186, "h": 50},
+        {"x": 1, "y": 56, "w": 191, "h": 29}
       ]
     }
   ],
@@ -54,6 +65,19 @@
       "time" : 10000,
       "frames" : [
         { "imgID": "i0", "framePos" : 9 }
+      ]
+    },
+
+    {
+      "name" : "mc_eye_default",
+      "time" : 2000,
+      "frames" : [
+        { "imgID": "mc_eye", "framePos" : 0 },
+        { "imgID": "mc_eye", "framePos" : 0 },
+        { "imgID": "mc_eye", "framePos" : 0 },
+        { "imgID": "mc_eye", "framePos" : 0 },
+        { "imgID": "mc_eye", "framePos" : 0 },
+        { "imgID": "mc_eye", "framePos" : 1 }
       ]
     }
 

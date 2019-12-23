@@ -2,6 +2,7 @@ package ml.huytools.ycnanswer.Commons.Views.Animations;
 
 import android.graphics.Canvas;
 
+import ml.huytools.ycnanswer.Commons.Math.Vector2D;
 import ml.huytools.ycnanswer.Commons.Views.AbstractAnimation;
 import ml.huytools.ycnanswer.Commons.Views.CubicBezier;
 
@@ -9,11 +10,13 @@ public class Animation extends AbstractAnimation {
     AnimationData.Action action;
     int numFrame;
     int positionFrameCurrent;
+    Vector2D positionRender;
 
     public Animation(AnimationData.Action action){
         this.action = action;
         this.positionFrameCurrent = 0;
         this.numFrame = action.frames.size();
+        this.positionRender = new Vector2D(0, 0);
         setInfinite(action.infinite);
         setTime(action.time);
         setTiming(new CubicBezier(CubicBezier.StringToTiming(action.timing)));
@@ -23,6 +26,15 @@ public class Animation extends AbstractAnimation {
     public AnimationData.Action getActionData(){
         return action;
     }
+
+    public Vector2D getPositionRender() {
+        return positionRender;
+    }
+
+    public void setPositionRender(Vector2D positionRender) {
+        this.positionRender = positionRender;
+    }
+
 
     private int getPositionFrameByPercent(float per){
         return (int)(per*numFrame/100);
@@ -40,6 +52,6 @@ public class Animation extends AbstractAnimation {
 
     @Override
     public void OnDraw(Canvas canvas) {
-        canvas.drawBitmap(action.frames.get(positionFrameCurrent).getImage().getBitmap(), 0, 0, null);
+        canvas.drawBitmap(action.frames.get(positionFrameCurrent).getImage().getBitmap(), positionRender.x, positionRender.y, null);
     }
 }
