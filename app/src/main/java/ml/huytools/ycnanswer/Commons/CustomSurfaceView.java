@@ -1,4 +1,4 @@
-package ml.huytools.ycnanswer.Commons.Views;
+package ml.huytools.ycnanswer.Commons;
 
 import android.content.Context;
 import android.graphics.Canvas;

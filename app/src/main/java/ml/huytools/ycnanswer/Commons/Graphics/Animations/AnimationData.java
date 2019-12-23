@@ -1,10 +1,6 @@
-package ml.huytools.ycnanswer.Commons.Views.Animations;
-
-import android.content.Context;
-import android.content.res.Resources;
+package ml.huytools.ycnanswer.Commons.Graphics.Animations;
 
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 
 import ml.huytools.ycnanswer.Commons.Annotation.JsonName;
 import ml.huytools.ycnanswer.Commons.App;
@@ -12,7 +8,6 @@ import ml.huytools.ycnanswer.Commons.Math.Vector2D;
 import ml.huytools.ycnanswer.Commons.Model;
 import ml.huytools.ycnanswer.Commons.ModelManager;
 import ml.huytools.ycnanswer.Commons.Resource;
-import ml.huytools.ycnanswer.Commons.Views.Image;
 
 /***
  *
@@ -103,7 +98,7 @@ public class AnimationData extends Model {
         ///
         private boolean isLoaded = false;
 
-        private ml.huytools.ycnanswer.Commons.Views.Image image;
+        private ml.huytools.ycnanswer.Commons.Image image;
 
         /// Frames
         public static class Frame extends Model {
@@ -120,9 +115,9 @@ public class AnimationData extends Model {
             public float h;
 
             ///
-            private ml.huytools.ycnanswer.Commons.Views.Image imageCrop;
+            private ml.huytools.ycnanswer.Commons.Image imageCrop;
 
-            public ml.huytools.ycnanswer.Commons.Views.Image getImageCrop(){
+            public ml.huytools.ycnanswer.Commons.Image getImageCrop(){
                 return imageCrop;
             }
         }
@@ -132,9 +127,9 @@ public class AnimationData extends Model {
             switch (type){
                 case "resource":
                     int r = Resource.getResourceID(path);
-                    image = ml.huytools.ycnanswer.Commons.Views.Image.LoadByResource(r);
+                    image = ml.huytools.ycnanswer.Commons.Image.LoadByResource(r);
                     if(scaleX != 1.0f || scaleY != 1.0f){
-                        ml.huytools.ycnanswer.Commons.Views.Image imageScale = image.scale(new Vector2D(scaleX, scaleY));
+                        ml.huytools.ycnanswer.Commons.Image imageScale = image.scale(new Vector2D(scaleX, scaleY));
                         // free image
                         image.free();
                         // swap
@@ -159,7 +154,7 @@ public class AnimationData extends Model {
         }
 
 
-        public ml.huytools.ycnanswer.Commons.Views.Image getImage() {
+        public ml.huytools.ycnanswer.Commons.Image getImage() {
             return image;
         }
     }
@@ -191,8 +186,8 @@ public class AnimationData extends Model {
             public int framePos;
 
             ///
-            private ml.huytools.ycnanswer.Commons.Views.Image image;
-            public ml.huytools.ycnanswer.Commons.Views.Image getImage(){
+            private ml.huytools.ycnanswer.Commons.Image image;
+            public ml.huytools.ycnanswer.Commons.Image getImage(){
                 return image;
             }
         }

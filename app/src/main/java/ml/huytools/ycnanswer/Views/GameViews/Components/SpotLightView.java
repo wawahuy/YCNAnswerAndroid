@@ -10,15 +10,12 @@ import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.graphics.Shader;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import java.util.LinkedList;
-import java.util.function.Consumer;
 
 import ml.huytools.ycnanswer.Commons.Math.Vector2D;
-import ml.huytools.ycnanswer.Commons.Views.AbstractAnimation;
-import ml.huytools.ycnanswer.Commons.Views.CubicBezier;
-import ml.huytools.ycnanswer.Commons.Views.CustomSurfaceView;
+import ml.huytools.ycnanswer.Commons.Math.CubicBezier;
+import ml.huytools.ycnanswer.Commons.CustomSurfaceView;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.Effect;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
 
@@ -28,9 +25,11 @@ public class SpotLightView extends CustomSurfaceView {
     EffectManager effectManager;
     LinkedList<SpotLightChild> spotLightChildren;
 
+
     public SpotLightView(Context context, AttributeSet attrs) {
         super(context, attrs);
         transparent();
+
     }
 
     @Override
@@ -101,6 +100,7 @@ public class SpotLightView extends CustomSurfaceView {
 
     @Override
     public boolean OnUpdate(int sleep) {
+        //test
         return effectManager.OnUpdate(sleep);
     }
 

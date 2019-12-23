@@ -1,25 +1,15 @@
 package ml.huytools.ycnanswer.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import ml.huytools.ycnanswer.Commons.App;
-import ml.huytools.ycnanswer.Commons.Model;
 import ml.huytools.ycnanswer.Commons.ModelManager;
 import ml.huytools.ycnanswer.Commons.Presenter;
-import ml.huytools.ycnanswer.Commons.Views.RenderingLoop;
 import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
 import ml.huytools.ycnanswer.Models.CauHoi;
 import ml.huytools.ycnanswer.Presenters.GamePresenter;
@@ -27,7 +17,6 @@ import ml.huytools.ycnanswer.R;
 import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownView;
 import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownAudio;
 import ml.huytools.ycnanswer.Views.GameViews.Components.FPSDebugView;
-import ml.huytools.ycnanswer.Views.GameViews.Components.LoadingView;
 import ml.huytools.ycnanswer.Views.GameViews.Components.SpotLightView;
 import ml.huytools.ycnanswer.Views.GameViews.Components.TableMLView;
 

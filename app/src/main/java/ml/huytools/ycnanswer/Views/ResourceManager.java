@@ -3,10 +3,7 @@ package ml.huytools.ycnanswer.Views;
 import android.content.Context;
 import android.media.MediaPlayer;
 
-import ml.huytools.ycnanswer.Commons.ModelManager;
-import ml.huytools.ycnanswer.Commons.Resource;
-import ml.huytools.ycnanswer.Commons.Views.Animations.AnimationManager;
-import ml.huytools.ycnanswer.Commons.Views.Image;
+import ml.huytools.ycnanswer.Commons.Image;
 import ml.huytools.ycnanswer.R;
 
 public class ResourceManager {

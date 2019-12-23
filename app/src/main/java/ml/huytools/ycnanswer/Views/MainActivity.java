@@ -4,12 +4,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.animation.Animation;
 
 import ml.huytools.ycnanswer.Commons.APIProvider;
-import ml.huytools.ycnanswer.Commons.Views.Animations.AnimationData;
 import ml.huytools.ycnanswer.Commons.App;
-import ml.huytools.ycnanswer.Commons.Views.Animations.AnimationManager;
 import ml.huytools.ycnanswer.R;
 
 public class MainActivity extends AppCompatActivity {
@@ -26,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         APIConfig();
 
 
-        Intent intent = new Intent(this, GameActivity.class);
+        Intent intent = new Intent(this, TestActivity.class);
         startActivity(intent);
         finish();
     }

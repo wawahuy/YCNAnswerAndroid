@@ -1,10 +1,9 @@
-package ml.huytools.ycnanswer.Commons.Views.Animations;
+package ml.huytools.ycnanswer.Commons.Graphics.Animations;
 
 import android.graphics.Canvas;
 
 import ml.huytools.ycnanswer.Commons.Math.Vector2D;
-import ml.huytools.ycnanswer.Commons.Views.AbstractAnimation;
-import ml.huytools.ycnanswer.Commons.Views.CubicBezier;
+import ml.huytools.ycnanswer.Commons.Math.CubicBezier;
 
 public class Animation extends AbstractAnimation {
     AnimationData.Action action;

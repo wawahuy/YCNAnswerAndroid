@@ -1,19 +1,10 @@
 package ml.huytools.ycnanswer.Presenters;
 
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.Canvas;
-import android.os.SystemClock;
-import android.util.Log;
-
 import ml.huytools.ycnanswer.Commons.APIProvider;
-import ml.huytools.ycnanswer.Commons.CustomLoader;
 import ml.huytools.ycnanswer.Commons.Model;
 import ml.huytools.ycnanswer.Commons.ModelManager;
 import ml.huytools.ycnanswer.Commons.Presenter;
 import ml.huytools.ycnanswer.Commons.Resource;
-import ml.huytools.ycnanswer.Commons.Views.AbstractAnimation;
-import ml.huytools.ycnanswer.Commons.Views.CubicBezier;
 import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
 import ml.huytools.ycnanswer.Models.CauHoi;
 import ml.huytools.ycnanswer.R;
@@ -62,7 +53,6 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
 
     public enum ANSWER {A, B, C, D}
     ModelManager<CHDiemCauHoi> chDiemCauHoi;
-    CustomLoader loading;
 
     ;
 
@@ -101,39 +91,6 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
     }
 
 
-    private void loadGame(){
-            ///-------- Need Update ----------------
-        new CustomLoader(){
-            @Override
-            protected void OnUpdateProgress(int p) {
-                view.UpdateLoadingBar(p);
-            }
-
-            @Override
-            protected void OnUpdateText(String text) {
-                view.UpdateLoadingText(text);
-            }
-
-            @Override
-            protected void OnStartLoad() {
-                /// Mo view loading
-                view.OpenLoading();
-
-                /// Load Cau Hinh Diem Cau Hoi
-                AddLoad(new Load<ModelManager<CHDiemCauHoi>>("Load config answer...", "Load config answer error"){
-                    @Override
-                    protected ModelManager<CHDiemCauHoi> OnRun() {
-                        return chDiemCauHoi = APIProvider.GET(APIUri.CAU_HINH_CAU_HOI).toModelManager(CHDiemCauHoi.class);
-                    }
-                });
-            }
-
-            @Override
-            protected void OnCompleteLoad() {
-                view.CloseLoading();
-            }
-        }.start();
-    }
 
 
 

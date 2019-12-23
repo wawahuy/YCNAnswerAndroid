@@ -1,19 +1,9 @@
-package ml.huytools.ycnanswer.Commons.Views;
+package ml.huytools.ycnanswer.Commons;
 
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
-import android.os.Environment;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Random;
-
-import ml.huytools.ycnanswer.Commons.App;
 import ml.huytools.ycnanswer.Commons.Math.Vector2D;
 
 public class Image {

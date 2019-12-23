@@ -11,7 +11,7 @@ import android.util.AttributeSet;
 
 import ml.huytools.ycnanswer.Commons.ModelManager;
 import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
-import ml.huytools.ycnanswer.Commons.Views.CustomSurfaceView;
+import ml.huytools.ycnanswer.Commons.CustomSurfaceView;
 
 public class TableMLView extends CustomSurfaceView {
 

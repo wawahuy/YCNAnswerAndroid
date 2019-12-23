@@ -9,7 +9,7 @@ import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.widget.RelativeLayout;
 
-import ml.huytools.ycnanswer.Commons.Views.CustomSurfaceView;
+import ml.huytools.ycnanswer.Commons.CustomSurfaceView;
 
 public class FPSDebugView extends CustomSurfaceView {
 

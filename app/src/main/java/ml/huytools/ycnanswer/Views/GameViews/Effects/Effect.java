@@ -1,9 +1,7 @@
 package ml.huytools.ycnanswer.Views.GameViews.Effects;
 
-import java.util.LinkedList;
-
-import ml.huytools.ycnanswer.Commons.Views.AbstractAnimation;
-import ml.huytools.ycnanswer.Commons.Views.IRender;
+import ml.huytools.ycnanswer.Commons.Graphics.Animations.AbstractAnimation;
+import ml.huytools.ycnanswer.Commons.IRender;
 
 public abstract class Effect extends AbstractAnimation implements IRender {
     private Runnable eventRemove;

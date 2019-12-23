@@ -1,12 +1,17 @@
 package ml.huytools.ycnanswer.Commons.Math;
 
-public class Vector2D {
+public class Vector2D implements Cloneable {
     public float x;
     public float y;
 
     public Vector2D(){
         x = 0.0f;
         y = 0.0f;
+    }
+
+    @Override
+    public Vector2D clone() {
+        return new Vector2D(x, y);
     }
 
     public Vector2D(float x, float y){

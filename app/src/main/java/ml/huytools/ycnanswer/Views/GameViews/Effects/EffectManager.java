@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 
 import java.util.LinkedList;
 
-import ml.huytools.ycnanswer.Commons.Views.IRender;
+import ml.huytools.ycnanswer.Commons.IRender;
 
 public class EffectManager<T extends Effect> implements IRender {
 

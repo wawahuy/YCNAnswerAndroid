@@ -7,11 +7,10 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.util.Log;
 
 import ml.huytools.ycnanswer.Commons.Math.Vector2D;
 import ml.huytools.ycnanswer.Commons.Math.Vector3D;
-import ml.huytools.ycnanswer.Commons.Views.CustomSurfaceView;
+import ml.huytools.ycnanswer.Commons.CustomSurfaceView;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectCircle;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
 
