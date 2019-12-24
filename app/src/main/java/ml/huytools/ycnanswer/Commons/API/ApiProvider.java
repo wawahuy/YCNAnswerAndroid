@@ -1,41 +1,34 @@
 package ml.huytools.ycnanswer.Commons.API;
 
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
+import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
 
-import ml.huytools.ycnanswer.Commons.MVP.Model;
-import ml.huytools.ycnanswer.Commons.MVP.ModelManager;
-
 
 /***
- * APIProvider.java
+ * ApiProvider.java
  * Author: Nguyen Gia Huy
  * Project: https://github.com/wawahuy/YCNAnswerAndroid
  * Start: 16/11/2019
  * Update: 24/11/2019
  *
  */
-public class APIProvider {
-
-    static String token;
-    static String host;
+public class ApiProvider {
 
 
     /**
@@ -45,13 +38,13 @@ public class APIProvider {
         Async.AnyRun runnable;
         Callback callback;
         Thread thread;
-        Uri.Builder params;
+        ApiParameters params;
         Handler handler;
         int requestCode;
 
         private Async(Async.AnyRun run){
             thread = new Thread(this);
-            params = new Uri.Builder();
+            params = new ApiParameters();
             runnable = run;
             handler = new Handler(Looper.myLooper());
         }
@@ -64,8 +57,8 @@ public class APIProvider {
         public static Async GET(final String uri){
             return ANY(new Async.AnyRun() {
                 @Override
-                public APIOutput run(Async async) {
-                    return APIProvider.GET(uri);
+                public ApiOutput run(Async async) {
+                    return ApiProvider.GET(uri);
                 }
             });
         }
@@ -73,18 +66,33 @@ public class APIProvider {
         public static Async POST(final String uri){
             return ANY(new Async.AnyRun() {
                 @Override
-                public APIOutput run(Async async) {
-                    return APIProvider.POST(uri, async.params);
+                public ApiOutput run(Async async) {
+                    return ApiProvider.POST(uri, async.params);
                 }
             });
         }
 
         public Async AddParam(String key, String value){
-            params.appendQueryParameter(key, value);
+            params.add(key, value);
             return this;
         }
 
-        public Async SetParams(Uri.Builder params){
+        public Async AddParam(String key, File value){
+            params.add(key, value);
+            return this;
+        }
+
+        public Async AddParam(String key, String filename, byte[] bytes){
+            params.add(key, filename, bytes);
+            return this;
+        }
+
+        public Async AddParam(String key, String filename, Bitmap bitmap){
+            params.add(key, filename, bitmap);
+            return this;
+        }
+
+        public Async SetParams(ApiParameters params){
             this.params = params;
             return this;
         }
@@ -103,7 +111,7 @@ public class APIProvider {
         @Override
         public void run() {
             // run
-            final APIOutput output = runnable.run(Async.this);
+            final ApiOutput output = runnable.run(Async.this);
 
             // run on thread created
             handler.post(new Runnable() {
@@ -115,11 +123,11 @@ public class APIProvider {
         }
 
         public interface Callback {
-            void OnAPIResult(APIOutput output, int requestCode);
+            void OnAPIResult(ApiOutput output, int requestCode);
         }
 
         private interface AnyRun {
-            APIOutput run(Async async);
+            ApiOutput run(Async async);
         }
     }
 
@@ -131,7 +139,7 @@ public class APIProvider {
      * @throws IOException
      */
     private static HttpURLConnection CreateConnection(String uri) throws IOException {
-        URL url = new URL(APIConfig.buildUrl(uri));
+        URL url = new URL(ApiConfig.buildUrl(uri));
         HttpURLConnection myConnection = (HttpURLConnection) url.openConnection();
         return myConnection;
     }
@@ -170,16 +178,19 @@ public class APIProvider {
      * @param runnable
      * @return
      */
-    private static APIOutput ANY(String uri, AnyRun runnable){
-        APIOutput output = new APIOutput();
+    private static ApiOutput ANY(String uri, AnyRun runnable){
+        ApiOutput output = new ApiOutput();
 
         try {
             HttpURLConnection httpURLConnection = CreateConnection(uri);
             httpURLConnection.setReadTimeout(15000);
             httpURLConnection.setConnectTimeout(15000);
+            httpURLConnection.setUseCaches(false);
+            httpURLConnection.setRequestProperty("Connection", "Keep-Alive");
+            httpURLConnection.setRequestProperty("Cache-Control", "no-cache");
 
             /// Inject
-            APIConfig.applyInjectHeader(httpURLConnection,uri);
+            ApiConfig.applyInterceptHeader(httpURLConnection,uri);
 
             /// Custom
             runnable.run(httpURLConnection);
@@ -202,7 +213,7 @@ public class APIProvider {
             httpURLConnection.disconnect();
 
         } catch (IOException e) {
-            Log("Error create HttpsUrlConnection: "+ host + uri);
+            Log("Error create HttpsUrlConnection: "+ ApiConfig.getHostname() + uri);
             e.printStackTrace();
         } catch (JSONException e) {
             Log("Error format json");
@@ -210,12 +221,12 @@ public class APIProvider {
         }
 
         /// inject
-        APIConfig.applyInjectOutput(output,uri);
+        ApiConfig.applyInterceptOutput(output,uri);
 
         return output;
     }
 
-    private static APIOutput ANY_NO_DATA(String uri, final String method){
+    private static ApiOutput ANY_NO_DATA(String uri, final String method){
         return ANY(uri, new AnyRun() {
             @Override
             public void run(HttpURLConnection connection) throws ProtocolException {
@@ -224,26 +235,22 @@ public class APIProvider {
         });
     }
 
-    private static APIOutput ANY_HAS_DATA(String uri, final String method , final Uri.Builder params){
+    private static ApiOutput ANY_HAS_DATA(String uri, final String method , final ApiParameters params){
         return ANY(uri, new AnyRun() {
             @Override
             public void run(HttpURLConnection connection) throws ProtocolException {
                 connection.setRequestMethod(method);
                 connection.setDoOutput(true);
                 connection.setDoInput(true);
+                connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + ApiParameters.Parameter.BOUNDARY);
 
                 //out
                 try {
                     OutputStream out = connection.getOutputStream();
-                    OutputStreamWriter outputStreamWriter = new OutputStreamWriter(out, "UTF-8");
-                    BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
-
-                    ///Out data
-                    bufferedWriter.write(params.build().getEncodedQuery());
-
-                    ///Close
-                    bufferedWriter.flush();
-                    bufferedWriter.close();
+                    DataOutputStream dataOutputStream =  new DataOutputStream(out);
+                    params.writeToDataOutputStream(dataOutputStream);
+                    dataOutputStream.flush();
+                    dataOutputStream.close();
                     out.close();
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -256,26 +263,14 @@ public class APIProvider {
 
 
     /// ---------------------
-    public static APIOutput GET(String uri){
+    public static ApiOutput GET(String uri){
         return ANY_NO_DATA(uri, "GET");
     }
 
-    public static APIOutput POST(String uri, final Uri.Builder params){
+    public static ApiOutput POST(String uri, final ApiParameters params){
         return ANY_HAS_DATA(uri, "POST", params);
     }
 
-
-
-
-
-    /// ----------------------
-    public static void SetToken(String token){
-        APIProvider.token = token;
-    }
-
-    public static void SetHost(String host){
-        APIProvider.host = host;
-    }
 
 
     private static void Log(String str){

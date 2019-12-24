@@ -1,9 +1,13 @@
 package ml.huytools.ycnanswer.Commons.API;
 
 import java.net.HttpURLConnection;
-import java.util.Collections;
 
-public abstract class APIInject {
+/**
+ * Đánh chặn và tiêm các đoạn mã theo nhu cầu
+ * Cận thận hoạt động nào có thể xãy ra lỗi trên toàn ApiProvider
+ *
+ */
+public abstract class ApiIntercept {
     /**
      * Không inject khi gặp uri này
      * Except uri chỉ có hiệu lực khi onlyUri không chứa phần tử nào
@@ -26,7 +30,7 @@ public abstract class APIInject {
      * Inject output
      * @param apiOutput
      */
-    public abstract void OnResult(APIOutput apiOutput);
+    public abstract void OnResult(ApiOutput apiOutput);
 
 
     /**

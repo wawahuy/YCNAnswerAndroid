@@ -49,4 +49,18 @@ public class App {
         return dp * ((float) App.getInstance().getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
+
+    /**
+     * App sẽ chạy trên một Thread riêng biệc tách biệt với MainThread
+     *
+     */
+    class AppLooper extends Thread {
+
+
+        @Override
+        public void run() {
+            super.run();
+        }
+    }
+
 }

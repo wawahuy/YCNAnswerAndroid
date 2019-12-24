@@ -2,10 +2,10 @@ package ml.huytools.ycnanswer.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import ml.huytools.ycnanswer.Commons.API.APIConfig;
-import ml.huytools.ycnanswer.Commons.API.APIInject;
-import ml.huytools.ycnanswer.Commons.API.APIOutput;
-import ml.huytools.ycnanswer.Commons.API.APIProvider;
+import ml.huytools.ycnanswer.Commons.API.ApiConfig;
+import ml.huytools.ycnanswer.Commons.API.ApiIntercept;
+import ml.huytools.ycnanswer.Commons.API.ApiOutput;
+import ml.huytools.ycnanswer.Commons.API.ApiProvider;
 import ml.huytools.ycnanswer.Commons.App;
 import ml.huytools.ycnanswer.R;
 
@@ -26,24 +26,12 @@ public class TestActivity extends AppCompatActivity {
         App.getInstance().init(this);
 
         // Đặt hostname cho API
-        APIConfig.setHostname("https://google.com");
-        APIConfig.addInject(new APIInject() {
-            @Override
-            public void OnHeaderInject(HttpURLConnection connection) {
-                connection.setRequestProperty ("Authorization", "");
-            }
+        ApiConfig.setHostname("https://google.com");
+        ApiProvider.Async.POST("/test").AddParam("test", "test").Then(new ApiProvider.Async.Callback() {
+                    @Override
+                    public void OnAPIResult(ApiOutput output, int requestCode) {
 
-            @Override
-            public void OnResult(APIOutput apiOutput) {
-
-            }
-        });
-
-        APIProvider.Async.GET("/").Then(new APIProvider.Async.Callback() {
-            @Override
-            public void OnAPIResult(APIOutput output, int requestCode) {
-
-            }
+                    }
         });
     }
 

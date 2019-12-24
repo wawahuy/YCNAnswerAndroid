@@ -6,7 +6,7 @@ import android.graphics.Rect;
 
 import ml.huytools.ycnanswer.Commons.Graphics.Scene.Node;
 
-public class Sprite extends Node {
+public class Sprite extends Node{
     Texture texture;
     Paint paint;
     Rect rect;
