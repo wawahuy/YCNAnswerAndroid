@@ -1,9 +1,10 @@
-package ml.huytools.ycnanswer.Commons;
+package ml.huytools.ycnanswer.Commons.Graphics;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
+import ml.huytools.ycnanswer.Commons.App;
 import ml.huytools.ycnanswer.Commons.Math.Vector2D;
 
 public class Image {

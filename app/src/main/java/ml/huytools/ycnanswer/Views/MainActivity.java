@@ -5,7 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import ml.huytools.ycnanswer.Commons.APIProvider;
+import ml.huytools.ycnanswer.Commons.API.APIConfig;
+import ml.huytools.ycnanswer.Commons.API.APIProvider;
 import ml.huytools.ycnanswer.Commons.App;
 import ml.huytools.ycnanswer.R;
 
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 
     void APIConfig(){
         /// Config Host
-        APIProvider.SetHost("http://192.168.1.130:8000/api");
+        APIConfig.setHostname("http://192.168.1.130:8000/api");
 
 
     }

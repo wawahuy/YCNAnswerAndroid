@@ -1,18 +1,21 @@
 package ml.huytools.ycnanswer.Commons.Graphics;
 
-import android.graphics.BitmapShader;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-import ml.huytools.ycnanswer.Commons.App;
 import ml.huytools.ycnanswer.Commons.Graphics.Scene.Node;
-import ml.huytools.ycnanswer.Commons.Image;
 
 public class Sprite extends Node {
     Texture texture;
     Paint paint;
     Rect rect;
+
+    public Sprite(){
+        rect = new Rect(0, 0, 0, 0);
+        paint = new Paint();
+        paint.setAntiAlias(true);
+    }
 
     public Sprite(Texture texture){
         rect = new Rect(0, 0, 0, 0);
@@ -47,7 +50,6 @@ public class Sprite extends Node {
         /// (right - left)*0.5f , (bottom - top)*0.5f
         setOrigin(rect.right*0.5f - rect.left*0.5f, rect.bottom*0.5f - rect.top*0.5f);
     }
-
 
     @Override
     public void OnDraw(Canvas canvas) {

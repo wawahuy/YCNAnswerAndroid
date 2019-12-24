@@ -1,14 +1,10 @@
-package ml.huytools.ycnanswer.Commons;
-
-import android.util.Log;
+package ml.huytools.ycnanswer.Commons.MVP;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
-import java.lang.reflect.Type;
 
 import ml.huytools.ycnanswer.Commons.Annotation.JsonName;
 

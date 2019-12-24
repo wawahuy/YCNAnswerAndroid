@@ -1,13 +1,10 @@
-package ml.huytools.ycnanswer.Commons;
-
-import androidx.annotation.NonNull;
+package ml.huytools.ycnanswer.Commons.MVP;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.function.Consumer;
 
 /***
  * ModelManager.java

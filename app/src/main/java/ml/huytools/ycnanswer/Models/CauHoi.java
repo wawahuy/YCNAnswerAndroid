@@ -2,7 +2,7 @@ package ml.huytools.ycnanswer.Models;
 
 
 import ml.huytools.ycnanswer.Commons.Annotation.JsonName;
-import ml.huytools.ycnanswer.Commons.Model;
+import ml.huytools.ycnanswer.Commons.MVP.Model;
 
 public class CauHoi extends Model {
 

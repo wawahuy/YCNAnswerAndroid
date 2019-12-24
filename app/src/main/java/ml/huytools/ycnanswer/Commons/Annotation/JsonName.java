@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import ml.huytools.ycnanswer.Commons.Model;
+import ml.huytools.ycnanswer.Commons.MVP.Model;
 
 
 @Documented

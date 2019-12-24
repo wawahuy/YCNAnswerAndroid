@@ -15,7 +15,7 @@ import java.util.LinkedList;
 
 import ml.huytools.ycnanswer.Commons.Math.Vector2D;
 import ml.huytools.ycnanswer.Commons.Math.CubicBezier;
-import ml.huytools.ycnanswer.Commons.CustomSurfaceView;
+import ml.huytools.ycnanswer.Commons.Removing.CustomSurfaceView;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.Effect;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
 

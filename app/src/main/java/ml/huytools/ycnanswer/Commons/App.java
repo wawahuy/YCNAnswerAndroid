@@ -3,7 +3,6 @@ package ml.huytools.ycnanswer.Commons;
 import android.content.Context;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
-import android.util.TypedValue;
 
 public class App {
     private static final App ourInstance = new App();

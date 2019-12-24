@@ -9,9 +9,9 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 
-import ml.huytools.ycnanswer.Commons.ModelManager;
+import ml.huytools.ycnanswer.Commons.MVP.ModelManager;
 import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
-import ml.huytools.ycnanswer.Commons.CustomSurfaceView;
+import ml.huytools.ycnanswer.Commons.Removing.CustomSurfaceView;
 
 public class TableMLView extends CustomSurfaceView {
 

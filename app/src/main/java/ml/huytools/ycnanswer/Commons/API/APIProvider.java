@@ -1,4 +1,4 @@
-package ml.huytools.ycnanswer.Commons;
+package ml.huytools.ycnanswer.Commons.API;
 
 import android.net.Uri;
 import android.os.Handler;
@@ -20,6 +20,9 @@ import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
 
+import ml.huytools.ycnanswer.Commons.MVP.Model;
+import ml.huytools.ycnanswer.Commons.MVP.ModelManager;
+
 
 /***
  * APIProvider.java
@@ -34,49 +37,6 @@ public class APIProvider {
     static String token;
     static String host;
 
-    /***
-     * Output
-     */
-    static public class Output<T extends Model> {
-        public boolean Status;
-        public String Message;
-        public Object Data;
-        public String Uri;
-
-        private Output(){
-        }
-
-        public static Output Create(String json) throws JSONException {
-            Output output = new Output();
-            JSONObject jsonObject = new JSONObject(json);
-            output.Status = jsonObject.getBoolean("status");
-            output.Message = jsonObject.has("message") ? jsonObject.getString("message") : null;
-            output.Data = jsonObject.get("data");
-            return output;
-        }
-
-        public boolean isDJObject(){
-            return Data instanceof JSONObject;
-        }
-
-        public boolean isDJArray(){
-            return Data instanceof JSONArray;
-        }
-
-
-        public ModelManager<T> toModelManager(Class<T> clazz){
-            if(Data == null || !isDJArray())
-                return null;
-            return ModelManager.ParseJSON(clazz, Data.toString());
-        }
-
-        public Model toModel(Class<T> clazz){
-            if(Data == null || !isDJObject())
-                return null;
-            return Model.ParseJson(clazz, Data.toString());
-        }
-
-    }
 
     /**
      * Async
@@ -104,7 +64,7 @@ public class APIProvider {
         public static Async GET(final String uri){
             return ANY(new Async.AnyRun() {
                 @Override
-                public Output run(Async async) {
+                public APIOutput run(Async async) {
                     return APIProvider.GET(uri);
                 }
             });
@@ -113,7 +73,7 @@ public class APIProvider {
         public static Async POST(final String uri){
             return ANY(new Async.AnyRun() {
                 @Override
-                public Output run(Async async) {
+                public APIOutput run(Async async) {
                     return APIProvider.POST(uri, async.params);
                 }
             });
@@ -143,7 +103,7 @@ public class APIProvider {
         @Override
         public void run() {
             // run
-            final Output output = runnable.run(Async.this);
+            final APIOutput output = runnable.run(Async.this);
 
             // run on thread created
             handler.post(new Runnable() {
@@ -155,11 +115,11 @@ public class APIProvider {
         }
 
         public interface Callback {
-            void OnAPIResult(Output output, int requestCode);
+            void OnAPIResult(APIOutput output, int requestCode);
         }
 
         private interface AnyRun {
-            Output run(Async async);
+            APIOutput run(Async async);
         }
     }
 
@@ -171,7 +131,7 @@ public class APIProvider {
      * @throws IOException
      */
     private static HttpURLConnection CreateConnection(String uri) throws IOException {
-        URL url = new URL(host + uri);
+        URL url = new URL(APIConfig.buildUrl(uri));
         HttpURLConnection myConnection = (HttpURLConnection) url.openConnection();
         return myConnection;
     }
@@ -210,27 +170,30 @@ public class APIProvider {
      * @param runnable
      * @return
      */
-    private static Output ANY(String uri, AnyRun runnable){
+    private static APIOutput ANY(String uri, AnyRun runnable){
+        APIOutput output = new APIOutput();
+
         try {
             HttpURLConnection httpURLConnection = CreateConnection(uri);
             httpURLConnection.setReadTimeout(15000);
             httpURLConnection.setConnectTimeout(15000);
 
-            /// Auth
-            /// ---------- Update ---------------
+            /// Inject
+            APIConfig.applyInjectHeader(httpURLConnection,uri);
 
             /// Custom
             runnable.run(httpURLConnection);
 
             /// code
             int responseCode = httpURLConnection.getResponseCode();
+            output.Uri = uri;
+            output.ResponseCode = responseCode;
 
             if(responseCode == HttpURLConnection.HTTP_OK){
                 String strJson = ReadString(httpURLConnection);
-                Output output = Output.Create(strJson);
-                output.Uri = uri;
+                output.DataString = strJson;
+                output.set(strJson);
                 Log(strJson);
-                return output;
             } else {
                 Log("Response code: "+ responseCode);
             }
@@ -246,10 +209,13 @@ public class APIProvider {
             e.printStackTrace();
         }
 
-        return new Output();
+        /// inject
+        APIConfig.applyInjectOutput(output,uri);
+
+        return output;
     }
 
-    private static Output ANY_NO_DATA(String uri, final String method){
+    private static APIOutput ANY_NO_DATA(String uri, final String method){
         return ANY(uri, new AnyRun() {
             @Override
             public void run(HttpURLConnection connection) throws ProtocolException {
@@ -258,7 +224,7 @@ public class APIProvider {
         });
     }
 
-    private static Output ANY_HAS_DATA(String uri, final String method , final Uri.Builder params){
+    private static APIOutput ANY_HAS_DATA(String uri, final String method , final Uri.Builder params){
         return ANY(uri, new AnyRun() {
             @Override
             public void run(HttpURLConnection connection) throws ProtocolException {
@@ -290,11 +256,11 @@ public class APIProvider {
 
 
     /// ---------------------
-    public static Output GET(String uri){
+    public static APIOutput GET(String uri){
         return ANY_NO_DATA(uri, "GET");
     }
 
-    public static Output POST(String uri, final Uri.Builder params){
+    public static APIOutput POST(String uri, final Uri.Builder params){
         return ANY_HAS_DATA(uri, "POST", params);
     }
 

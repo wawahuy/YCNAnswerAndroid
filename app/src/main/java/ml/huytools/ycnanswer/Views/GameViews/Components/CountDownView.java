@@ -10,7 +10,7 @@ import android.util.AttributeSet;
 
 import ml.huytools.ycnanswer.Commons.Math.Vector2D;
 import ml.huytools.ycnanswer.Commons.Math.Vector3D;
-import ml.huytools.ycnanswer.Commons.CustomSurfaceView;
+import ml.huytools.ycnanswer.Commons.Removing.CustomSurfaceView;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectCircle;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
 

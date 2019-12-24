@@ -3,7 +3,6 @@ package ml.huytools.ycnanswer.Commons.Graphics;
 import android.graphics.BitmapShader;
 import android.graphics.Shader;
 
-import ml.huytools.ycnanswer.Commons.Image;
 import ml.huytools.ycnanswer.Commons.Math.Vector2D;
 
 public class Texture {

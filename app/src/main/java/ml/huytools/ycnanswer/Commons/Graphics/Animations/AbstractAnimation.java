@@ -2,7 +2,7 @@ package ml.huytools.ycnanswer.Commons.Graphics.Animations;
 
 import ml.huytools.ycnanswer.Commons.Math.CubicBezier;
 import ml.huytools.ycnanswer.Commons.Math.Vector2D;
-import ml.huytools.ycnanswer.Commons.IRender;
+import ml.huytools.ycnanswer.Commons.Removing.IRender;
 
 /**
  * Xây dựng các chuyển động hoàn hảo
