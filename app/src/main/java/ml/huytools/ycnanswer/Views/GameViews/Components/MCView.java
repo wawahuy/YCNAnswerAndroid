@@ -4,11 +4,11 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 
-import ml.huytools.ycnanswer.Commons.Math.Vector2D;
-import ml.huytools.ycnanswer.Commons.Graphics.Animations.Animation;
-import ml.huytools.ycnanswer.Commons.Graphics.Animations.AnimationData;
-import ml.huytools.ycnanswer.Commons.Graphics.Animations.AnimationManager;
-import ml.huytools.ycnanswer.Commons.Removing.CustomSurfaceView;
+import ml.huytools.ycnanswer.Core.Math.Vector2D;
+import ml.huytools.ycnanswer.Core.Game.Removing.Animation;
+import ml.huytools.ycnanswer.Core.Game.Removing.AnimationData;
+import ml.huytools.ycnanswer.Core.Game.Removing.AnimationManager;
+import ml.huytools.ycnanswer.Core.Removing.CustomSurfaceView;
 import ml.huytools.ycnanswer.R;
 
 public class MCView extends CustomSurfaceView {

@@ -5,8 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 
-import ml.huytools.ycnanswer.Commons.API.ApiConfig;
-import ml.huytools.ycnanswer.Commons.App;
+import ml.huytools.ycnanswer.Core.API.ApiConfig;
+import ml.huytools.ycnanswer.Core.App;
 import ml.huytools.ycnanswer.R;
 
 public class MainActivity extends AppCompatActivity {

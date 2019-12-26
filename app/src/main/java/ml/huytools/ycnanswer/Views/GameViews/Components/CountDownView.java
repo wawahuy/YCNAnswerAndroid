@@ -8,9 +8,9 @@ import android.graphics.PorterDuff;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 
-import ml.huytools.ycnanswer.Commons.Math.Vector2D;
-import ml.huytools.ycnanswer.Commons.Math.Vector3D;
-import ml.huytools.ycnanswer.Commons.Removing.CustomSurfaceView;
+import ml.huytools.ycnanswer.Core.Math.Vector2D;
+import ml.huytools.ycnanswer.Core.Math.Vector3D;
+import ml.huytools.ycnanswer.Core.Removing.CustomSurfaceView;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectCircle;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
 

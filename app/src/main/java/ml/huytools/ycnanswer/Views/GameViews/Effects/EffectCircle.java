@@ -3,8 +3,8 @@ package ml.huytools.ycnanswer.Views.GameViews.Effects;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import ml.huytools.ycnanswer.Commons.Math.Vector2D;
-import ml.huytools.ycnanswer.Commons.Math.Vector3D;
+import ml.huytools.ycnanswer.Core.Math.Vector2D;
+import ml.huytools.ycnanswer.Core.Math.Vector3D;
 
 public class EffectCircle extends Effect {
 

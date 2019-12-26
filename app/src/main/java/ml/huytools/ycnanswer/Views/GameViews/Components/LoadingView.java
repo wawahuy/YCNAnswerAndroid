@@ -10,7 +10,7 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
-import ml.huytools.ycnanswer.Commons.Removing.CustomSurfaceView;
+import ml.huytools.ycnanswer.Core.Removing.CustomSurfaceView;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectCircleRotate;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
 

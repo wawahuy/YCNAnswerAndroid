@@ -13,9 +13,9 @@ import android.util.AttributeSet;
 
 import java.util.LinkedList;
 
-import ml.huytools.ycnanswer.Commons.Math.Vector2D;
-import ml.huytools.ycnanswer.Commons.Math.CubicBezier;
-import ml.huytools.ycnanswer.Commons.Removing.CustomSurfaceView;
+import ml.huytools.ycnanswer.Core.Math.Vector2D;
+import ml.huytools.ycnanswer.Core.Math.CubicBezier;
+import ml.huytools.ycnanswer.Core.Removing.CustomSurfaceView;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.Effect;
 import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
 

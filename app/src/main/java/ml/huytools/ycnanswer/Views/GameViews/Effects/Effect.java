@@ -1,7 +1,7 @@
 package ml.huytools.ycnanswer.Views.GameViews.Effects;
 
-import ml.huytools.ycnanswer.Commons.Graphics.Animations.AbstractAnimation;
-import ml.huytools.ycnanswer.Commons.Removing.IRender;
+import ml.huytools.ycnanswer.Core.Game.Removing.AbstractAnimation;
+import ml.huytools.ycnanswer.Core.Removing.IRender;
 
 public abstract class Effect extends AbstractAnimation implements IRender {
     private Runnable eventRemove;

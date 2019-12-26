@@ -1,9 +1,9 @@
 package ml.huytools.ycnanswer.Presenters;
 
-import ml.huytools.ycnanswer.Commons.MVP.Model;
-import ml.huytools.ycnanswer.Commons.MVP.ModelManager;
-import ml.huytools.ycnanswer.Commons.MVP.Presenter;
-import ml.huytools.ycnanswer.Commons.Resource;
+import ml.huytools.ycnanswer.Core.MVP.Model;
+import ml.huytools.ycnanswer.Core.MVP.ModelManager;
+import ml.huytools.ycnanswer.Core.MVP.Presenter;
+import ml.huytools.ycnanswer.Core.Resource;
 import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
 import ml.huytools.ycnanswer.Models.CauHoi;
 import ml.huytools.ycnanswer.R;

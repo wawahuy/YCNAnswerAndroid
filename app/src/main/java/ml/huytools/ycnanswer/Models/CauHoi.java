@@ -1,8 +1,8 @@
 package ml.huytools.ycnanswer.Models;
 
 
-import ml.huytools.ycnanswer.Commons.Annotation.JsonName;
-import ml.huytools.ycnanswer.Commons.MVP.Model;
+import ml.huytools.ycnanswer.Core.Annotation.JsonName;
+import ml.huytools.ycnanswer.Core.MVP.Model;
 
 public class CauHoi extends Model {
 
