@@ -7,6 +7,7 @@ import android.graphics.PorterDuff;
 
 import java.util.LinkedList;
 
+import ml.huytools.ycnanswer.Core.Game.Actions.Action;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Transformable;
 import ml.huytools.ycnanswer.Core.Game.Schedules.Scheduler;
 
@@ -30,10 +31,12 @@ public class Scene {
     }
 
     public void add(Node node){
+        node.scene = this;
         nodes.add(node);
     }
 
     public void remove(Node node){
+        node.scene = null;
         nodes.remove(node);
     }
 
@@ -74,6 +77,8 @@ public class Scene {
     public static abstract class Node extends Transformable {
         private boolean visible;
         private boolean hasDraw = false;
+        private Action action;
+        private Scene scene;
 
         protected Node(){
             visible = true;
@@ -88,6 +93,19 @@ public class Scene {
                 hasDraw = false;
             }
             this.visible = visible;
+        }
+
+        public Action getAction() {
+            return action;
+        }
+
+        public void runAction(Action action) {
+            this.action = action;
+            this.action.setup(this);
+        }
+
+        public Scene getSceneAttach() {
+            return scene;
         }
 
         /***
@@ -124,7 +142,8 @@ public class Scene {
         }
 
         public boolean update(){
-            return needUpdateMatrix || !hasDraw;
+            boolean hasActionUpdate = action != null && action.update();
+            return needUpdateMatrix || !hasDraw || hasActionUpdate;
         }
     }
 

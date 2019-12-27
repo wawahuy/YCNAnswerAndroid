@@ -15,7 +15,7 @@ public class CircleShape extends Drawable {
         radius = 0;
         rect = new RectF();
         startAngle = 0;
-        endAngle = 0;
+        endAngle = 360;
     }
 
     public int getRadius() {

@@ -8,6 +8,21 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.SurfaceView;
 
+import ml.huytools.ycnanswer.Core.Game.Actions.Action;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionDelay;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionFunc;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionRepeat;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionRepeatForever;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionSequence;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionSpawn;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionTimings.ActionCubicBezier;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionTimings.ActionMoveBy;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionTimings.ActionMoveTo;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionTimings.ActionRotateBy;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionTimings.ActionRotateTo;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionTimings.ActionScaleBy;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionTimings.ActionScaleTo;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionVisible;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Color;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.CircleShape;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.Drawable;
@@ -71,10 +86,13 @@ public class TestActivity extends AppCompatActivity {
 
             circleShape = new CircleShape();
             circleShape.setColor(new Color(255, 0, 0));
-            circleShape.setRadius(400);
+            circleShape.setRadius(10);
             circleShape.setStrokeWidth(10);
-            circleShape.setStyle(Drawable.Style.STROKE);
+            circleShape.setEndAngle(220);
+            circleShape.setStyle(Drawable.Style.FILL);
             circleShape.alwaysCenterOrigin();
+
+
 
             scene.add(circleShape);
             scene.add(sprite);
@@ -86,6 +104,18 @@ public class TestActivity extends AppCompatActivity {
         @Override
         public void OnResume(Vector2D size) {
             circleShape.setPosition(size.x/2, size.y/2);
+            circleShape.runAction(
+                    ActionRepeatForever.create(
+                        ActionSequence.create(
+                                ActionVisible.create(true),
+                                ActionCubicBezier.EaseInOut(ActionScaleBy.create(new Vector2D(20, 20), 1000)),
+                                ActionDelay.create(100),
+                                ActionVisible.create(false),
+                                ActionScaleTo.create(new Vector2D(1, 1), 0)
+                        )
+                    )
+            );
+
             sprite.setPosition(size.x/2, size.y/2);
         }
 
@@ -95,13 +125,7 @@ public class TestActivity extends AppCompatActivity {
 
         @Override
         public void OnUpdate(float dt) {
-            sprite.rotate(1);
-
-            if(circleShape.getEndAngle() - circleShape.getStartAngle() >= 360){
-                circleShape.setStartAngle(0);
-                circleShape.setEndAngle(0);
-            }
-            circleShape.setEndAngle(circleShape.getEndAngle() + 1);
+            //circleShape.rotate(1);
         }
     }
 

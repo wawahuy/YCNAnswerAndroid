@@ -21,6 +21,7 @@ public class GameDirector extends Thread {
     private GameDirector() {
         renders = new LinkedListQueue<>();
         setFramePerSecondsMax(60);
+        this.setName("Game Director");
         start();
     }
 
