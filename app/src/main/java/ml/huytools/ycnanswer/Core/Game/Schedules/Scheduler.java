@@ -2,14 +2,16 @@ package ml.huytools.ycnanswer.Core.Game.Schedules;
 
 import android.os.SystemClock;
 
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+
 import ml.huytools.ycnanswer.Core.Game.Scene;
-import ml.huytools.ycnanswer.Core.LinkedListQueue;
 
 public class Scheduler extends Thread {
     private Scene scene;
-    private LinkedListQueue<ScheduleAction> listAction;
-    private LinkedListQueue<ScheduleAction> listActionMainThread;
-    private LinkedListQueue.Callback callbackInitScheduleAction;
+    private List<ScheduleAction> listAction;
+    private List<ScheduleAction> listActionMainThread;
 
     public Scheduler(){
         this.scene = null;
@@ -27,10 +29,11 @@ public class Scheduler extends Thread {
     public void run() {
         // -------- Thread N ---------
         while (true){
-            listAction.updateQueue(callbackInitScheduleAction);
-            for(ScheduleAction scheduleAction:listAction){
-                if(!scheduleAction.run()){
-                    listAction.removeQueue(scheduleAction);
+            synchronized (listAction) {
+                for (ScheduleAction scheduleAction : listAction) {
+                    if (!scheduleAction.run()) {
+                        listAction.remove(scheduleAction);
+                    }
                 }
             }
             SystemClock.sleep(1);
@@ -39,37 +42,37 @@ public class Scheduler extends Thread {
 
     public boolean update(){
         // ------- Main Thread -----
-        listActionMainThread.updateQueue(callbackInitScheduleAction);
-        for(ScheduleAction scheduleAction:listActionMainThread){
-            if(!scheduleAction.run()){
-                listActionMainThread.removeQueue(scheduleAction);
+        synchronized (listActionMainThread) {
+            for (ScheduleAction scheduleAction : listActionMainThread) {
+                if (!scheduleAction.run()) {
+                    listActionMainThread.remove(scheduleAction);
+                }
             }
         }
         return false;
     }
 
     public void schedule(ScheduleAction scheduleAction){
-        listAction.addQueue(scheduleAction);
+        synchronized (listAction) {
+            listAction.add(scheduleAction);
+            scheduleAction.init();
+        }
     }
 
     public void scheduleOnThreadGame(ScheduleAction scheduleAction){
-        listActionMainThread.addQueue(scheduleAction);
+        synchronized (listActionMainThread) {
+            listActionMainThread.add(scheduleAction);
+            scheduleAction.init();
+        }
     }
 
     public void remove(ScheduleAction scheduleAction){
-        listAction.removeQueue(scheduleAction);
-        listActionMainThread.removeQueue(scheduleAction);
+        /// -------- update ---------
     }
 
     public void initScheduleCBInit(){
-        listAction = new LinkedListQueue<>();
-        listActionMainThread = new LinkedListQueue<>();
-        callbackInitScheduleAction = new LinkedListQueue.Callback() {
-            @Override
-            public void OnInsert(Object object) {
-                ((ScheduleAction)object).init();
-            }
-        };
+        listAction = Collections.synchronizedList(new LinkedList<ScheduleAction>());
+        listActionMainThread = Collections.synchronizedList(new LinkedList<ScheduleAction>());
     }
 
 }

@@ -2,7 +2,9 @@ package ml.huytools.ycnanswer.Core.Game;
 
 import android.os.SystemClock;
 
-import ml.huytools.ycnanswer.Core.LinkedListQueue;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 public class GameDirector extends Thread {
     private static final GameDirector ourInstance = new GameDirector();
@@ -11,7 +13,7 @@ public class GameDirector extends Thread {
         return ourInstance;
     }
 
-    private LinkedListQueue<Renderer> renders;
+    private List<Renderer> renders;
 
     /// FPS
     private int framePerSeconds;
@@ -19,7 +21,7 @@ public class GameDirector extends Thread {
     private long timeFrameCurrent;
 
     private GameDirector() {
-        renders = new LinkedListQueue<>();
+        renders = Collections.synchronizedList(new LinkedList<Renderer>());
         setFramePerSecondsMax(60);
         this.setName("Game Director");
         start();
@@ -27,14 +29,18 @@ public class GameDirector extends Thread {
 
     public void registration(Renderer renderer){
         setFramePerSecondsMax(framePerSeconds);
-        renders.addQueue(renderer);
+        synchronized (renders){
+            renders.add(renderer);
+        }
     }
 
     public void cancelRegistration(Renderer renderer){
         if(renders.size() <= 1){
             sleepOfOnFrame = 100;
         }
-        renders.removeQueue(renderer);
+        synchronized (renders) {
+            renders.remove(renderer);
+        }
     }
 
     public void setFramePerSecondsMax(int frame){
@@ -48,14 +54,17 @@ public class GameDirector extends Thread {
 
         while (true){
             time = System.currentTimeMillis();
-            renders.updateQueue();
 
-            for(Renderer renderer:renders){
-                renderer.update();
+            synchronized (renders) {
+                for (Renderer renderer : renders) {
+                    renderer.update();
+                }
             }
 
-            for(Renderer renderer:renders){
-                renderer.render();
+            synchronized (renders) {
+                for (Renderer renderer : renders) {
+                    renderer.render();
+                }
             }
 
             time = System.currentTimeMillis() - time;

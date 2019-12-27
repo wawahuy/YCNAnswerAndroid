@@ -40,7 +40,7 @@ public class CircleShape extends Drawable {
         return endAngle;
     }
 
-    public void setEndAngle(int endAngle) {
+    public void setAngleSwept(int endAngle) {
         this.endAngle = endAngle;
     }
 

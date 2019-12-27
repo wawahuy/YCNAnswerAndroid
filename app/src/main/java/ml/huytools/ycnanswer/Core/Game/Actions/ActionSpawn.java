@@ -1,8 +1,8 @@
 package ml.huytools.ycnanswer.Core.Game.Actions;
 
+import java.util.Collections;
 import java.util.LinkedList;
-
-import ml.huytools.ycnanswer.Core.LinkedListQueue;
+import java.util.List;
 
 /***
  * Thực hiện các hành động song song
@@ -16,12 +16,12 @@ import ml.huytools.ycnanswer.Core.LinkedListQueue;
  */
 public class ActionSpawn extends Action {
     protected Action[] actions;
-    protected LinkedListQueue<Action> actionsCurrent;
+    protected List<Action> actionsCurrent;
 
     public static ActionSpawn create(Action... actions){
         ActionSpawn actionSpawn = new ActionSpawn();
         actionSpawn.actions = actions;
-        actionSpawn.actionsCurrent = new LinkedListQueue<>();
+        actionSpawn.actionsCurrent = Collections.synchronizedList(new LinkedList<Action>());
         return actionSpawn;
     }
 
@@ -43,11 +43,12 @@ public class ActionSpawn extends Action {
 
     @Override
     protected boolean OnActionUpdate() {
-        actionsCurrent.updateQueue();
-        for(Action action:actionsCurrent){
-            action.update();
-            if(action.isFinish()){
-                actionsCurrent.removeQueue(action);
+        synchronized (actionsCurrent) {
+            for (Action action : actionsCurrent) {
+                action.update();
+                if (action.isFinish()) {
+                    actionsCurrent.remove(action);
+                }
             }
         }
         if(actionsCurrent.size() == 0){

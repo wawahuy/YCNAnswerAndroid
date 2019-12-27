@@ -1,7 +1,5 @@
 package ml.huytools.ycnanswer.Core.Game.Actions;
 
-import ml.huytools.ycnanswer.Core.LinkedListQueue;
-
 public class ActionSequence extends Action {
     protected Action[] actions;
     int pos;
@@ -28,8 +26,10 @@ public class ActionSequence extends Action {
     @Override
     protected void OnActionRestart() {
         pos = 0;
-        for(Action action:actions){
-            action.restart();
+
+        /// Update lại action chuẩn bị thực hiện
+        if(pos < size){
+            actions[0].restart();
         }
     }
 

@@ -1,6 +1,6 @@
 package ml.huytools.ycnanswer.Core.Game.Graphics;
 
-public class Color {
+public class Color implements Cloneable {
     public int a;
     public int r;
     public int g;
@@ -22,4 +22,10 @@ public class Color {
 
     public Color() {
     }
+
+    @Override
+    public Color clone() {
+        return new Color(a, r, g, b);
+    }
+
 }

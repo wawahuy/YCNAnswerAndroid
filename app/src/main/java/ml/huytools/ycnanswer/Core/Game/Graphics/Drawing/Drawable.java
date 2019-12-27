@@ -17,6 +17,7 @@ public abstract class Drawable extends Scene.Node {
     protected Paint paint;
 
     public Drawable(){
+        color = new Color(0, 0,0, 0);
         paint = new Paint();
         paint.setAntiAlias(true);
     }
@@ -28,6 +29,14 @@ public abstract class Drawable extends Scene.Node {
     public void setColor(Color color) {
         paint.setARGB(color.a, color.r, color.g, color.b);
         this.color = color;
+    }
+
+    public void setColor(int a, int r, int g, int b) {
+        this.color.a = a;
+        this.color.r = r;
+        this.color.g = g;
+        this.color.b = b;
+        paint.setARGB(a, r, g, b);
     }
 
     public Texture getTexture() {

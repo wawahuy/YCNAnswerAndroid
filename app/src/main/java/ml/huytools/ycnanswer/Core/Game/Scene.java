@@ -5,19 +5,27 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import ml.huytools.ycnanswer.Core.Game.Actions.Action;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Transformable;
+import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleAction;
+import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleCallback;
 import ml.huytools.ycnanswer.Core.Game.Schedules.Scheduler;
 
 public class Scene {
-    private LinkedList<Node> nodes;
+    private List<Node> nodes;
     private Camera camera;
     private Scheduler scheduler;
 
+    /// scene, scheduler, actionspawn, gamedirector sử dụng Collections.Sync
+    /// ____,
+
     public Scene(){
-        nodes = new LinkedList<>();
+        nodes = Collections.synchronizedList(new LinkedList<Node>());
         camera = new Camera();
         scheduler = new Scheduler(this);
     }
@@ -30,14 +38,31 @@ public class Scene {
         this.camera = camera;
     }
 
-    public void add(Node node){
+    public void add(final Node node){
         node.scene = this;
-        nodes.add(node);
+//        synchronized (nodes) {
+//            nodes.add(node);
+//        }
+
+        scheduler.scheduleOnThreadGame(ScheduleAction.One(new ScheduleCallback() {
+            @Override
+            public void OnUpdate(float dt) {
+                nodes.add(node);
+            }
+        }, 0));
     }
 
-    public void remove(Node node){
+    public void remove(final Node node){
         node.scene = null;
-        nodes.remove(node);
+//        synchronized (nodes) {
+//            nodes.remove(node);
+//        }
+        scheduler.scheduleOnThreadGame(ScheduleAction.One(new ScheduleCallback() {
+            @Override
+            public void OnUpdate(float dt) {
+                nodes.remove(node);
+            }
+        }, 0));
     }
 
     public Scheduler getScheduler() {
@@ -56,15 +81,19 @@ public class Scene {
         /// Các node không thuộc camera không được cắt khổi kết xuất
         /// Giai đoạn tiếp theo cần xây dựng Tree có thể AABB Dynamic Tree để performance cao hơn
         /// ---- Update ----
-        for (Node node : nodes) {
-            node.draw(canvas);
+        synchronized (nodes) {
+            for (Node node : nodes) {
+                node.draw(canvas);
+            }
         }
     }
 
     public boolean update(){
         boolean hasChange = scheduler.update();
-        for (Node node : nodes) {
-            hasChange = hasChange || node.update();
+        synchronized (nodes) {
+            for (Node node : nodes) {
+                hasChange = node.update() || hasChange;
+            }
         }
         return hasChange;
     }

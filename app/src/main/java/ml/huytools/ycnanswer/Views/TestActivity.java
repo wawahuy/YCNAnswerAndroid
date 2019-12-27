@@ -8,33 +8,31 @@ import android.os.Bundle;
 import android.util.AttributeSet;
 import android.view.SurfaceView;
 
+import java.util.Random;
+
 import ml.huytools.ycnanswer.Core.Game.Actions.Action;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionDelay;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionCircleAngleBy;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionCircleAngleStartBy;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionCircleAngleTo;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionCircleAngleStartTo;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionColorTo;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionFunc;
-import ml.huytools.ycnanswer.Core.Game.Actions.ActionRepeat;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionRepeatForever;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionSequence;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionSpawn;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionTimings.ActionCubicBezier;
-import ml.huytools.ycnanswer.Core.Game.Actions.ActionTimings.ActionMoveBy;
-import ml.huytools.ycnanswer.Core.Game.Actions.ActionTimings.ActionMoveTo;
-import ml.huytools.ycnanswer.Core.Game.Actions.ActionTimings.ActionRotateBy;
-import ml.huytools.ycnanswer.Core.Game.Actions.ActionTimings.ActionRotateTo;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionTimings.ActionScaleBy;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionTimings.ActionScaleTo;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionVisible;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Color;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.CircleShape;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.Drawable;
-import ml.huytools.ycnanswer.Core.Game.Graphics.Image;
 import ml.huytools.ycnanswer.Core.Game.Renderer;
 import ml.huytools.ycnanswer.Core.Game.Scene;
-import ml.huytools.ycnanswer.Core.Game.Graphics.Sprite;
-import ml.huytools.ycnanswer.Core.Game.Graphics.Texture;
 import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleAction;
 import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleCallback;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
-import ml.huytools.ycnanswer.R;
 
 public class TestActivity extends AppCompatActivity {
 
@@ -66,8 +64,6 @@ public class TestActivity extends AppCompatActivity {
     class TestCustomSurfaceView extends SurfaceView implements Renderer.Callback, ScheduleCallback {
         Renderer renderer;
         Scene scene;
-        Sprite sprite;
-        CircleShape circleShape;
 
         public TestCustomSurfaceView(Context context, AttributeSet attrs) {
             super(context, attrs);
@@ -80,43 +76,117 @@ public class TestActivity extends AppCompatActivity {
 
         @Override
         public void OnCreate() {
-            Texture texture = new Texture(Image.LoadByResource(R.drawable.sprite_mc).createScale(new Vector2D(0.1f, 0.1f)));
-            sprite = new Sprite(texture);
-            sprite.centerOrigin();
 
-            circleShape = new CircleShape();
-            circleShape.setColor(new Color(255, 0, 0));
-            circleShape.setRadius(10);
-            circleShape.setStrokeWidth(10);
-            circleShape.setEndAngle(220);
-            circleShape.setStyle(Drawable.Style.FILL);
-            circleShape.alwaysCenterOrigin();
-
-
-
-            scene.add(circleShape);
-            scene.add(sprite);
-
-            /// Create Scheduler
-            scene.getScheduler().scheduleOnThreadGame(ScheduleAction.Infinite(this,20, 0));
         }
 
         @Override
-        public void OnResume(Vector2D size) {
-            circleShape.setPosition(size.x/2, size.y/2);
-            circleShape.runAction(
-                    ActionRepeatForever.create(
-                        ActionSequence.create(
-                                ActionVisible.create(true),
-                                ActionCubicBezier.EaseInOut(ActionScaleBy.create(new Vector2D(20, 20), 1000)),
-                                ActionDelay.create(100),
-                                ActionVisible.create(false),
-                                ActionScaleTo.create(new Vector2D(1, 1), 0)
-                        )
-                    )
-            );
+        public void OnResume(final Vector2D size) {
 
-            sprite.setPosition(size.x/2, size.y/2);
+            /// bubble
+            for(int i=0; i<100; i++) {
+                CircleShape circleShape = new CircleShape();
+                circleShape.setRadius(10);
+                circleShape.setStrokeWidth(10);
+                circleShape.setAngleSwept(360);
+                circleShape.setStyle(Drawable.Style.FILL);
+                circleShape.alwaysCenterOrigin();
+                circleShape.setPosition((new Random()).nextInt()%(size.x), (new Random()).nextInt()%(size.y)  );
+
+                Color start = new Color(155, (new Random()).nextInt()%125 + 125, (new Random()).nextInt()%125 + 125, (new Random()).nextInt()%125 + 125);
+                Color end   = new Color(0  , (new Random()).nextInt()%125 + 125, (new Random()).nextInt()%125 + 125, (new Random()).nextInt()%125 + 125);
+                int scale = (new Random()).nextInt()%10;
+                Vector2D scaleTo = new Vector2D(scale, scale);
+
+                circleShape.runAction(
+                        ActionRepeatForever.create(
+                                ActionSequence.create(
+                                        ActionDelay.create((new Random()).nextInt()%100),
+                                        ActionSpawn.create(
+                                                ActionSequence.create(
+                                                        ActionColorTo.create(start, 0),
+                                                        ActionCubicBezier.EaseOut(ActionColorTo.create(end, 1000))
+                                                ),
+                                                ActionSequence.create(
+                                                        ActionVisible.create(true),
+                                                        ActionCubicBezier.EaseOut(ActionScaleBy.create(scaleTo, 1000)),
+                                                        ActionVisible.create(false),
+                                                        ActionScaleTo.create(new Vector2D(0, 0), 0)
+                                                )
+                                        ),
+                                        ActionFunc.create(new ActionFunc.Callback() {
+                                            @Override
+                                            public boolean OnCallback(Scene.Node node) {
+                                                node.setPosition((new Random()).nextInt()%(size.x), (new Random()).nextInt()%(size.y)  );
+                                                return false;
+                                            }
+                                        })
+                                )
+                        )
+                );
+
+                scene.add(circleShape);
+            }
+
+
+            // rain
+            CircleShape circleShape = new CircleShape();
+            circleShape.setRadius(200);
+            circleShape.setStrokeWidth(30);
+            circleShape.setAngleSwept(0);
+            circleShape.setStyle(Drawable.Style.STROKE);
+            circleShape.alwaysCenterOrigin();
+            circleShape.setPosition(size.x/2, size.y/2  );
+            circleShape.setColor(new Color(255, 255, 0,0 ));
+
+            ActionFunc.Callback createEffect = new ActionFunc.Callback() {
+                @Override
+                public boolean OnCallback(Scene.Node node) {
+                    final CircleShape circleShape = new CircleShape();
+                    circleShape.setRadius(200);
+                    circleShape.setAngleSwept(0);
+                    circleShape.setStyle(Drawable.Style.FILL);
+                    circleShape.alwaysCenterOrigin();
+                    circleShape.setPosition(size.x/2, size.y/2  );
+
+                    circleShape.runAction(
+                            ActionSequence.create(
+                                    ActionSpawn.create(
+                                            ActionSequence.create(
+                                                ActionColorTo.create(new Color(255, 255, 0,0 ), 0),
+                                                ActionColorTo.create(new Color(0, 255, 0,0 ), 4000)
+                                            ),
+                                            ActionScaleTo.create(new Vector2D(10, 10), 4000)
+                                    ),
+                                    ActionFunc.create(new ActionFunc.Callback() {
+                                        @Override
+                                        public boolean OnCallback(final Scene.Node node) {
+                                            scene.remove(circleShape);
+                                            return false;
+                                        }
+                                    })
+                            )
+                    );
+
+                    scene.add(circleShape);
+
+                    return false;
+                }
+            };
+
+            circleShape.runAction(ActionRepeatForever.create(
+                    ActionSequence.create(
+                            ActionSpawn.create(
+                                    ActionSequence.create(
+                                            ActionCubicBezier.EaseInOut(ActionCircleAngleBy.create(360, 1500)),
+                                            ActionCubicBezier.EaseInOut(ActionCircleAngleBy.create(-360, 500))
+                                    ),
+                                    ActionCubicBezier.EaseInOut(ActionCircleAngleStartBy.create(360, 2000))
+                            ),
+                            ActionFunc.create(createEffect)
+                    )
+            ));
+
+            scene.add(circleShape);
         }
 
         @Override
