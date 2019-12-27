@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import ml.huytools.ycnanswer.Core.LinkedListQueue;
+
 public class GameDirector extends Thread {
     private static final GameDirector ourInstance = new GameDirector();
 
@@ -13,7 +15,7 @@ public class GameDirector extends Thread {
         return ourInstance;
     }
 
-    private List<Renderer> renders;
+    private LinkedListQueue<Renderer> renders;
 
     /// FPS
     private int framePerSeconds;
@@ -21,7 +23,7 @@ public class GameDirector extends Thread {
     private long timeFrameCurrent;
 
     private GameDirector() {
-        renders = Collections.synchronizedList(new LinkedList<Renderer>());
+        renders = new LinkedListQueue<>();
         setFramePerSecondsMax(60);
         this.setName("Game Director");
         start();
@@ -29,18 +31,18 @@ public class GameDirector extends Thread {
 
     public void registration(Renderer renderer){
         setFramePerSecondsMax(framePerSeconds);
-        synchronized (renders){
-            renders.add(renderer);
-        }
+        //synchronized (renders){
+        renders.addQueue(renderer);
+        //}
     }
 
     public void cancelRegistration(Renderer renderer){
         if(renders.size() <= 1){
             sleepOfOnFrame = 100;
         }
-        synchronized (renders) {
-            renders.remove(renderer);
-        }
+        // synchronized (renders) {
+        renders.removeQueue(renderer);
+        //}
     }
 
     public void setFramePerSecondsMax(int frame){
@@ -55,17 +57,19 @@ public class GameDirector extends Thread {
         while (true){
             time = System.currentTimeMillis();
 
-            synchronized (renders) {
-                for (Renderer renderer : renders) {
-                    renderer.update();
-                }
+            // synchronized (renders) {
+            for (Renderer renderer : renders) {
+                renderer.update();
             }
+            //}
 
-            synchronized (renders) {
-                for (Renderer renderer : renders) {
-                    renderer.render();
-                }
+            //synchronized (renders) {
+            for (Renderer renderer : renders) {
+                renderer.render();
             }
+            //}
+
+            renders.updateQueue();
 
             time = System.currentTimeMillis() - time;
             SystemClock.sleep(time < sleepOfOnFrame ? sleepOfOnFrame - time : 1);

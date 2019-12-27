@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceView;
 
 import java.util.Random;
@@ -72,6 +73,13 @@ public class TestActivity extends AppCompatActivity {
             scene = new Scene();
             renderer = new Renderer(this, scene);
             renderer.enableAutoRegisterDirector(this);
+
+            scene.getScheduler().schedule(ScheduleAction.Infinite(new ScheduleCallback() {
+                @Override
+                public void OnUpdate(float dt) {
+                    Log.v("Log", "Object Node: "+scene.getSizeNode());
+                }
+            }, 100, 0));
         }
 
         @Override
@@ -83,7 +91,7 @@ public class TestActivity extends AppCompatActivity {
         public void OnResume(final Vector2D size) {
 
             /// bubble
-            for(int i=0; i<100; i++) {
+            for(int i=0; i<60; i++) {
                 CircleShape circleShape = new CircleShape();
                 circleShape.setRadius(10);
                 circleShape.setStrokeWidth(10);
@@ -129,64 +137,74 @@ public class TestActivity extends AppCompatActivity {
 
 
             // rain
-            CircleShape circleShape = new CircleShape();
-            circleShape.setRadius(200);
-            circleShape.setStrokeWidth(30);
-            circleShape.setAngleSwept(0);
-            circleShape.setStyle(Drawable.Style.STROKE);
-            circleShape.alwaysCenterOrigin();
-            circleShape.setPosition(size.x/2, size.y/2  );
-            circleShape.setColor(new Color(255, 255, 0,0 ));
+            final CircleShape circleP = new CircleShape();
+            circleP.setRadius(200);
+            circleP.setStrokeWidth(40);
+            circleP.setAngleSwept(0);
+            circleP.setStyle(Drawable.Style.STROKE);
+            circleP.alwaysCenterOrigin();
+            circleP.setPosition(size.x/2, size.y/2  );
+            circleP.setColor(new Color(255, 255, 0,0 ));
 
             ActionFunc.Callback createEffect = new ActionFunc.Callback() {
                 @Override
                 public boolean OnCallback(Scene.Node node) {
-                    final CircleShape circleShape = new CircleShape();
-                    circleShape.setRadius(200);
-                    circleShape.setAngleSwept(0);
-                    circleShape.setStyle(Drawable.Style.FILL);
-                    circleShape.alwaysCenterOrigin();
-                    circleShape.setPosition(size.x/2, size.y/2  );
+                    for(int i=0; i<2; i++) {
+                        CircleShape circleShape = new CircleShape();
+                        circleShape.setRadius((int)(210));
+                        circleShape.setScale(circleP.getScale().clone());
+                        circleShape.setStrokeWidth(40);
+                        circleShape.setStartAngle(circleP.getEndAngle());
+                        circleShape.setAngleSwept(0);
+                        circleShape.setStyle(Drawable.Style.STROKE);
+                        circleShape.alwaysCenterOrigin();
+                        circleShape.setPosition(size.x / 2, size.y / 2);
 
-                    circleShape.runAction(
-                            ActionSequence.create(
-                                    ActionSpawn.create(
-                                            ActionSequence.create(
-                                                ActionColorTo.create(new Color(255, 255, 0,0 ), 0),
-                                                ActionColorTo.create(new Color(0, 255, 0,0 ), 4000)
-                                            ),
-                                            ActionScaleTo.create(new Vector2D(10, 10), 4000)
-                                    ),
-                                    ActionFunc.create(new ActionFunc.Callback() {
-                                        @Override
-                                        public boolean OnCallback(final Scene.Node node) {
-                                            scene.remove(circleShape);
-                                            return false;
-                                        }
-                                    })
-                            )
-                    );
-
-                    scene.add(circleShape);
-
+                        circleShape.runAction(
+                                ActionSequence.create(
+                                        ActionDelay.create(120*i),
+                                        ActionSpawn.create(
+                                                ActionCircleAngleTo.create(360, 400),
+                                                ActionSequence.create(
+                                                        ActionColorTo.create(new Color(80, 255, 0, 0), 0),
+                                                        ActionColorTo.create(new Color(0, 255, 255, 255), 2000 + 90*i)
+                                                ),
+                                                ActionCubicBezier.EaseOut(ActionScaleTo.create(new Vector2D(3, 3), 2000 + 90*i))
+                                        ),
+                                        ActionFunc.create(new ActionFunc.Callback() {
+                                            @Override
+                                            public boolean OnCallback(final Scene.Node node) {
+                                                scene.remove(node);
+                                                return false;
+                                            }
+                                        })
+                                )
+                        );
+                        scene.add(circleShape);
+                    }
                     return false;
                 }
             };
 
-            circleShape.runAction(ActionRepeatForever.create(
+            circleP.runAction(ActionRepeatForever.create(
                     ActionSequence.create(
                             ActionSpawn.create(
                                     ActionSequence.create(
                                             ActionCubicBezier.EaseInOut(ActionCircleAngleBy.create(360, 1500)),
                                             ActionCubicBezier.EaseInOut(ActionCircleAngleBy.create(-360, 500))
                                     ),
-                                    ActionCubicBezier.EaseInOut(ActionCircleAngleStartBy.create(360, 2000))
-                            ),
-                            ActionFunc.create(createEffect)
+                                    ActionCubicBezier.EaseInOut(ActionCircleAngleStartBy.create(360, 2000)),
+                                    ActionSequence.create(
+                                            ActionCubicBezier.EaseIn(ActionScaleTo.create(new Vector2D(0.9f, 0.9f), 1000)),
+                                            ActionFunc.create(createEffect),
+                                            ActionCubicBezier.EaseOut(ActionScaleTo.create(new Vector2D(1.3f, 1.3f), 1000)),
+                                            ActionFunc.create(createEffect)
+                                    )
+                            )
                     )
             ));
 
-            scene.add(circleShape);
+            scene.add(circleP);
         }
 
         @Override

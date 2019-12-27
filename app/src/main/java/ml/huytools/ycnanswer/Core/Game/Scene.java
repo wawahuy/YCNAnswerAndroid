@@ -15,17 +15,17 @@ import ml.huytools.ycnanswer.Core.Game.Graphics.Transformable;
 import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleAction;
 import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleCallback;
 import ml.huytools.ycnanswer.Core.Game.Schedules.Scheduler;
+import ml.huytools.ycnanswer.Core.LinkedListQueue;
 
 public class Scene {
-    private List<Node> nodes;
+    private LinkedListQueue<Node> nodes;
     private Camera camera;
     private Scheduler scheduler;
 
-    /// scene, scheduler, actionspawn, gamedirector sử dụng Collections.Sync
-    /// ____,
+    /// scene, scheduler, actionspawn, gamedirector
 
     public Scene(){
-        nodes = Collections.synchronizedList(new LinkedList<Node>());
+        nodes = new LinkedListQueue();
         camera = new Camera();
         scheduler = new Scheduler(this);
     }
@@ -38,31 +38,37 @@ public class Scene {
         this.camera = camera;
     }
 
-    public void add(final Node node){
+    public void add(Node node){
         node.scene = this;
 //        synchronized (nodes) {
 //            nodes.add(node);
 //        }
 
-        scheduler.scheduleOnThreadGame(ScheduleAction.One(new ScheduleCallback() {
-            @Override
-            public void OnUpdate(float dt) {
-                nodes.add(node);
-            }
-        }, 0));
+//        scheduler.scheduleOnThreadGame(ScheduleAction.One(new ScheduleCallback() {
+//            @Override
+//            public void OnUpdate(float dt) {
+//                nodes.add(node);
+//            }
+//        }, 0));
+        nodes.addQueue(node);
     }
 
-    public void remove(final Node node){
+    public void remove(Node node){
         node.scene = null;
 //        synchronized (nodes) {
 //            nodes.remove(node);
 //        }
-        scheduler.scheduleOnThreadGame(ScheduleAction.One(new ScheduleCallback() {
-            @Override
-            public void OnUpdate(float dt) {
-                nodes.remove(node);
-            }
-        }, 0));
+//        scheduler.scheduleOnThreadGame(ScheduleAction.One(new ScheduleCallback() {
+//            @Override
+//            public void OnUpdate(float dt) {
+//                nodes.remove(node);
+//            }
+//        }, 0));
+        nodes.removeQueue(node);
+    }
+
+    public int getSizeNode(){
+        return nodes.size();
     }
 
     public Scheduler getScheduler() {
@@ -81,20 +87,21 @@ public class Scene {
         /// Các node không thuộc camera không được cắt khổi kết xuất
         /// Giai đoạn tiếp theo cần xây dựng Tree có thể AABB Dynamic Tree để performance cao hơn
         /// ---- Update ----
-        synchronized (nodes) {
-            for (Node node : nodes) {
-                node.draw(canvas);
-            }
+        //  synchronized (nodes) {
+        for (Node node : nodes) {
+            node.draw(canvas);
         }
+        //  }
     }
 
     public boolean update(){
         boolean hasChange = scheduler.update();
-        synchronized (nodes) {
-            for (Node node : nodes) {
-                hasChange = node.update() || hasChange;
-            }
+        // synchronized (nodes) {
+        for (Node node : nodes) {
+            hasChange = node.update() || hasChange;
         }
+        nodes.updateQueue();
+        // }
         return hasChange;
     }
 
@@ -135,6 +142,10 @@ public class Scene {
 
         public Scene getSceneAttach() {
             return scene;
+        }
+
+        public int getZIndex(){
+            return scene.nodes.indexOf(this);
         }
 
         /***

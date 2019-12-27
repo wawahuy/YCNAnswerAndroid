@@ -7,11 +7,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 import ml.huytools.ycnanswer.Core.Game.Scene;
+import ml.huytools.ycnanswer.Core.LinkedListQueue;
 
 public class Scheduler extends Thread {
     private Scene scene;
-    private List<ScheduleAction> listAction;
-    private List<ScheduleAction> listActionMainThread;
+    private LinkedListQueue<ScheduleAction> listAction;
+    private LinkedListQueue<ScheduleAction> listActionMainThread;
 
     public Scheduler(){
         this.scene = null;
@@ -29,41 +30,35 @@ public class Scheduler extends Thread {
     public void run() {
         // -------- Thread N ---------
         while (true){
-            synchronized (listAction) {
-                for (ScheduleAction scheduleAction : listAction) {
-                    if (!scheduleAction.run()) {
-                        listAction.remove(scheduleAction);
-                    }
+            for (ScheduleAction scheduleAction : listAction) {
+                if (!scheduleAction.run()) {
+                    listAction.removeQueue(scheduleAction);
                 }
             }
+            listAction.updateQueue();
             SystemClock.sleep(1);
         }
     }
 
     public boolean update(){
         // ------- Main Thread -----
-        synchronized (listActionMainThread) {
-            for (ScheduleAction scheduleAction : listActionMainThread) {
-                if (!scheduleAction.run()) {
-                    listActionMainThread.remove(scheduleAction);
-                }
+        for (ScheduleAction scheduleAction : listActionMainThread) {
+            if (!scheduleAction.run()) {
+                listActionMainThread.removeQueue(scheduleAction);
             }
         }
+        listActionMainThread.updateQueue();
         return false;
     }
 
     public void schedule(ScheduleAction scheduleAction){
-        synchronized (listAction) {
-            listAction.add(scheduleAction);
-            scheduleAction.init();
-        }
+        listAction.addQueue(scheduleAction);
+        scheduleAction.init();
     }
 
     public void scheduleOnThreadGame(ScheduleAction scheduleAction){
-        synchronized (listActionMainThread) {
-            listActionMainThread.add(scheduleAction);
-            scheduleAction.init();
-        }
+        listActionMainThread.addQueue(scheduleAction);
+        scheduleAction.init();
     }
 
     public void remove(ScheduleAction scheduleAction){
@@ -71,8 +66,8 @@ public class Scheduler extends Thread {
     }
 
     public void initScheduleCBInit(){
-        listAction = Collections.synchronizedList(new LinkedList<ScheduleAction>());
-        listActionMainThread = Collections.synchronizedList(new LinkedList<ScheduleAction>());
+        listAction = new LinkedListQueue<>();
+        listActionMainThread = new LinkedListQueue<>();
     }
 
 }
