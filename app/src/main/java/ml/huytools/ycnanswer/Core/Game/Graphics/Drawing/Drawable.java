@@ -37,6 +37,7 @@ public abstract class Drawable extends Scene.Node {
         this.color.g = g;
         this.color.b = b;
         paint.setARGB(a, r, g, b);
+        hasUpdateDraw = true;
     }
 
     public Texture getTexture() {
@@ -46,6 +47,7 @@ public abstract class Drawable extends Scene.Node {
     public void setTexture(Texture texture) {
         paint.setShader(texture.getBitmapShader());
         this.texture = texture;
+        hasUpdateDraw = true;
     }
 
     public int getStrokeWidth() {
@@ -55,6 +57,7 @@ public abstract class Drawable extends Scene.Node {
     public void setStrokeWidth(int strokeWidth) {
         paint.setStrokeWidth(strokeWidth);
         this.strokeWidth = strokeWidth;
+        hasUpdateDraw = true;
     }
 
     public Style getStyle() {
@@ -64,6 +67,7 @@ public abstract class Drawable extends Scene.Node {
     public void setStyle(Style type) {
         paint.setStyle(type == Style.STROKE ? Paint.Style.STROKE : Paint.Style.FILL);
         this.style = type;
+        hasUpdateDraw = true;
     }
 
 }

@@ -18,7 +18,7 @@ import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleCallback;
 import ml.huytools.ycnanswer.Core.Game.Schedules.Scheduler;
 import ml.huytools.ycnanswer.Core.LinkedListQueue;
 
-public class Scene {
+public class Scene implements IGameObject {
     private LinkedListQueue<Node> nodes;
     private Camera camera;
     private Scheduler scheduler;
@@ -68,7 +68,8 @@ public class Scene {
         return scheduler;
     }
 
-    public void render(Canvas canvas) {
+    @Override
+    public void draw(Canvas canvas) {
         /// clear
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
 
@@ -85,6 +86,7 @@ public class Scene {
         }
     }
 
+    @Override
     public boolean update(){
         /// Update logic
         boolean hasChange = scheduler.update();
@@ -109,9 +111,9 @@ public class Scene {
      * Đối tượng trong một Scene
      *
      */
-    public static abstract class Node extends Transformable {
+    public static abstract class Node extends Transformable implements IGameObject {
+        protected boolean hasUpdateDraw = false;
         private boolean visible;
-        private boolean hasDraw = false;
         private Action action;
         private Scene scene;
 
@@ -130,7 +132,7 @@ public class Scene {
 
         public void setVisible(boolean visible) {
             if(visible){
-                hasDraw = false;
+                hasUpdateDraw = false;
             }
             this.visible = visible;
         }
@@ -188,6 +190,7 @@ public class Scene {
          */
         protected abstract void OnDraw(Canvas canvas);
 
+        @Override
         public void draw(Canvas canvas) {
             if(!visible){
                 return;
@@ -197,21 +200,22 @@ public class Scene {
             canvas.concat(getMatrix());
             OnDraw(canvas);
             canvas.restore();
-            hasDraw = true;
+            hasUpdateDraw = false;
         }
 
-        public void draw(Canvas canvas, Transformable transformable) {
-            if(!visible){
-                return;
-            }
-            canvas.save();
-            /// ------- Update --------------
-            canvas.restore();
-        }
+//        public void draw(Canvas canvas, Transformable transformable) {
+//            if(!visible){
+//                return;
+//            }
+//            canvas.save();
+//            /// ------- Update --------------
+//            canvas.restore();
+//        }
 
+        @Override
         public boolean update(){
             boolean hasActionUpdate = action != null && action.update();
-            return needUpdateMatrix || !hasDraw || hasActionUpdate;
+            return needUpdateMatrix || hasUpdateDraw || hasActionUpdate;
         }
     }
 

@@ -14,7 +14,7 @@ import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
 import ml.huytools.ycnanswer.Models.CauHoi;
 import ml.huytools.ycnanswer.Presenters.GamePresenter;
 import ml.huytools.ycnanswer.R;
-import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownView;
+import ml.huytools.ycnanswer.Views.Components.CountDownView;
 import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownAudio;
 import ml.huytools.ycnanswer.Views.GameViews.Components.FPSDebugView;
 import ml.huytools.ycnanswer.Views.GameViews.Components.SpotLightView;
@@ -97,7 +97,7 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
         //set audio
         countDownAudio = new CountDownAudio();
         countDownAudio.setAudioTimeout(resourceManager.audioTimeout);
-        countDown.setCallback(countDownAudio);
+//        countDown.setCallback(countDownAudio);
     }
 
 
@@ -169,12 +169,12 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
     /// ------------- Dem Nguoc --------------------
     @Override
     public void RestartCountDown() {
-        countDown.start();
+//        countDown.start();
     }
 
     @Override
     public void ConfigCountDownTime(int second) {
-        countDown.setTimeCountDown(second);
+//        countDown.setTimeCountDown(second);
     }
 
 

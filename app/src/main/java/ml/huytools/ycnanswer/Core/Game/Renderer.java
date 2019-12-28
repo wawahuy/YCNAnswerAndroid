@@ -1,6 +1,9 @@
 package ml.huytools.ycnanswer.Core.Game;
 
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -13,26 +16,26 @@ public class Renderer implements SurfaceHolder.Callback {
 
     SurfaceView surfaceView;
     SurfaceHolder surfaceHolder;
-    Scene scene;
+    IGameObject gameObject;
     Callback callback;
     boolean flagUpdate;
     boolean flagCreated;
 
-    public Renderer(SurfaceView surfaceView, Scene scene) {
+    public Renderer(SurfaceView surfaceView, IGameObject gameObject) {
         this.surfaceView = surfaceView;
-        this.scene = scene;
+        this.gameObject = gameObject;
         this.surfaceHolder = surfaceView.getHolder();
     }
 
     public void update(){
-        flagUpdate = scene.update();
+        flagUpdate = gameObject.update();
     }
 
     public void render(){
         if(flagUpdate){
             Canvas canvas = surfaceHolder.lockCanvas();
             synchronized (surfaceHolder){
-                scene.render(canvas);
+                gameObject.draw(canvas);
             }
             surfaceHolder.unlockCanvasAndPost(canvas);
         }
@@ -49,16 +52,28 @@ public class Renderer implements SurfaceHolder.Callback {
 
     @Override
     public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        if(!flagCreated){
-            callback.OnCreate();
-            flagCreated = true;
-        }
         GameDirector.getInstance().registration(this);
+
+        // transparent
+        surfaceView.setZOrderOnTop(true);
+        surfaceView.getHolder().setFormat(PixelFormat.RGBA_8888);
+
+        // clear background transparent
+        Canvas canvas = surfaceHolder.lockCanvas();
+        synchronized (surfaceHolder){
+            canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
+        }
+        surfaceHolder.unlockCanvasAndPost(canvas);
     }
 
     @Override
     public void surfaceChanged(SurfaceHolder surfaceHolder, int i, int i1, int i2) {
-        callback.OnResume(new Vector2D(i1, i2));
+        Vector2D size = new Vector2D(i1, i2);
+        if(!flagCreated){
+            callback.OnCreate(size);
+            flagCreated = true;
+        }
+        callback.OnResume(size);
     }
 
     @Override
@@ -68,7 +83,7 @@ public class Renderer implements SurfaceHolder.Callback {
     }
 
     public interface Callback {
-        void OnCreate();
+        void OnCreate(Vector2D size);
         void OnResume(Vector2D size);
         void OnDestroy();
     }

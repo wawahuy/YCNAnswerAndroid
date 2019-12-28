@@ -18,6 +18,11 @@ public class Text extends Drawable {
     private Typeface typefaceObject;
     private int style;
 
+    public Text(){
+        text = "";
+        size = 20;
+    }
+
 
     public Font getFont() {
         return font;
@@ -31,6 +36,7 @@ public class Text extends Drawable {
     private void initWithTypeface(Typeface typeface){
         typefaceObject = typeface;
         paint.setTypeface(typefaceObject);
+        computeOrigin();
     }
 
     public int getTextStyle() {
@@ -53,6 +59,7 @@ public class Text extends Drawable {
     public void setSize(int size) {
         paint.setTextSize(size);
         this.size = size;
+        computeOrigin();
     }
 
     public String getText() {

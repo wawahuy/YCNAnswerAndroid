@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         APIConfig();
 
 
-        Intent intent = new Intent(this, TestActivity.class);
+        Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
         finish();
     }

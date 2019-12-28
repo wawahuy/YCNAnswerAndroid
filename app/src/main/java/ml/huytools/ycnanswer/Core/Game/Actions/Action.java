@@ -36,6 +36,10 @@ public abstract class Action {
         return finish;
     }
 
+    public void finish(){
+        finish = true;
+    }
+
     protected void setFinish(boolean finish) {
         this.finish = finish;
     }

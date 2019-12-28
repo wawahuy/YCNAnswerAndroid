@@ -10,6 +10,7 @@ import ml.huytools.ycnanswer.Core.Game.Scene;
 import ml.huytools.ycnanswer.Core.LinkedListQueue;
 
 public class Scheduler extends Thread {
+    private static int id = 0;
     private Scene scene;
     private LinkedListQueue<ScheduleAction> listAction;
     private LinkedListQueue<ScheduleAction> listActionMainThread;
@@ -23,6 +24,7 @@ public class Scheduler extends Thread {
     public Scheduler(Scene scene){
         this.scene = scene;
         initScheduleCBInit();
+        setName("Scheduler " + id++);
         start();
     }
 

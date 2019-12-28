@@ -85,7 +85,7 @@ public class TestActivity extends AppCompatActivity {
         }
 
         @Override
-        public void OnCreate() {
+        public void OnCreate(Vector2D vector2D) {
 
         }
 

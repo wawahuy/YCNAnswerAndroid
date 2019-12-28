@@ -29,6 +29,7 @@ public class Sprite extends Node{
         this.paint.setShader(texture.getBitmapShader());
         rect.right = (int)texture.getSize().x;
         rect.bottom = (int)texture.getSize().y;
+        hasUpdateDraw = true;
     }
 
     public Texture getTexture() {
@@ -40,6 +41,7 @@ public class Sprite extends Node{
         this.rect.left = rect.left;
         this.rect.right = rect.right;
         this.rect.bottom = rect.bottom;
+        hasUpdateDraw = true;
     }
 
     public final Rect getRect(Rect rect){
@@ -49,6 +51,7 @@ public class Sprite extends Node{
     public void centerOrigin(){
         /// (right - left)*0.5f , (bottom - top)*0.5f
         setOrigin(rect.right*0.5f - rect.left*0.5f, rect.bottom*0.5f - rect.top*0.5f);
+        hasUpdateDraw = true;
     }
 
     @Override

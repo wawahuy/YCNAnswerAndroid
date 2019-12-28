@@ -114,7 +114,7 @@ public class SpotLightView extends CustomSurfaceView {
     /**
      * One SpotLight
      */
-    class SpotLightChild extends Effect {
+    public class SpotLightChild extends Effect {
 
         int x, y, h, r1, r2, s, l;
         Path path;
