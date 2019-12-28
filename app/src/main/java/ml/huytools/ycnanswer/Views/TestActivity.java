@@ -11,12 +11,10 @@ import android.view.SurfaceView;
 
 import java.util.Random;
 
-import ml.huytools.ycnanswer.Core.Game.Actions.Action;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionDelay;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionCircleAngleBy;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionCircleAngleStartBy;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionCircleAngleTo;
-import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionCircleAngleStartTo;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionColorTo;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionFunc;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionRepeatForever;
@@ -144,21 +142,22 @@ public class TestActivity extends AppCompatActivity {
             circleP.setStyle(Drawable.Style.STROKE);
             circleP.alwaysCenterOrigin();
             circleP.setPosition(size.x/2, size.y/2  );
-            circleP.setColor(new Color(255, 255, 0,0 ));
+            circleP.setColor(new Color(255, 255, 255,0 ));
 
             ActionFunc.Callback createEffect = new ActionFunc.Callback() {
                 @Override
                 public boolean OnCallback(Scene.Node node) {
-                    for(int i=0; i<2; i++) {
+                    for(int i=0; i<1; i++) {
                         CircleShape circleShape = new CircleShape();
                         circleShape.setRadius((int)(210));
                         circleShape.setScale(circleP.getScale().clone());
                         circleShape.setStrokeWidth(40);
                         circleShape.setStartAngle(circleP.getEndAngle());
                         circleShape.setAngleSwept(0);
-                        circleShape.setStyle(Drawable.Style.STROKE);
+                        circleShape.setStyle(Drawable.Style.FILL);
                         circleShape.alwaysCenterOrigin();
                         circleShape.setPosition(size.x / 2, size.y / 2);
+                        circleShape.setZOrderUnder(node);
 
                         circleShape.runAction(
                                 ActionSequence.create(
@@ -166,7 +165,7 @@ public class TestActivity extends AppCompatActivity {
                                         ActionSpawn.create(
                                                 ActionCircleAngleTo.create(360, 400),
                                                 ActionSequence.create(
-                                                        ActionColorTo.create(new Color(80, 255, 0, 0), 0),
+                                                        ActionColorTo.create(new Color(255, 255, 0, 0), 0),
                                                         ActionColorTo.create(new Color(0, 255, 255, 255), 2000 + 90*i)
                                                 ),
                                                 ActionCubicBezier.EaseOut(ActionScaleTo.create(new Vector2D(3, 3), 2000 + 90*i))

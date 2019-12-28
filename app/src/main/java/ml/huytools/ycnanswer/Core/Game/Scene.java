@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,8 +22,7 @@ public class Scene {
     private LinkedListQueue<Node> nodes;
     private Camera camera;
     private Scheduler scheduler;
-
-    /// scene, scheduler, actionspawn, gamedirector
+    boolean hasUpdateSort;
 
     public Scene(){
         nodes = new LinkedListQueue();
@@ -39,32 +39,25 @@ public class Scene {
     }
 
     public void add(Node node){
+        hasUpdateSort = true;
         node.scene = this;
-//        synchronized (nodes) {
-//            nodes.add(node);
-//        }
-
-//        scheduler.scheduleOnThreadGame(ScheduleAction.One(new ScheduleCallback() {
-//            @Override
-//            public void OnUpdate(float dt) {
-//                nodes.add(node);
-//            }
-//        }, 0));
         nodes.addQueue(node);
     }
 
     public void remove(Node node){
+        hasUpdateSort = true;
         node.scene = null;
-//        synchronized (nodes) {
-//            nodes.remove(node);
-//        }
-//        scheduler.scheduleOnThreadGame(ScheduleAction.One(new ScheduleCallback() {
-//            @Override
-//            public void OnUpdate(float dt) {
-//                nodes.remove(node);
-//            }
-//        }, 0));
         nodes.removeQueue(node);
+    }
+
+    private void updatePositionNodeByZOrder(){
+        nodes.sortQueue(new Comparator<Node>() {
+            @Override
+            public int compare(Node node1, Node node2) {
+                return node1.getZOrder() < node2.getZOrder() ? -1 :
+                        (node1.getZOrder() > node2.getZOrder() ? 1 : 0);
+            }
+        });
     }
 
     public int getSizeNode(){
@@ -87,21 +80,27 @@ public class Scene {
         /// Các node không thuộc camera không được cắt khổi kết xuất
         /// Giai đoạn tiếp theo cần xây dựng Tree có thể AABB Dynamic Tree để performance cao hơn
         /// ---- Update ----
-        //  synchronized (nodes) {
         for (Node node : nodes) {
             node.draw(canvas);
         }
-        //  }
     }
 
     public boolean update(){
+        /// Update logic
         boolean hasChange = scheduler.update();
-        // synchronized (nodes) {
         for (Node node : nodes) {
             hasChange = node.update() || hasChange;
         }
+
+        /// Update ZOrder
+        if(hasUpdateSort){
+            updatePositionNodeByZOrder();
+            hasUpdateSort = false;
+        }
+
+        /// Dequeue
         nodes.updateQueue();
-        // }
+
         return hasChange;
     }
 
@@ -116,8 +115,13 @@ public class Scene {
         private Action action;
         private Scene scene;
 
+        private int zOrder;
+        private int zOrderNodeInc;
+        private Node zOrderNode;
+
         protected Node(){
             visible = true;
+            zOrder = 0;
         }
 
         public boolean isVisible() {
@@ -144,8 +148,32 @@ public class Scene {
             return scene;
         }
 
-        public int getZIndex(){
-            return scene.nodes.indexOf(this);
+        public int getZOrder(){
+            return zOrderNode == null ? zOrder : zOrderNode.getZOrder() + zOrderNodeInc;
+        }
+
+        public void setZOrder(int zIndex){
+            zOrderNode = null;
+            zOrder = zIndex;
+            if(scene != null){
+                scene.hasUpdateSort = true;
+            }
+        }
+
+        public void setZOrderUnder(Node node){
+            zOrderNode = node;
+            zOrderNodeInc = -1;
+            if(scene != null){
+                scene.hasUpdateSort = true;
+            }
+        }
+
+        public void setZOrderUpper(Node node){
+            zOrderNode = node;
+            zOrderNodeInc = 1;
+            if(scene != null){
+                scene.hasUpdateSort = true;
+            }
         }
 
         /***
