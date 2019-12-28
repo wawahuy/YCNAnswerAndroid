@@ -10,6 +10,7 @@ public class CircleShape extends Drawable {
     private int startAngle;
     private int endAngle;
     private boolean center;
+    private boolean drawToCenter;
 
     public CircleShape(){
         radius = 0;
@@ -25,6 +26,7 @@ public class CircleShape extends Drawable {
     public void setRadius(int radius) {
         this.rect.right = this.rect.bottom = radius*2;
         this.radius = radius;
+        this.drawToCenter = false;
         computeOrigin();
     }
 
@@ -36,7 +38,7 @@ public class CircleShape extends Drawable {
         this.startAngle = startAngle;
     }
 
-    public int getEndAngle() {
+    public int getAngleSwept() {
         return endAngle;
     }
 
@@ -44,12 +46,20 @@ public class CircleShape extends Drawable {
         this.endAngle = endAngle;
     }
 
-    public void alwaysCenterOrigin(){
+    public boolean isDrawToCenter() {
+        return drawToCenter;
+    }
+
+    public void setDrawToCenter(boolean drawToCenter) {
+        this.drawToCenter = drawToCenter;
+    }
+
+    public void centerOrigin(){
         center = true;
         computeOrigin();
     }
 
-    public void computeOrigin(){
+    private void computeOrigin(){
         if(center){
             setOrigin(radius, radius);
         }
@@ -57,6 +67,6 @@ public class CircleShape extends Drawable {
 
     @Override
     protected void OnDraw(Canvas canvas) {
-        canvas.drawArc(rect, startAngle, endAngle, false, paint);
+        canvas.drawArc(rect, startAngle, endAngle, drawToCenter, paint);
     }
 }

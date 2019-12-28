@@ -30,7 +30,7 @@ public class ActionCircleRadiusTo extends ActionTiming {
 
     @Override
     protected boolean OnActionUpdateWithPercent(float per) {
-        circleShape.setAngleSwept(radiusStart + (int)(radiusMagnitude*per));
+        circleShape.setRadius(radiusStart + (int)(radiusMagnitude*per));
         return false;
     }
 

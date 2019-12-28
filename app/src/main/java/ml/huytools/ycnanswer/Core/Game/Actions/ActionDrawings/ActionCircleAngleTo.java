@@ -24,7 +24,7 @@ public class ActionCircleAngleTo extends ActionTiming {
     @Override
     protected void OnActionRestart() {
         super.OnActionRestart();
-        angleEStart = circleShape.getEndAngle();
+        angleEStart = circleShape.getAngleSwept();
         angleMagnitude = angleEEnd - angleEStart;
     }
 

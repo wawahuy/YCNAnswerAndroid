@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -14,7 +15,7 @@ import java.util.Random;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionDelay;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionCircleAngleBy;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionCircleAngleStartBy;
-import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionCircleAngleTo;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionCircleRadiusTo;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionColorTo;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionFunc;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionRepeatForever;
@@ -27,11 +28,14 @@ import ml.huytools.ycnanswer.Core.Game.Actions.ActionVisible;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Color;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.CircleShape;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.Drawable;
+import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.Text;
+import ml.huytools.ycnanswer.Core.Game.Graphics.Font;
 import ml.huytools.ycnanswer.Core.Game.Renderer;
 import ml.huytools.ycnanswer.Core.Game.Scene;
 import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleAction;
 import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleCallback;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
+import ml.huytools.ycnanswer.R;
 
 public class TestActivity extends AppCompatActivity {
 
@@ -88,14 +92,24 @@ public class TestActivity extends AppCompatActivity {
         @Override
         public void OnResume(final Vector2D size) {
 
+            Text text = new Text();
+            text.setFont(Font.loadResource(R.font.f1));
+            text.setText("012 Huy");
+            text.setSize(200);
+            text.setPosition(size.x/2, size.y/2);
+            text.centerOrigin(true);
+            text.setZOrder(999);
+            //text.setTextStyle(Typeface.BOLD);
+            scene.add(text);
+
             /// bubble
-            for(int i=0; i<60; i++) {
+            for(int i=0; i<40; i++) {
                 CircleShape circleShape = new CircleShape();
                 circleShape.setRadius(10);
                 circleShape.setStrokeWidth(10);
                 circleShape.setAngleSwept(360);
                 circleShape.setStyle(Drawable.Style.FILL);
-                circleShape.alwaysCenterOrigin();
+                circleShape.centerOrigin();
                 circleShape.setPosition((new Random()).nextInt()%(size.x), (new Random()).nextInt()%(size.y)  );
 
                 Color start = new Color(155, (new Random()).nextInt()%125 + 125, (new Random()).nextInt()%125 + 125, (new Random()).nextInt()%125 + 125);
@@ -140,35 +154,35 @@ public class TestActivity extends AppCompatActivity {
             circleP.setStrokeWidth(40);
             circleP.setAngleSwept(0);
             circleP.setStyle(Drawable.Style.STROKE);
-            circleP.alwaysCenterOrigin();
+            circleP.centerOrigin();
             circleP.setPosition(size.x/2, size.y/2  );
             circleP.setColor(new Color(255, 255, 255,0 ));
 
             ActionFunc.Callback createEffect = new ActionFunc.Callback() {
                 @Override
                 public boolean OnCallback(Scene.Node node) {
-                    for(int i=0; i<1; i++) {
+                    for(int i=0; i<6; i++) {
                         CircleShape circleShape = new CircleShape();
-                        circleShape.setRadius((int)(210));
+                        circleShape.setRadius(0);
                         circleShape.setScale(circleP.getScale().clone());
-                        circleShape.setStrokeWidth(40);
-                        circleShape.setStartAngle(circleP.getEndAngle());
-                        circleShape.setAngleSwept(0);
+                        circleShape.setStrokeWidth(60);
+                        circleShape.setStartAngle(circleP.getAngleSwept());
+                        circleShape.setAngleSwept(360);
                         circleShape.setStyle(Drawable.Style.FILL);
-                        circleShape.alwaysCenterOrigin();
+                        circleShape.centerOrigin();
                         circleShape.setPosition(size.x / 2, size.y / 2);
                         circleShape.setZOrderUnder(node);
+                        circleShape.setColor(new Color(120, 255, 0, 0));
 
                         circleShape.runAction(
                                 ActionSequence.create(
-                                        ActionDelay.create(120*i),
+                                        ActionDelay.create(50*i),
                                         ActionSpawn.create(
-                                                ActionCircleAngleTo.create(360, 400),
                                                 ActionSequence.create(
-                                                        ActionColorTo.create(new Color(255, 255, 0, 0), 0),
+                                                        ActionColorTo.create(new Color(60, 255, 0, 0), 0),
                                                         ActionColorTo.create(new Color(0, 255, 255, 255), 2000 + 90*i)
                                                 ),
-                                                ActionCubicBezier.EaseOut(ActionScaleTo.create(new Vector2D(3, 3), 2000 + 90*i))
+                                                ActionCubicBezier.EaseInOut(ActionCircleRadiusTo.create(500 + i*30, 2000 + 90*i))
                                         ),
                                         ActionFunc.create(new ActionFunc.Callback() {
                                             @Override
@@ -190,7 +204,7 @@ public class TestActivity extends AppCompatActivity {
                             ActionSpawn.create(
                                     ActionSequence.create(
                                             ActionCubicBezier.EaseInOut(ActionCircleAngleBy.create(360, 1500)),
-                                            ActionCubicBezier.EaseInOut(ActionCircleAngleBy.create(-360, 500))
+                                            ActionCubicBezier.EaseOut(ActionCircleAngleBy.create(-350, 500))
                                     ),
                                     ActionCubicBezier.EaseInOut(ActionCircleAngleStartBy.create(360, 2000)),
                                     ActionSequence.create(
