@@ -20,6 +20,13 @@ public class Color implements Cloneable {
         this.b = b;
     }
 
+    public Color(int alpha, Color color){
+        this.a = alpha;
+        this.r = color.r;
+        this.g = color.g;
+        this.b = color.b;
+    }
+
     public Color() {
     }
 

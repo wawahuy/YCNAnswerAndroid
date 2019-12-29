@@ -4,9 +4,6 @@ import java.util.Random;
 
 import ml.huytools.ycnanswer.Core.Game.Actions.Action;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionDelay;
-import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionCircleAngleBy;
-import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionCircleAngleStartBy;
-import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionCircleAngleStartTo;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionCircleAngleTo;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionCircleRadiusTo;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionColorTo;
@@ -33,16 +30,12 @@ public class CountDown extends NodeGroup implements ScheduleCallback {
     final int BAR_WIDTH = 20;
     final int TEXT_SIZE = 40;
 
-    /// -- Object Graphics ----
+    /// -- Object Game ----
     Vector2D size;
     Text textNumberTime;
     CircleShape circleBackground;
     CircleShape circleProgression;
-
-    /// -- Scheduler --
     ScheduleAction scheduleActionTick;
-
-    /// -- Action --
     Action actionCirclePBar;
 
     /// -- Data ---
@@ -156,54 +149,54 @@ public class CountDown extends NodeGroup implements ScheduleCallback {
     public void OnScheduleCallback(float dt) {
         long t = timeCountDown - System.currentTimeMillis() + timeStartCountDown;
         int  tSecond = (int)(t/1000);
+
+        if(tSecond <= 0){
+            start();
+            return;
+        }
+
         textNumberTime.setText(String.valueOf(tSecond));
         createEffectCircle();
     }
 
     public void createEffectCircle(){
-        /// -----------
-        /// Need Update Style Code
-        //  -----------
-        long timeCurrent = timeCountDown - System.currentTimeMillis() + timeStartCountDown;
-        /// Create Effect Tick
+        int timeCurrent = (int)(timeCountDown - System.currentTimeMillis() + timeStartCountDown)/1000;
         final int count = 4;
         for(int i=0; i<count; i++) {
+            Color color = new Color(50, circleProgression.getColor());
             CircleShape circleShape = new CircleShape();
             circleShape.setRadius(circleProgression.getRadius()-5);
             circleShape.setStrokeWidth(i*4 + 8);
-            circleShape.setAngleSwept(358);
+            circleShape.setAngleSwept(359);
             circleShape.setStyle(Drawable.Style.STROKE);
             circleShape.centerOrigin();
             circleShape.setPosition(size.x / 2, size.y / 2);
             circleShape.setZOrderUnder(circleBackground);
-            circleShape.setColor(new Color(120, 255, 0, 0));
-
-            int time = 2000 - i*50 - (timeCountDown/1000 - (int)timeCurrent/1000)*3;
-            int r = (int)(size.x/2) - count*3 + i*3;
-            Color color = circleProgression.getColor().clone();
-            color.a = 50;
             circleShape.setColor(color);
 
-            circleShape.runAction(
-                    ActionSequence.create(
-                            ActionDelay.create(180*i),
-                            ActionSpawn.create(
-                                    ActionSequence.create(
-                                            ActionColorTo.create(color, 0),
-                                            ActionCubicBezier.EaseOut(ActionColorTo.create(new Color(0, 255, 255, 255), time))
-                                    ),
-                                    ActionCubicBezier.EaseOut(ActionCircleRadiusTo.create(r, time)),
-                                    ActionCubicBezier.EaseOut(ActionRotateBy.create(720, time))
-                            ),
-                            ActionFunc.create(new ActionFunc.Callback() {
-                                @Override
-                                public boolean OnCallback(final Node node) {
-                                    remove(node);
-                                    return false;
-                                }
-                            })
-                    )
-            );
+            int timeEffect = 2000 - i*50 - timeCurrent*3;
+            int radiusTo = (int)(size.x/2) - count*3 + i*3;
+            Color colorTo = new Color(0, 255, 255, 255);
+
+            /// Sequences
+            Action actionDelay  = ActionDelay.create(180*i);
+            Action actionDelete = ActionFunc.create(new ActionFunc.Callback() {
+                @Override
+                public boolean OnCallback(final Node node) {
+                    remove(node);
+                    return false;
+                }
+            });
+
+            /// Spawn
+            Action actionColor  = ActionCubicBezier.EaseOut(ActionColorTo.create(colorTo, timeEffect));
+            Action actionRadius = ActionCubicBezier.EaseOut(ActionCircleRadiusTo.create(radiusTo, timeEffect));
+            Action actionRotate = ActionCubicBezier.EaseOut(ActionRotateBy.create(720, timeEffect));
+            Action actionSpawn = ActionSpawn.create(actionRadius, actionColor, actionRotate);
+
+            /// All
+            Action action = ActionSequence.create(actionDelay, actionSpawn, actionDelete);
+            circleShape.runAction(action);
             add(circleShape);
         }
     }
@@ -218,6 +211,7 @@ public class CountDown extends NodeGroup implements ScheduleCallback {
 
     public void start(){
         timeStartCountDown = System.currentTimeMillis();
+        textNumberTime.setText(String.valueOf(timeCountDown/1000));
         registerScheduleTick();
         restartActionBar();
     }
