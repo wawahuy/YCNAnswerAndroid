@@ -1,9 +1,9 @@
 package ml.huytools.ycnanswer.Core.Game.Actions;
 
-import ml.huytools.ycnanswer.Core.Game.Scene;
+import ml.huytools.ycnanswer.Core.Game.Scenes.Node;
 
 public abstract class Action {
-    protected Scene.Node node;
+    protected Node node;
     protected boolean finish;
 
     protected Action(){
@@ -14,7 +14,7 @@ public abstract class Action {
     protected abstract void OnActionRestart();
     protected abstract boolean OnActionUpdate();
 
-    public void setup(Scene.Node node){
+    public void setup(Node node){
         this.node = node;
         OnActionSetup();
         restart();

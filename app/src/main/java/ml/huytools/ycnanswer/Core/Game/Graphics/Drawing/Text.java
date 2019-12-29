@@ -4,7 +4,6 @@ import android.graphics.Canvas;
 import android.graphics.Typeface;
 
 import ml.huytools.ycnanswer.Core.Game.Graphics.Font;
-import ml.huytools.ycnanswer.Core.Game.Scene;
 
 public class Text extends Drawable {
 

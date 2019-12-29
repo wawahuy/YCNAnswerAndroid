@@ -4,9 +4,9 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
-import ml.huytools.ycnanswer.Core.Game.Scene.Node;
+import ml.huytools.ycnanswer.Core.Game.Scenes.Node;
 
-public class Sprite extends Node{
+public class Sprite extends Node {
     Texture texture;
     Paint paint;
     Rect rect;

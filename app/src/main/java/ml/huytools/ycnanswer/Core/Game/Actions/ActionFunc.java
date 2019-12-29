@@ -1,6 +1,6 @@
 package ml.huytools.ycnanswer.Core.Game.Actions;
 
-import ml.huytools.ycnanswer.Core.Game.Scene;
+import ml.huytools.ycnanswer.Core.Game.Scenes.Node;
 
 public class ActionFunc extends Action {
     private Callback callback;
@@ -12,7 +12,7 @@ public class ActionFunc extends Action {
          * @return
          *      true - yêu cầu vẽ lại
          */
-        boolean OnCallback(Scene.Node node);
+        boolean OnCallback(Node node);
     }
 
     public static ActionFunc create(Callback callback){

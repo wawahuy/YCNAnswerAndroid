@@ -1,4 +1,4 @@
-package ml.huytools.ycnanswer.Views.GameViews.Effects;
+package ml.huytools.ycnanswer.Views.Removing.Effects;
 
 import android.graphics.Canvas;
 

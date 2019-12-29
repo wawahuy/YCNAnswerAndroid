@@ -1,4 +1,4 @@
-package ml.huytools.ycnanswer.Views.GameViews.Components;
+package ml.huytools.ycnanswer.Views.Removing.Components;
 
 import android.app.Activity;
 import android.content.Context;
@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import ml.huytools.ycnanswer.Core.Removing.CustomSurfaceView;
-import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectCircleRotate;
-import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
+import ml.huytools.ycnanswer.Views.Removing.Effects.EffectCircleRotate;
+import ml.huytools.ycnanswer.Views.Removing.Effects.EffectManager;
 
 /***
  * CustomLoader.java

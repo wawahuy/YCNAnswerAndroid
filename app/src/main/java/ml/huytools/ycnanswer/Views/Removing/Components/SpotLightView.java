@@ -1,4 +1,4 @@
-package ml.huytools.ycnanswer.Views.GameViews.Components;
+package ml.huytools.ycnanswer.Views.Removing.Components;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -16,8 +16,8 @@ import java.util.LinkedList;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
 import ml.huytools.ycnanswer.Core.Math.CubicBezier;
 import ml.huytools.ycnanswer.Core.Removing.CustomSurfaceView;
-import ml.huytools.ycnanswer.Views.GameViews.Effects.Effect;
-import ml.huytools.ycnanswer.Views.GameViews.Effects.EffectManager;
+import ml.huytools.ycnanswer.Views.Removing.Effects.Effect;
+import ml.huytools.ycnanswer.Views.Removing.Effects.EffectManager;
 
 public class SpotLightView extends CustomSurfaceView {
 

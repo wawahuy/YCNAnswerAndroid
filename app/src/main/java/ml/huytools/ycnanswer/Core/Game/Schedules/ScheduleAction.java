@@ -14,6 +14,9 @@ public class ScheduleAction {
     private long time, dt;
     private int nCurrent;
 
+    enum PositionThread { CURRENT, MAIN }
+    private PositionThread schedulePositionThread;
+
     private ScheduleAction(ScheduleCallback callback){
         this.callback = callback;
         hasTimeout = true;
@@ -44,9 +47,14 @@ public class ScheduleAction {
         return scheduleAction;
     }
 
-    public void init(){
+    public void init(PositionThread positionThread){
         timeCurrent = System.currentTimeMillis();
         nCurrent = 0;
+        schedulePositionThread = positionThread;
+    }
+
+    public PositionThread getSchedulePositionThread() {
+        return schedulePositionThread;
     }
 
     public boolean run() {
@@ -64,7 +72,7 @@ public class ScheduleAction {
         // main
         dt = time - timeCurrent;
         if(dt >= interval) {
-            callback.OnUpdate(dt);
+            callback.OnScheduleCallback(dt);
 
             switch (nLoop){
                 case ONE:

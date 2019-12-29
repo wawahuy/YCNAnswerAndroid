@@ -14,7 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ml.huytools.ycnanswer.Views.GameViews.Components.SpotLightView
+        <ml.huytools.ycnanswer.Views.Removing.Components.SpotLightView
             android:id="@+id/spotLight"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -50,8 +50,8 @@
 
                     <ml.huytools.ycnanswer.Views.Components.CountDownView
                         android:id="@+id/countDown"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
                         android:layout_gravity="center"
                         android:layout_marginStart="10dp" />
                 </LinearLayout>
@@ -117,7 +117,7 @@
                             app:layout_constraintStart_toEndOf="@+id/imageView12"
                             app:srcCompat="@drawable/chair" />
 
-                        <ml.huytools.ycnanswer.Views.GameViews.Components.MCView
+                        <ml.huytools.ycnanswer.Views.Removing.Components.MCView
                             android:id="@+id/MCView"
                             android:layout_width="168px"
                             android:layout_height="256px"
@@ -219,7 +219,7 @@
 
                 </LinearLayout>
 
-                <ml.huytools.ycnanswer.Views.GameViews.Components.TableMLView
+                <ml.huytools.ycnanswer.Views.Removing.Components.TableMLView
                     android:id="@+id/iv_tb_level_question"
                     android:layout_width="0dp"
                     android:layout_height="250dp"

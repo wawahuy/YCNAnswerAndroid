@@ -1,4 +1,4 @@
-package ml.huytools.ycnanswer.Views.GameViews.Effects;
+package ml.huytools.ycnanswer.Views.Removing.Effects;
 
 import ml.huytools.ycnanswer.Core.Game.Removing.AbstractAnimation;
 import ml.huytools.ycnanswer.Core.Removing.IRender;

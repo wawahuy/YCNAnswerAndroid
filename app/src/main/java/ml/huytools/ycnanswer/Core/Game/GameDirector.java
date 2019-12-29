@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import ml.huytools.ycnanswer.Core.Game.Schedules.Scheduler;
 import ml.huytools.ycnanswer.Core.LinkedListQueue;
 
 public class GameDirector extends Thread {
@@ -16,14 +17,13 @@ public class GameDirector extends Thread {
     }
 
     private LinkedListQueue<Renderer> renders;
-
-    /// FPS
     private int framePerSeconds;
     private int sleepOfOnFrame;
-    private long timeFrameCurrent;
+    private Scheduler scheduler;
 
     private GameDirector() {
         renders = new LinkedListQueue<>();
+        scheduler = new Scheduler();
         setFramePerSecondsMax(60);
         this.setName("Game Director");
         start();
@@ -50,27 +50,33 @@ public class GameDirector extends Thread {
         sleepOfOnFrame = 1000/framePerSeconds;
     }
 
+    public Scheduler getScheduler() {
+        return scheduler;
+    }
+
     @Override
     public void run() {
         long time;
 
         while (true){
             time = System.currentTimeMillis();
-
-            // synchronized (renders) {
+            /// Logic
             for (Renderer renderer : renders) {
                 renderer.update();
             }
-            //}
 
-            //synchronized (renders) {
+            /// Render
             for (Renderer renderer : renders) {
                 renderer.render();
             }
-            //}
 
+            /// Scheduler Logic
+            scheduler.update();
+
+            /// Update linkedList
             renders.updateQueue();
 
+            /// Compute time sleep
             time = System.currentTimeMillis() - time;
             SystemClock.sleep(time < sleepOfOnFrame ? sleepOfOnFrame - time : 1);
         }

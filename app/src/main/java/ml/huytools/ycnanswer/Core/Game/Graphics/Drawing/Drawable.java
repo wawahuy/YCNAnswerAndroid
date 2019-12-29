@@ -1,13 +1,12 @@
 package ml.huytools.ycnanswer.Core.Game.Graphics.Drawing;
 
 import android.graphics.Paint;
-import android.graphics.Shader;
 
 import ml.huytools.ycnanswer.Core.Game.Graphics.Color;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Texture;
-import ml.huytools.ycnanswer.Core.Game.Scene;
+import ml.huytools.ycnanswer.Core.Game.Scenes.Node;
 
-public abstract class Drawable extends Scene.Node {
+public abstract class Drawable extends Node {
     public enum Style { STROKE, FILL };
 
     private Color color;
@@ -16,7 +15,8 @@ public abstract class Drawable extends Scene.Node {
     private Style style;
     protected Paint paint;
 
-    public Drawable(){
+    protected Drawable(){
+        super();
         color = new Color(0, 0,0, 0);
         paint = new Paint();
         paint.setAntiAlias(true);

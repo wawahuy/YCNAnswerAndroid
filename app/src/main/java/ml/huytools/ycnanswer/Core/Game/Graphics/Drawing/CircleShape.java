@@ -13,6 +13,7 @@ public class CircleShape extends Drawable {
     private boolean drawToCenter;
 
     public CircleShape(){
+        super();
         radius = 0;
         rect = new RectF();
         startAngle = 0;

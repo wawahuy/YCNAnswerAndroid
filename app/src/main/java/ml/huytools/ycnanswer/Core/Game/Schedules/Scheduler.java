@@ -2,11 +2,7 @@ package ml.huytools.ycnanswer.Core.Game.Schedules;
 
 import android.os.SystemClock;
 
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-
-import ml.huytools.ycnanswer.Core.Game.Scene;
+import ml.huytools.ycnanswer.Core.Game.Scenes.Scene;
 import ml.huytools.ycnanswer.Core.LinkedListQueue;
 
 public class Scheduler extends Thread {
@@ -55,16 +51,24 @@ public class Scheduler extends Thread {
 
     public void schedule(ScheduleAction scheduleAction){
         listAction.addQueue(scheduleAction);
-        scheduleAction.init();
+        scheduleAction.init(ScheduleAction.PositionThread.CURRENT);
     }
 
     public void scheduleOnThreadGame(ScheduleAction scheduleAction){
         listActionMainThread.addQueue(scheduleAction);
-        scheduleAction.init();
+        scheduleAction.init(ScheduleAction.PositionThread.MAIN);
     }
 
     public void remove(ScheduleAction scheduleAction){
-        /// -------- update ---------
+        switch (scheduleAction.getSchedulePositionThread()){
+            case MAIN:
+                listActionMainThread.removeQueue(scheduleAction);
+                break;
+
+            case CURRENT:
+                listAction.removeQueue(scheduleAction);
+                break;
+        }
     }
 
     public void initScheduleCBInit(){

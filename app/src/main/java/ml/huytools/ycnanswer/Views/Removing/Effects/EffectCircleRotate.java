@@ -1,9 +1,7 @@
-package ml.huytools.ycnanswer.Views.GameViews.Effects;
+package ml.huytools.ycnanswer.Views.Removing.Effects;
 
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 
 /**
  * Effect này chưa sử dụng AnimationManager Abstract

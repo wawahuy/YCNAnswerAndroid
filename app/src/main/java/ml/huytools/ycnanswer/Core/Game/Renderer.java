@@ -35,6 +35,9 @@ public class Renderer implements SurfaceHolder.Callback {
         if(flagUpdate){
             Canvas canvas = surfaceHolder.lockCanvas();
             synchronized (surfaceHolder){
+                /// Clear
+                canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
+                /// Draw
                 gameObject.draw(canvas);
             }
             surfaceHolder.unlockCanvasAndPost(canvas);

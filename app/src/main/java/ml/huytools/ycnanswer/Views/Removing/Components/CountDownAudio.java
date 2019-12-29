@@ -1,4 +1,4 @@
-package ml.huytools.ycnanswer.Views.GameViews.Components;
+package ml.huytools.ycnanswer.Views.Removing.Components;
 
 import android.media.MediaPlayer;
 

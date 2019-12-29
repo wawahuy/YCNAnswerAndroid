@@ -15,10 +15,10 @@ import ml.huytools.ycnanswer.Models.CauHoi;
 import ml.huytools.ycnanswer.Presenters.GamePresenter;
 import ml.huytools.ycnanswer.R;
 import ml.huytools.ycnanswer.Views.Components.CountDownView;
-import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownAudio;
-import ml.huytools.ycnanswer.Views.GameViews.Components.FPSDebugView;
-import ml.huytools.ycnanswer.Views.GameViews.Components.SpotLightView;
-import ml.huytools.ycnanswer.Views.GameViews.Components.TableMLView;
+import ml.huytools.ycnanswer.Views.Removing.Components.CountDownAudio;
+import ml.huytools.ycnanswer.Views.Removing.Components.FPSDebugView;
+import ml.huytools.ycnanswer.Views.Removing.Components.SpotLightView;
+import ml.huytools.ycnanswer.Views.Removing.Components.TableMLView;
 
 
 public class GameActivity extends AppCompatActivity implements GamePresenter.View {
