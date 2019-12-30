@@ -1,40 +1,39 @@
 package ml.huytools.ycnanswer.Core.Game.Schedules;
 
-import android.os.SystemClock;
+import android.graphics.Matrix;
+import android.util.Log;
 
-import ml.huytools.ycnanswer.Core.Game.Scenes.Scene;
+import ml.huytools.ycnanswer.Core.Game.Commons.Sleeper;
 import ml.huytools.ycnanswer.Core.LinkedListQueue;
 
 public class Scheduler extends Thread {
+    private final int sleepIdle = 300;
     private static int id = 0;
-    private Scene scene;
+    private Sleeper sleeper;
     private LinkedListQueue<ScheduleAction> listAction;
     private LinkedListQueue<ScheduleAction> listActionMainThread;
 
     public Scheduler(){
-        this.scene = null;
+        sleeper = new Sleeper();
+        sleeper.setSleep(sleepIdle);
         initScheduleCBInit();
+        setName("Scheduler " + ++id);
         start();
     }
 
-    public Scheduler(Scene scene){
-        this.scene = scene;
-        initScheduleCBInit();
-        setName("Scheduler " + id++);
-        start();
-    }
 
     @Override
     public void run() {
         // -------- Thread N ---------
         while (true){
+            sleeper.reset();
             for (ScheduleAction scheduleAction : listAction) {
                 if (!scheduleAction.run()) {
                     listAction.removeQueue(scheduleAction);
                 }
             }
             listAction.updateQueue();
-            SystemClock.sleep(1);
+            sleeper.sleep();
         }
     }
 
@@ -50,11 +49,13 @@ public class Scheduler extends Thread {
     }
 
     public void schedule(ScheduleAction scheduleAction){
+        updateSleepWithInterval(scheduleAction.getInterval());
         listAction.addQueue(scheduleAction);
         scheduleAction.init(ScheduleAction.PositionThread.CURRENT);
     }
 
     public void scheduleOnThreadGame(ScheduleAction scheduleAction){
+        updateSleepWithInterval(scheduleAction.getInterval());
         listActionMainThread.addQueue(scheduleAction);
         scheduleAction.init(ScheduleAction.PositionThread.MAIN);
     }
@@ -66,12 +67,25 @@ public class Scheduler extends Thread {
                 break;
 
             case CURRENT:
+                if(listAction.size() == 1){
+                    sleeper.setSleep(sleepIdle);
+                    ///
+                    Log.v("Log", "Scheduler " + id + " sleep = " + sleepIdle);
+                }
                 listAction.removeQueue(scheduleAction);
                 break;
         }
     }
 
-    public void initScheduleCBInit(){
+    private void updateSleepWithInterval(int interval){
+        final int divInterval = 4;
+        long intervalMin = Math.min(interval, sleeper.getSleep()*divInterval) / divInterval;
+        sleeper.setSleep(intervalMin);
+        ///
+        Log.v("Log", "Scheduler " + id + " sleep = " + intervalMin);
+    }
+
+    private void initScheduleCBInit(){
         listAction = new LinkedListQueue<>();
         listActionMainThread = new LinkedListQueue<>();
     }

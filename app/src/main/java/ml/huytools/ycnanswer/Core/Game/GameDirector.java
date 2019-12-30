@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import ml.huytools.ycnanswer.Core.Game.Commons.Sleeper;
 import ml.huytools.ycnanswer.Core.Game.Schedules.Scheduler;
 import ml.huytools.ycnanswer.Core.LinkedListQueue;
 
@@ -18,12 +19,13 @@ public class GameDirector extends Thread {
 
     private LinkedListQueue<Renderer> renders;
     private int framePerSeconds;
-    private int sleepOfOnFrame;
     private Scheduler scheduler;
+    private Sleeper sleeper;
 
     private GameDirector() {
         renders = new LinkedListQueue<>();
         scheduler = new Scheduler();
+        sleeper = new Sleeper();
         setFramePerSecondsMax(60);
         this.setName("Game Director");
         start();
@@ -38,7 +40,7 @@ public class GameDirector extends Thread {
 
     public void cancelRegistration(Renderer renderer){
         if(renders.size() <= 1){
-            sleepOfOnFrame = 100;
+            sleeper.setSleep(100);
         }
         // synchronized (renders) {
         renders.removeQueue(renderer);
@@ -47,7 +49,7 @@ public class GameDirector extends Thread {
 
     public void setFramePerSecondsMax(int frame){
         framePerSeconds = frame;
-        sleepOfOnFrame = 1000/framePerSeconds;
+        sleeper.setSleep(1000/framePerSeconds);
     }
 
     public Scheduler getScheduler() {
@@ -56,10 +58,10 @@ public class GameDirector extends Thread {
 
     @Override
     public void run() {
-        long time;
 
         while (true){
-            time = System.currentTimeMillis();
+            sleeper.reset();
+
             /// Logic
             for (Renderer renderer : renders) {
                 renderer.update();
@@ -76,9 +78,7 @@ public class GameDirector extends Thread {
             /// Update linkedList
             renders.updateQueue();
 
-            /// Compute time sleep
-            time = System.currentTimeMillis() - time;
-            SystemClock.sleep(time < sleepOfOnFrame ? sleepOfOnFrame - time : 1);
+            sleeper.sleep();
         }
     }
 

@@ -57,6 +57,14 @@ public class ScheduleAction {
         return schedulePositionThread;
     }
 
+    public int getInterval() {
+        return interval;
+    }
+
+    public void setInterval(int interval) {
+        this.interval = interval;
+    }
+
     public boolean run() {
         time = System.currentTimeMillis();
 

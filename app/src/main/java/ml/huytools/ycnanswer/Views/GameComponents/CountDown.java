@@ -1,6 +1,4 @@
-package ml.huytools.ycnanswer.Views.Components;
-
-import java.util.Random;
+package ml.huytools.ycnanswer.Views.GameComponents;
 
 import ml.huytools.ycnanswer.Core.Game.Actions.Action;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionDelay;

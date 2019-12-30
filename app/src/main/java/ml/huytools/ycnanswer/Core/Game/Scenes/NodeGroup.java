@@ -3,6 +3,7 @@ package ml.huytools.ycnanswer.Core.Game.Scenes;
 import android.graphics.Canvas;
 
 import java.util.Comparator;
+import java.util.List;
 
 import ml.huytools.ycnanswer.Core.LinkedListQueue;
 
@@ -39,6 +40,10 @@ public class NodeGroup extends Node {
 
     public int size(){
         return nodes.size();
+    }
+
+    public List<Node> getListNode(){
+        return nodes;
     }
 
     public void updateZIndexSort(){
