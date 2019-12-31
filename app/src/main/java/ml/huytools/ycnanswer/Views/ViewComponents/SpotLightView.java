@@ -17,6 +17,7 @@ public class SpotLightView extends SurfaceView implements Renderer.Callback {
         spotLight = new SpotLight();
         renderer = new Renderer(this, spotLight);
         renderer.enableAutoRegisterDirector(this);
+        renderer.transparent();
     }
 
     @Override

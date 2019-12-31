@@ -212,9 +212,20 @@ public class CountDown extends NodeGroup implements ScheduleCallback {
     }
 
     public void start(){
+        setVisible(true);
+        setEnableAction(true);
         timeStartCountDown = System.currentTimeMillis();
         textNumberTime.setText(String.valueOf(timeCountDown/1000));
         registerScheduleTick();
         restartActionBar();
     }
+
+    public void die(){
+        setVisible(false);
+        setEnableAction(false);
+        if(scheduleActionTick != null){
+            GameDirector.getInstance().getScheduler().remove(scheduleActionTick);
+        }
+    }
+
 }

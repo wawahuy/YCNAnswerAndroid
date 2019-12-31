@@ -1,4 +1,4 @@
-package ml.huytools.ycnanswer;
+package ml.huytools.ycnanswer.Models;
 
 public final class APIUri {
 

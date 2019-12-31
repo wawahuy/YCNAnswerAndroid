@@ -18,6 +18,7 @@ public class Text extends Drawable {
     private int style;
 
     public Text(){
+        super();
         text = "";
         size = 20;
     }

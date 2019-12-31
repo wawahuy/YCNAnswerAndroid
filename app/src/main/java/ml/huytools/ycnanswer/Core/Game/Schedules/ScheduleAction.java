@@ -1,5 +1,7 @@
 package ml.huytools.ycnanswer.Core.Game.Schedules;
 
+import ml.huytools.ycnanswer.Views.GameComponents.FPSDebug;
+
 public class ScheduleAction {
     private enum LOOP { INFINITE, ONE, N };
 

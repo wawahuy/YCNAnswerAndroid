@@ -9,6 +9,7 @@ public class ActionCubicBezier extends Action {
     protected ActionTiming actionTiming;
     protected CubicBezier cubicBezier;
 
+    /// Cache
     private long dt;
     private float per, perDt;
 
@@ -40,9 +41,30 @@ public class ActionCubicBezier extends Action {
         return time;
     }
 
-    public void setTime(float time) {
-        this.time = time;
-        actionTiming.setTime(time);
+    public void setTime(float timeNew) {
+        /// Vấn đề làm mịn hiệu ứng theo thời gian hiện taij
+        /// Khi thời gian đột ngột thay đổi dẫ đến percent đột ngột tăng giảm
+        /// percent tại t1, t2. cần quay về timeStart có per tương ứng
+        /// Khoản gian thực thi mới = phần trăm thời gian hiện tai * thời gian mới;
+        /// Thời gian bắt đầu = timeStart - Khoản thời gian mới + Khoản thời gian cũ
+        computePercent();
+        long timeDTNew = (long)(perDt*timeNew);
+        long timeDTOld = (long)(perDt*time);
+        timeStart = timeStart - timeDTNew + timeDTOld;
+
+        /// Set
+        this.time = timeNew;
+        actionTiming.setTime(timeNew);
+    }
+
+    public void computePercent(){
+        dt    = getTimeCurrent() - timeStart;
+        if(dt > time){
+            dt = (long)time;
+        }
+
+        perDt = time == 0 ? 1 : dt / time;
+        per   = cubicBezier.computeProgressionOnY(perDt);
     }
 
     @Override
@@ -58,13 +80,7 @@ public class ActionCubicBezier extends Action {
 
     @Override
     protected boolean OnActionUpdate() {
-        dt    = getTimeCurrent() - timeStart;
-        if(dt > time){
-            dt = (long)time;
-        }
-
-        perDt = time == 0 ? 1 : dt / time;
-        per   = cubicBezier.computeProgressionOnY(perDt);
+        computePercent();
         if( perDt >= 1 ){
             setFinish(true);
         }

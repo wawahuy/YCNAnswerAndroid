@@ -24,7 +24,7 @@ public class Sleeper {
     }
 
     public void sleep(){
-        dt = System.currentTimeMillis() - getDT();
+        dt = getDT();
         SystemClock.sleep(dt < sleep ? sleep - dt : 1);
     }
 }

@@ -15,6 +15,7 @@ public class PolygonShape extends Drawable {
     private boolean centerMinMax;
 
     public PolygonShape(){
+        super();
         path = new Path();
         points = new LinkedList<>();
     }

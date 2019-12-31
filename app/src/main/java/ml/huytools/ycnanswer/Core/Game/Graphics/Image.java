@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 
+import com.bumptech.glide.Glide;
+
 import ml.huytools.ycnanswer.Core.App;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
 
@@ -44,6 +46,13 @@ public class Image {
         float h = bitmap.getHeight()*scale.y;
         image.bitmap = Bitmap.createScaledBitmap(bitmap, (int)w, (int)h, false);
         return image;
+    }
+
+    public Image scaleToSizeWithFitCenter(Vector2D size){
+        float scaleX = bitmap.getWidth()/size.x;
+        float scaleY = bitmap.getHeight()/size.y;
+        float sc = Math.min(scaleX, scaleY);
+        return createScale(new Vector2D(1/sc, 1/sc));
     }
 
     public void free(){

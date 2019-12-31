@@ -17,8 +17,23 @@ public abstract class ActionTiming extends Action {
         return time;
     }
 
+    /***
+     * Cập nhật lại thời gian
+     * Sẽ không được làm min nhưng có một phương án thay thế
+     * Hãy sử dụng têm một ActionCubicBezier.Linear để thay thế
+     * @param time
+     */
     public void setTime(float time) {
         this.time = time;
+    }
+
+    public void computePercent(){
+        dt  = getTimeCurrent() - timeStart;
+        if(dt > time){
+            dt = (long)time;
+        }
+
+        per = time == 0 ? 1 : dt / time;
     }
 
     @Override
@@ -28,12 +43,7 @@ public abstract class ActionTiming extends Action {
 
     @Override
     protected boolean OnActionUpdate() {
-        dt  = getTimeCurrent() - timeStart;
-        if(dt > time){
-            dt = (long)time;
-        }
-
-        per = time == 0 ? 1 : dt / time;
+        computePercent();
         if(per >= 1){
             setFinish(true);
         }

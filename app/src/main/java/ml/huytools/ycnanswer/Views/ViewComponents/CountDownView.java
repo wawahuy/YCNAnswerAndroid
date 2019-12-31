@@ -21,6 +21,7 @@ public class CountDownView extends SurfaceView implements Renderer.Callback {
         countDown.start();
         renderer = new Renderer(this, countDown);
         renderer.enableAutoRegisterDirector(this);
+        renderer.transparent();
     }
 
 

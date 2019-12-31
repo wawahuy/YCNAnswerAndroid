@@ -34,6 +34,10 @@ public class Renderer implements SurfaceHolder.Callback {
     public void render(){
         if(flagUpdate){
             Canvas canvas = surfaceHolder.lockCanvas();
+            if(canvas == null){
+                return;
+            }
+
             synchronized (surfaceHolder){
                 /// Clear
                 canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.MULTIPLY);
@@ -53,13 +57,15 @@ public class Renderer implements SurfaceHolder.Callback {
         surfaceHolder.addCallback(this);
     }
 
-    @Override
-    public void surfaceCreated(SurfaceHolder surfaceHolder) {
-        GameDirector.getInstance().registration(this);
-
+    public void transparent(){
         // transparent
         surfaceView.setZOrderOnTop(true);
         surfaceView.getHolder().setFormat(PixelFormat.RGBA_8888);
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder surfaceHolder) {
+        GameDirector.getInstance().registration(this);
 
         // clear background transparent
         Canvas canvas = surfaceHolder.lockCanvas();

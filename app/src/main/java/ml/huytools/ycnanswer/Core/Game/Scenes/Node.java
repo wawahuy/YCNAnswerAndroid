@@ -2,8 +2,6 @@ package ml.huytools.ycnanswer.Core.Game.Scenes;
 
 import android.graphics.Canvas;
 
-import java.security.acl.Group;
-
 import ml.huytools.ycnanswer.Core.Game.Actions.Action;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Transformable;
 import ml.huytools.ycnanswer.Core.Game.IGameObject;
@@ -11,6 +9,7 @@ import ml.huytools.ycnanswer.Core.Game.IGameObject;
 public abstract class Node extends Transformable implements IGameObject {
     protected boolean hasUpdateDraw = false;
     private boolean visible;
+    private boolean enableAction;
     private Action action;
     private NodeGroup nodeGroup;
 
@@ -20,6 +19,7 @@ public abstract class Node extends Transformable implements IGameObject {
 
     protected Node(){
         visible = true;
+        enableAction = true;
         zOrder = 0;
     }
 
@@ -32,6 +32,14 @@ public abstract class Node extends Transformable implements IGameObject {
             hasUpdateDraw = false;
         }
         this.visible = visible;
+    }
+
+    public boolean isEnableAction() {
+        return enableAction;
+    }
+
+    public void setEnableAction(boolean enableAction) {
+        this.enableAction = enableAction;
     }
 
     public Action getAction() {
@@ -106,7 +114,7 @@ public abstract class Node extends Transformable implements IGameObject {
 
     @Override
     public boolean update(){
-        boolean hasActionUpdate = action != null && action.update();
-        return needUpdateMatrix || hasUpdateDraw || hasActionUpdate;
+        boolean hasActionUpdate = enableAction && action != null && action.update();
+        return hasUpdateDraw || needUpdateMatrix || hasActionUpdate;
     }
 }

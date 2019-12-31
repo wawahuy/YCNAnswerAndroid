@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import java.util.Comparator;
 import java.util.List;
 
+import ml.huytools.ycnanswer.Core.Exceptions.NodeInAnotherNodeGroupException;
 import ml.huytools.ycnanswer.Core.LinkedListQueue;
 
 public class NodeGroup extends Node {
@@ -27,12 +28,20 @@ public class NodeGroup extends Node {
     }
 
     public void add(Node node){
+        if(node.getGroupNode() != null){
+            throw new NodeInAnotherNodeGroupException();
+        }
+
         hasUpdateSort = true;
         node.setGroupNode(this);
         nodes.addQueue(node);
     }
 
     public void remove(Node node){
+        if(node.getGroupNode() == null){
+            return;
+        }
+
         hasUpdateSort = true;
         node.setGroupNode(null);
         nodes.removeQueue(node);
