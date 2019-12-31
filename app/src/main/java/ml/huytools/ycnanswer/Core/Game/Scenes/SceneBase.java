@@ -2,9 +2,7 @@ package ml.huytools.ycnanswer.Core.Game.Scenes;
 
 import android.graphics.Camera;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Matrix;
-import android.graphics.PorterDuff;
 
 import ml.huytools.ycnanswer.Core.Game.IGameObject;
 import ml.huytools.ycnanswer.Core.Game.Schedules.Scheduler;

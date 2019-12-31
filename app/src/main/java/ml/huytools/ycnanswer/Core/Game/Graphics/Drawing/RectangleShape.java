@@ -44,6 +44,24 @@ public class RectangleShape extends Drawable {
         }
     }
 
+    /***
+     * Test Bounding AABB no rotate and scale
+     * Dont use.
+     * @param point
+     * @return
+     */
+    @Override
+    protected boolean testTouchPoint(Vector2D point) {
+        /// Test
+        /// Need update OOB or AABB Bounding
+        Vector2D min = positionWord.sub(origin);
+        Vector2D max = new Vector2D(rect.right + positionWord.x, rect.bottom + positionWord.y).sub(origin);
+
+        if(point.x < min.x || point.x > max.x) return false;
+        if(point.y < min.y || point.y > max.y) return false;
+        return true;
+    }
+
     @Override
     protected void OnDraw(Canvas canvas) {
         canvas.drawRect(rect, paint);

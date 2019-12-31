@@ -69,6 +69,11 @@ public class GameDirector extends Thread {
         while (true){
             sleeper.reset();
 
+            /// Input
+            for (Renderer renderer : renders) {
+                renderer.updateInput();
+            }
+
             /// Logic
             for (Renderer renderer : renders) {
                 renderer.update();

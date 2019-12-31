@@ -2,12 +2,17 @@ package ml.huytools.ycnanswer.Views;
 
 import android.content.Context;
 import android.graphics.Rect;
+import android.util.Log;
 
 import java.util.Random;
 
+import ml.huytools.ycnanswer.Core.Game.Event.OnTouchListener;
+import ml.huytools.ycnanswer.Core.Game.Graphics.Color;
+import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.RectangleShape;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Image;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Sprite;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Texture;
+import ml.huytools.ycnanswer.Core.Game.Scenes.Node;
 import ml.huytools.ycnanswer.Core.Game.Scenes.Scene;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
 import ml.huytools.ycnanswer.Views.GameComponents.CountDown;
@@ -45,10 +50,8 @@ public class GameScene extends Scene {
         spotLight.setZOrder(100);
         add(spotLight);
 
-
         /// Test
         countDown.start();
-
     }
 
     public void initSizeScreen(Vector2D size) {

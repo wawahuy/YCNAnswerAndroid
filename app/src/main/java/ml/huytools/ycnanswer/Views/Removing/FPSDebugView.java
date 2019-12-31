@@ -1,4 +1,4 @@
-package ml.huytools.ycnanswer.Views.ViewComponents;
+package ml.huytools.ycnanswer.Views.Removing;
 
 import android.app.Activity;
 import android.content.Context;
@@ -35,9 +35,7 @@ public class FPSDebugView extends SurfaceView implements Renderer.Callback {
 
     @Override
     public void OnDestroy() {
-
     }
-
 
     public static void AddOnActivity(Activity activity){
         FPSDebugView loading = new FPSDebugView(activity.getBaseContext(), null);

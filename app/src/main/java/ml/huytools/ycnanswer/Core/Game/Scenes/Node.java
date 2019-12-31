@@ -3,8 +3,12 @@ package ml.huytools.ycnanswer.Core.Game.Scenes;
 import android.graphics.Canvas;
 
 import ml.huytools.ycnanswer.Core.Game.Actions.Action;
+import ml.huytools.ycnanswer.Core.Game.Event.Event;
+import ml.huytools.ycnanswer.Core.Game.Event.TouchEvent;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Transformable;
 import ml.huytools.ycnanswer.Core.Game.IGameObject;
+import ml.huytools.ycnanswer.Core.Game.Event.OnTouchListener;
+import ml.huytools.ycnanswer.Core.Math.Vector2D;
 
 public abstract class Node extends Transformable implements IGameObject {
     protected boolean hasUpdateDraw = false;
@@ -12,6 +16,10 @@ public abstract class Node extends Transformable implements IGameObject {
     private boolean enableAction;
     private Action action;
     private NodeGroup nodeGroup;
+
+    private OnTouchListener touchListener;
+    private TouchEvent.TouchType typeTouch;
+    protected Vector2D positionWord;
 
     private int zOrder;
     private int zOrderNodeInc;
@@ -21,6 +29,7 @@ public abstract class Node extends Transformable implements IGameObject {
         visible = true;
         enableAction = true;
         zOrder = 0;
+        typeTouch = TouchEvent.TouchType.NORMAL;
     }
 
     public boolean isVisible() {
@@ -87,6 +96,23 @@ public abstract class Node extends Transformable implements IGameObject {
         }
     }
 
+    protected boolean testTouchPoint(Vector2D point){
+        return false;
+    }
+
+    public OnTouchListener getTouchListener() {
+        return touchListener;
+    }
+
+    /**
+     * Kiểm tra sự kiện nhấn
+     * Hiện tại chỉ xác thức thông qua khung AABB bao quanh không chihs xác
+     * @param touchListener
+     */
+    public void setTouchListener(OnTouchListener touchListener) {
+        this.touchListener = touchListener;
+    }
+
     /***
      * Các đối tượng sẽ được vẽ kèm theo ma trận biến đổi bởi Transformable
      * Nên vẽ các đối tượng ở góc tọa độ và di chuyển đến trọng tâm
@@ -110,6 +136,7 @@ public abstract class Node extends Transformable implements IGameObject {
         OnDraw(canvas);
         canvas.restore();
         hasUpdateDraw = false;
+        positionWord = null;
     }
 
     @Override
@@ -117,4 +144,48 @@ public abstract class Node extends Transformable implements IGameObject {
         boolean hasActionUpdate = enableAction && action != null && action.update();
         return hasUpdateDraw || needUpdateMatrix || hasActionUpdate;
     }
+
+    @Override
+    public void updateInput(Event event) {
+        switch (event.getEventType()){
+            case Touch:
+                progressionTouch((TouchEvent) event);
+                break;
+        }
+    }
+
+
+    ///// -------- touches -----------
+    protected void computePositionWordIfTouches(Event event){
+        if(positionWord == null && event.getEventType() == Event.EventType.Touch){
+            positionWord = computePositionWordTrx();
+            if( nodeGroup!=null ){
+                positionWord = positionWord.add(nodeGroup.positionWord);
+            }
+        }
+    }
+
+    private void progressionTouch(TouchEvent touchEvent){
+        if(touchListener == null) {
+            return;
+        }
+
+        computePositionWordIfTouches(touchEvent);
+
+        if(testTouchPoint(touchEvent.getPoint()) && touchEvent.getType() != TouchEvent.TouchType.END){
+            if(typeTouch == TouchEvent.TouchType.NORMAL){
+                touchListener.OnTouchBegin(this, touchEvent.getPoint().clone());
+                typeTouch = TouchEvent.TouchType.BEGIN;
+            } else {
+                touchListener.OnTouchMove(this, touchEvent.getPoint().clone());
+                typeTouch = TouchEvent.TouchType.MOVE;
+            }
+        } else {
+            if(typeTouch == TouchEvent.TouchType.MOVE || typeTouch == TouchEvent.TouchType.BEGIN){
+                touchListener.OnTouchEnd(this, touchEvent.getPoint().clone());
+                typeTouch = TouchEvent.TouchType.NORMAL;
+            }
+        }
+    }
+
 }

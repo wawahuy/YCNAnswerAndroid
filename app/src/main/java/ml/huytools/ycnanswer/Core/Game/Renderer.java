@@ -4,15 +4,21 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
 
+import ml.huytools.ycnanswer.Core.Game.Event.Event;
+import ml.huytools.ycnanswer.Core.Game.Event.TouchEvent;
+import ml.huytools.ycnanswer.Core.LinkedListQueue;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
 
 /***
  *
  */
-public class Renderer implements SurfaceHolder.Callback {
+public class Renderer implements SurfaceHolder.Callback, View.OnTouchListener {
 
     SurfaceView surfaceView;
     SurfaceHolder surfaceHolder;
@@ -21,10 +27,24 @@ public class Renderer implements SurfaceHolder.Callback {
     boolean flagUpdate;
     boolean flagCreated;
 
+    /// ... Need Update ...
+    /// Event
+    LinkedListQueue<Event> events;
+
     public Renderer(SurfaceView surfaceView, IGameObject gameObject) {
         this.surfaceView = surfaceView;
         this.gameObject = gameObject;
         this.surfaceHolder = surfaceView.getHolder();
+        this.events = new LinkedListQueue<>();
+        this.surfaceView.setOnTouchListener(this);
+    }
+
+    public void updateInput(){
+        events.updateQueue();
+        for(Event event:events){
+            gameObject.updateInput(event);
+        }
+        events.clear();
     }
 
     public void update(){
@@ -89,6 +109,26 @@ public class Renderer implements SurfaceHolder.Callback {
     public void surfaceDestroyed(SurfaceHolder surfaceHolder) {
         GameDirector.getInstance().cancelRegistration(this);
         callback.OnDestroy();
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        int action = motionEvent.getAction();
+        float x = motionEvent.getX();
+        float y = motionEvent.getY();
+
+        switch (action) {
+                case MotionEvent.ACTION_DOWN:
+                    case MotionEvent.ACTION_MOVE:
+                        events.addQueue(new TouchEvent(TouchEvent.TouchType.BEGIN, new Vector2D(x, y)));
+                        break;
+
+                case MotionEvent.ACTION_UP:
+                    case MotionEvent.ACTION_CANCEL:
+                        events.addQueue(new TouchEvent(TouchEvent.TouchType.END, new Vector2D(x, y)));
+                        break;
+        }
+        return true;
     }
 
     public interface Callback {

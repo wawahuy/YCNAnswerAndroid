@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import ml.huytools.ycnanswer.Core.Exceptions.NodeInAnotherNodeGroupException;
+import ml.huytools.ycnanswer.Core.Game.Event.Event;
 import ml.huytools.ycnanswer.Core.LinkedListQueue;
 
 public class NodeGroup extends Node {
@@ -84,5 +85,13 @@ public class NodeGroup extends Node {
         nodes.updateQueue();
 
         return hasUpdate;
+    }
+
+    @Override
+    public void updateInput(Event event) {
+        computePositionWordIfTouches(event);
+        for(Node node:nodes){
+            node.updateInput(event);
+        }
     }
 }

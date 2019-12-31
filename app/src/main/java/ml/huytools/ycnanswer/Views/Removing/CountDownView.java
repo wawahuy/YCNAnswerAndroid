@@ -1,4 +1,4 @@
-package ml.huytools.ycnanswer.Views.ViewComponents;
+package ml.huytools.ycnanswer.Views.Removing;
 
 import android.content.Context;
 import android.util.AttributeSet;

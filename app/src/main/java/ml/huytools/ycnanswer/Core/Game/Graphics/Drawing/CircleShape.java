@@ -1,8 +1,10 @@
 package ml.huytools.ycnanswer.Core.Game.Graphics.Drawing;
 
 import android.graphics.Canvas;
-import android.graphics.Rect;
 import android.graphics.RectF;
+import android.util.Log;
+
+import ml.huytools.ycnanswer.Core.Math.Vector2D;
 
 public class CircleShape extends Drawable {
     private RectF rect;
@@ -70,6 +72,18 @@ public class CircleShape extends Drawable {
             setOrigin(radius, radius);
             hasUpdateDraw = true;
         }
+    }
+
+    /// Touch
+    @Override
+    protected boolean testTouchPoint(Vector2D point) {
+        Vector2D v = positionWord;
+        /// Length(pointTouch - pointWord) <= R
+        float xs = v.x - point.x;
+        float ys = v.y - point.y;
+        xs*=xs;
+        ys*=ys;
+        return xs + ys <= radius*radius;
     }
 
     @Override

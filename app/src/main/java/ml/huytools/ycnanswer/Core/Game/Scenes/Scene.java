@@ -4,6 +4,7 @@ import android.graphics.Canvas;
 
 import java.util.Comparator;
 
+import ml.huytools.ycnanswer.Core.Game.Event.Event;
 import ml.huytools.ycnanswer.Core.LinkedListQueue;
 
 public class Scene extends SceneBase {
@@ -34,5 +35,10 @@ public class Scene extends SceneBase {
     @Override
     public boolean OnUpdate(){
         return nodeGroup.update();
+    }
+
+    @Override
+    public void updateInput(Event event) {
+        nodeGroup.updateInput(event);
     }
 }

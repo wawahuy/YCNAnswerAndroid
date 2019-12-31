@@ -2,6 +2,7 @@ package ml.huytools.ycnanswer.Core.Game.Scenes;
 
 import android.graphics.Canvas;
 
+import ml.huytools.ycnanswer.Core.Game.Event.Event;
 import ml.huytools.ycnanswer.Core.LinkedListQueue;
 
 public class SceneGroup extends SceneBase {
@@ -40,5 +41,12 @@ public class SceneGroup extends SceneBase {
         scenes.updateQueue();
 
         return hasUpdate;
+    }
+
+    @Override
+    public void updateInput(Event event) {
+        for(SceneBase scene:scenes){
+            scene.updateInput(event);
+        }
     }
 }
