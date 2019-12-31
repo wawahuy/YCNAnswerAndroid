@@ -1,6 +1,8 @@
 package ml.huytools.ycnanswer.Core.Game.Graphics.Drawing;
 
 import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.Typeface;
 
 import ml.huytools.ycnanswer.Core.Game.Graphics.Font;
@@ -74,6 +76,12 @@ public class Text extends Drawable {
     public void centerOrigin(boolean status){
         center = status;
         computeOrigin();
+    }
+
+    public void setTextAlign(Paint.Align align){
+        paint.setTextAlign(align);
+        computeOrigin();
+        hasUpdateDraw = true;
     }
 
     private void computeOrigin(){

@@ -14,10 +14,15 @@ import ml.huytools.ycnanswer.Core.Game.Graphics.Sprite;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Texture;
 import ml.huytools.ycnanswer.Core.Game.Scenes.Node;
 import ml.huytools.ycnanswer.Core.Game.Scenes.Scene;
+import ml.huytools.ycnanswer.Core.MVP.EntityManager;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
+import ml.huytools.ycnanswer.Core.Resource;
+import ml.huytools.ycnanswer.Models.Entities.CHDiemCauHoi;
+import ml.huytools.ycnanswer.R;
 import ml.huytools.ycnanswer.Views.GameComponents.CountDown;
 import ml.huytools.ycnanswer.Views.GameComponents.FPSDebug;
 import ml.huytools.ycnanswer.Views.GameComponents.SpotLight;
+import ml.huytools.ycnanswer.Views.GameComponents.TableScore;
 
 public class GameScene extends Scene {
     private Vector2D size;
@@ -28,6 +33,7 @@ public class GameScene extends Scene {
     FPSDebug fpsDebug;
     CountDown countDown;
     SpotLight spotLight;
+    TableScore tableScore;
 
     public GameScene(Context context) {
         super();
@@ -50,8 +56,14 @@ public class GameScene extends Scene {
         spotLight.setZOrder(100);
         add(spotLight);
 
+        /// Table Score
+        tableScore = new TableScore();
+        tableScore.setZOrder(90);
+        add(tableScore);
+
         /// Test
         countDown.start();
+        tableScore.initData(EntityManager.ParseJSON(CHDiemCauHoi.class, Resource.readRawTextFile(R.raw.test_cau_hinh_diem_cau_hoi)));
     }
 
     public void initSizeScreen(Vector2D size) {
@@ -68,5 +80,9 @@ public class GameScene extends Scene {
 
         /// SpotLight
         spotLight.setBoundingSize(size);
+
+        /// Table Score
+        tableScore.setBoundingSize(new Vector2D(halfW*0.35f, h*0.6f));
+        tableScore.setPosition(w*0.75f, h*0.25f);
     }
 }

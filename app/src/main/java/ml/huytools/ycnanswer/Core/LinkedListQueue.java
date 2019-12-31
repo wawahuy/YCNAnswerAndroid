@@ -50,6 +50,18 @@ public class LinkedListQueue<T> extends LinkedList<T> {
         }
     }
 
+    public void clearQueue() {
+        hasUpdate = true;
+        synchronized (listAction){
+            listAction.add(new Runnable() {
+                @Override
+                public void run() {
+                    clear();
+                }
+            });
+        }
+    }
+
     public void sortQueue(final Comparator<? super T> c){
         hasUpdate = true;
         synchronized (listAction){
@@ -76,4 +88,6 @@ public class LinkedListQueue<T> extends LinkedList<T> {
 
         hasUpdate = false;
     }
+
+
 }
