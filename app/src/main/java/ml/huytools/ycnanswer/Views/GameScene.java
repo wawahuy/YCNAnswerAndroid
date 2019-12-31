@@ -19,6 +19,7 @@ import ml.huytools.ycnanswer.Core.Math.Vector2D;
 import ml.huytools.ycnanswer.Core.Resource;
 import ml.huytools.ycnanswer.Models.Entities.CHDiemCauHoi;
 import ml.huytools.ycnanswer.R;
+import ml.huytools.ycnanswer.Views.GameComponents.BoxQuestion;
 import ml.huytools.ycnanswer.Views.GameComponents.CountDown;
 import ml.huytools.ycnanswer.Views.GameComponents.FPSDebug;
 import ml.huytools.ycnanswer.Views.GameComponents.SpotLight;
@@ -84,5 +85,6 @@ public class GameScene extends Scene {
         /// Table Score
         tableScore.setBoundingSize(new Vector2D(halfW*0.35f, h*0.6f));
         tableScore.setPosition(w*0.75f, h*0.25f);
+
     }
 }

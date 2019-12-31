@@ -93,7 +93,8 @@ public class NodeGroup extends Node {
 
     @Override
     public void updateInput(Event event) {
-        computePositionWordIfTouches(event);
+        super.computePositionWordIfTouches(event);
+        super.updateInput(event);
         for(Node node:nodes){
             node.updateInput(event);
         }
