@@ -1,6 +1,7 @@
 package ml.huytools.ycnanswer.Core.Game.Graphics.Drawing;
 
 import android.graphics.Paint;
+import android.graphics.Shader;
 
 import ml.huytools.ycnanswer.Core.Game.Graphics.Color;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Texture;
@@ -27,8 +28,7 @@ public abstract class Drawable extends Node {
     }
 
     public void setColor(Color color) {
-        paint.setARGB(color.a, color.r, color.g, color.b);
-        this.color = color;
+        setColor(color.a, color.r, color.g, color.b);
     }
 
     public void setColor(int a, int r, int g, int b) {
@@ -37,6 +37,16 @@ public abstract class Drawable extends Node {
         this.color.g = g;
         this.color.b = b;
         paint.setARGB(a, r, g, b);
+        hasUpdateDraw = true;
+    }
+
+    public void setColorShader(Shader colorShader){
+        paint.setShader(colorShader);
+        hasUpdateDraw = true;
+    }
+
+    public void clearColorShader(){
+        paint.setShader(null);
         hasUpdateDraw = true;
     }
 

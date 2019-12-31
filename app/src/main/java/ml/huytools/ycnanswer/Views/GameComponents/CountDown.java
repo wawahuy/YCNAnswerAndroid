@@ -158,6 +158,10 @@ public class CountDown extends NodeGroup implements ScheduleCallback {
     }
 
     public void createEffectCircle(){
+        if(size == null){
+            return;
+        }
+
         int timeCurrent = (int)(timeCountDown - System.currentTimeMillis() + timeStartCountDown)/1000;
         final int count = 4;
         for(int i=0; i<count; i++) {

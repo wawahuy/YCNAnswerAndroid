@@ -34,7 +34,7 @@ public abstract class SceneBase implements IGameObject {
         canvas.save();
         Matrix matrix = new Matrix();
         camera.getMatrix(matrix);
-        /// ... * [Model]
+        /// ... * [Entity]
         ///        ----- = CameraMatrix * Transform
         /// ... = Project * CameraDifMatrix
         canvas.concat(matrix);
@@ -44,7 +44,7 @@ public abstract class SceneBase implements IGameObject {
 
     @Override
     public void draw(Canvas canvas) {
-        /// Project * View * Model
+        /// Project * View * Entity
         ///           ----   -----
         ///         Camera  Transform
         camera.applyToCanvas(canvas);

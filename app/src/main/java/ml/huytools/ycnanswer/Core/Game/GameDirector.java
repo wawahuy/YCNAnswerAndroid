@@ -1,5 +1,7 @@
 package ml.huytools.ycnanswer.Core.Game;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 
 import java.util.Collections;
@@ -28,7 +30,12 @@ public class GameDirector extends Thread {
         sleeper = new Sleeper();
         setFramePerSecondsMax(60);
         this.setName("Game Director");
-        start();
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                start();
+            }
+        });
     }
 
     public void registration(Renderer renderer){

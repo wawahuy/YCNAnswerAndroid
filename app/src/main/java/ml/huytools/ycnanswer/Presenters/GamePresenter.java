@@ -1,11 +1,11 @@
 package ml.huytools.ycnanswer.Presenters;
 
-import ml.huytools.ycnanswer.Core.MVP.Model;
-import ml.huytools.ycnanswer.Core.MVP.ModelManager;
+import ml.huytools.ycnanswer.Core.MVP.Entity;
+import ml.huytools.ycnanswer.Core.MVP.EntityManager;
 import ml.huytools.ycnanswer.Core.MVP.Presenter;
 import ml.huytools.ycnanswer.Core.Resource;
-import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
-import ml.huytools.ycnanswer.Models.CauHoi;
+import ml.huytools.ycnanswer.Models.Entities.CHDiemCauHoi;
+import ml.huytools.ycnanswer.Models.Entities.CauHoi;
 import ml.huytools.ycnanswer.R;
 
 public class GamePresenter extends Presenter<GamePresenter.View> {
@@ -23,7 +23,7 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
         void UpdateLoadingBar(int per);
 
         ///--------------
-        void ConfigTableML(ModelManager<CHDiemCauHoi> chDiemCauHoi);
+        void ConfigTableML(EntityManager<CHDiemCauHoi> chDiemCauHoi);
         void SetLevelTableML(int level);
         void IncreaseLevelTableML();
 
@@ -42,8 +42,8 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
 
     /// DataSaved
     /// Dữ liệu bị thay đổi mõi khi cấu hình activity bị thay đổi
-    /// Model này sẽ chứa các thông tin thay đổi đó
-    //    public static class ResumeData extends Model {
+    /// Entity này sẽ chứa các thông tin thay đổi đó
+    //    public static class ResumeData extends Entity {
     //        public long countDownStart;
     //        public int levelTableML;
     //    }
@@ -51,7 +51,7 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
     ;
 
     public enum ANSWER {A, B, C, D}
-    ModelManager<CHDiemCauHoi> chDiemCauHoi;
+    EntityManager<CHDiemCauHoi> chDiemCauHoi;
 
     ;
 
@@ -71,7 +71,7 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
      * @param model
      */
     @Override
-    protected void OnResume(Model model){
+    protected void OnResume(Entity model){
 //        /// add lại table
 //        view.ConfigTableML(chDiemCauHoi);
 //
@@ -86,7 +86,7 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
 
         /// Debug
         String s = Resource.readRawTextFile(R.raw.test_cau_hinh_diem_cau_hoi);
-        chDiemCauHoi = ModelManager.ParseJSON(CHDiemCauHoi.class, s);
+        chDiemCauHoi = EntityManager.ParseJSON(CHDiemCauHoi.class, s);
     }
 
 

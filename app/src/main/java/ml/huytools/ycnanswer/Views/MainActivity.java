@@ -10,7 +10,7 @@ import ml.huytools.ycnanswer.Core.App;
 import ml.huytools.ycnanswer.R;
 
 public class MainActivity extends AppCompatActivity {
-//////// NO Model - View - Presenter
+//////// NO Entity - View - Presenter
 //////// UPDATE
 
     @Override

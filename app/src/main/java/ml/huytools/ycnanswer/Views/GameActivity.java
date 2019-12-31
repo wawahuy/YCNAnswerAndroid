@@ -8,17 +8,17 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import ml.huytools.ycnanswer.Core.MVP.ModelManager;
+import ml.huytools.ycnanswer.Core.MVP.EntityManager;
 import ml.huytools.ycnanswer.Core.MVP.Presenter;
-import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
-import ml.huytools.ycnanswer.Models.CauHoi;
+import ml.huytools.ycnanswer.Models.Entities.CHDiemCauHoi;
+import ml.huytools.ycnanswer.Models.Entities.CauHoi;
 import ml.huytools.ycnanswer.Presenters.GamePresenter;
 import ml.huytools.ycnanswer.R;
 import ml.huytools.ycnanswer.Views.ViewComponents.CountDownView;
 import ml.huytools.ycnanswer.Views.Removing.Components.CountDownAudio;
 import ml.huytools.ycnanswer.Views.Removing.Components.FPSDebugView;
-import ml.huytools.ycnanswer.Views.Removing.Components.SpotLightView;
 import ml.huytools.ycnanswer.Views.Removing.Components.TableMLView;
+import ml.huytools.ycnanswer.Views.ViewComponents.SpotLightView;
 
 
 public class GameActivity extends AppCompatActivity implements GamePresenter.View {
@@ -126,7 +126,7 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
 
     /// ------------- Bang diem ------------------
     @Override
-    public void ConfigTableML(ModelManager<CHDiemCauHoi> chDiemCauHoi) {
+    public void ConfigTableML(EntityManager<CHDiemCauHoi> chDiemCauHoi) {
         tableMLView.Config(chDiemCauHoi);
     }
 
@@ -186,7 +186,6 @@ public class GameActivity extends AppCompatActivity implements GamePresenter.Vie
        spotLightView.post(new Runnable() {
             @Override
             public void run() {
-                spotLightView.runFlickerAmbientLight();
             }
         });
     }

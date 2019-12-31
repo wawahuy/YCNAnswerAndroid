@@ -97,7 +97,7 @@ public abstract class Node extends Transformable implements IGameObject {
             return;
         }
         canvas.save();
-        /// [0,0] * [ Matrix Model (Transformable) ] * [.... Camera Matrix On Scene ....]
+        /// [0,0] * [ Matrix Entity (Transformable) ] * [.... Camera Matrix On Scene ....]
         canvas.concat(getMatrix());
         OnDraw(canvas);
         canvas.restore();

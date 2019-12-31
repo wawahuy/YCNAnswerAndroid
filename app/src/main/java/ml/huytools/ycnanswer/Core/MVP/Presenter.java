@@ -21,7 +21,7 @@ public abstract class Presenter<T> {
 
     protected WeakReference<Activity> activity;
     protected T view;
-    private Model dataSaved;
+    private Entity dataSaved;
 
     protected Presenter(){
     }
@@ -41,11 +41,11 @@ public abstract class Presenter<T> {
 
     /// Chỉ được gọi khi presenter được tạo lại
     /// Khi activity bị xoay hay cấu hình bị thay đổi
-    protected void OnResume(Model dataSaved){ }
+    protected void OnResume(Entity dataSaved){ }
 
 
     /// new data save
-    public void postDataSaved(Model model){
+    public void postDataSaved(Entity model){
         this.dataSaved = model;
     }
 
@@ -65,12 +65,6 @@ public abstract class Presenter<T> {
                 presenterSaved.presenter.set(activity);
 
                 /// Run Resume on Main Thread
-//                new Handler(Looper.myLooper()).post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        presenterSaved.presenter.OnResume(presenterSaved.presenter.dataSaved);
-//                    }
-//                });
                 presenterSaved.presenter.OnResume(presenterSaved.presenter.dataSaved);
 
             }

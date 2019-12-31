@@ -17,6 +17,10 @@ public abstract class ActionTiming extends Action {
         return time;
     }
 
+    public void setTime(float time) {
+        this.time = time;
+    }
+
     @Override
     protected void OnActionRestart() {
         timeStart = getTimeCurrent();

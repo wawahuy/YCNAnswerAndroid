@@ -7,17 +7,17 @@ import java.util.Iterator;
 import java.util.LinkedList;
 
 /***
- * ModelManager.java
+ * EntityManager.java
  * Author: Nguyen Gia Huy
  * Project: https://github.com/wawahuy/YCNAnswerAndroid
  * Start: 15/11/2019
  * Update: 20/11/2019
  *
  */
-public class ModelManager<T extends Model> extends LinkedList<T> {
+public class EntityManager<T extends Entity> extends LinkedList<T> {
 
 
-    public ModelManager(){
+    public EntityManager(){
 
     }
 
@@ -35,7 +35,7 @@ public class ModelManager<T extends Model> extends LinkedList<T> {
         return stringBuilder.substring(0, stringBuilder.length()-1) + "]";
     }
 
-    public static<T extends Model> ModelManager<T> ParseJSON(Class<T> clazz, String arrayJson){
+    public static<T extends Entity> EntityManager<T> ParseJSON(Class<T> clazz, String arrayJson){
         try {
             JSONArray jsonArray = new JSONArray(arrayJson);
             return ParseJSON(clazz, jsonArray);
@@ -45,8 +45,8 @@ public class ModelManager<T extends Model> extends LinkedList<T> {
         return null;
     }
 
-    public static<T extends Model> ModelManager<T> ParseJSON(Class<T> clazz, JSONArray arrayJson){
-        ModelManager<T> modelManager = new ModelManager<>();
+    public static<T extends Entity> EntityManager<T> ParseJSON(Class<T> clazz, JSONArray arrayJson){
+        EntityManager<T> modelManager = new EntityManager<>();
         modelManager.set(clazz, arrayJson);
         return modelManager;
     }
@@ -56,7 +56,7 @@ public class ModelManager<T extends Model> extends LinkedList<T> {
         int size = arrayJson.length();
         for (int i=0; i<size; i++){
             try {
-                add(Model.ParseJson(clazz, arrayJson.get(i).toString()));
+                add(Entity.ParseJson(clazz, arrayJson.get(i).toString()));
             } catch (JSONException e) {
                 e.printStackTrace();
             }

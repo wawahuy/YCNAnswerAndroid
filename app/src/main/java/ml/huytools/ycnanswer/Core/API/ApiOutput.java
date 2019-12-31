@@ -4,15 +4,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import ml.huytools.ycnanswer.Core.MVP.Model;
-import ml.huytools.ycnanswer.Core.MVP.ModelManager;
+import ml.huytools.ycnanswer.Core.MVP.Entity;
+import ml.huytools.ycnanswer.Core.MVP.EntityManager;
 
 /**
  * Các mẫu json được lấy phải tuân thủ theo
  *
  * @param <T>
  */
-public class ApiOutput<T extends Model> {
+public class ApiOutput<T extends Entity> {
 
     /**
      * Cấu hình xây dựng Output theo cách của bạn
@@ -55,7 +55,7 @@ public class ApiOutput<T extends Model> {
 
     /**
      * Kiểm tra xem Output là {...}
-     * Bannj có thể chuyển sang Model
+     * Bannj có thể chuyển sang Entity
      * @return
      */
     public boolean isDJObject(){
@@ -64,7 +64,7 @@ public class ApiOutput<T extends Model> {
 
     /**
      * Kiểm tra xem Ouput là [...] array
-     * Bạn có thể chuyển sang ModelManager
+     * Bạn có thể chuyển sang EntityManager
      * @return
      */
     public boolean isDJArray(){
@@ -76,12 +76,12 @@ public class ApiOutput<T extends Model> {
      * @param clazz
      *          clazz model (không phải modelmanager)
      * @return
-     *          ModelManager<clazz>
+     *          EntityManager<clazz>
      */
-    public ModelManager<T> toModelManager(Class<T> clazz){
+    public EntityManager<T> toModelManager(Class<T> clazz){
         if(Data == null || !isDJArray())
             return null;
-        return ModelManager.ParseJSON(clazz, Data.toString());
+        return EntityManager.ParseJSON(clazz, Data.toString());
     }
 
     /**
@@ -89,10 +89,10 @@ public class ApiOutput<T extends Model> {
      * @param clazz
      * @return
      */
-    public Model toModel(Class<T> clazz){
+    public Entity toModel(Class<T> clazz){
         if(Data == null || !isDJObject())
             return null;
-        return Model.ParseJson(clazz, Data.toString());
+        return Entity.ParseJson(clazz, Data.toString());
     }
 
 }

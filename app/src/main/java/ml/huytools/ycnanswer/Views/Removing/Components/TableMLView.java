@@ -9,8 +9,8 @@ import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 
-import ml.huytools.ycnanswer.Core.MVP.ModelManager;
-import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
+import ml.huytools.ycnanswer.Core.MVP.EntityManager;
+import ml.huytools.ycnanswer.Models.Entities.CHDiemCauHoi;
 import ml.huytools.ycnanswer.Core.Removing.CustomSurfaceView;
 
 public class TableMLView extends CustomSurfaceView {
@@ -27,7 +27,7 @@ public class TableMLView extends CustomSurfaceView {
 
     int w, h, hLine, hReal, pos;
 
-    ModelManager<CHDiemCauHoi> chDiemCauHoi;
+    EntityManager<CHDiemCauHoi> chDiemCauHoi;
 
     public TableMLView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -103,7 +103,7 @@ public class TableMLView extends CustomSurfaceView {
         }
     }
 
-    public void Config(ModelManager<CHDiemCauHoi> chDiemCauHoi){
+    public void Config(EntityManager<CHDiemCauHoi> chDiemCauHoi){
         this.chDiemCauHoi = chDiemCauHoi;
 
         // upd d

@@ -1,9 +1,9 @@
-package ml.huytools.ycnanswer.Models;
+package ml.huytools.ycnanswer.Models.Entities;
 
 import ml.huytools.ycnanswer.Core.Annotation.JsonName;
-import ml.huytools.ycnanswer.Core.MVP.Model;
+import ml.huytools.ycnanswer.Core.MVP.Entity;
 
-public class CHTroGiup extends Model {
+public class CHTroGiup extends Entity {
     @JsonName
     public int id;
 

@@ -6,6 +6,7 @@ import android.graphics.Path;
 import java.util.LinkedList;
 import java.util.List;
 
+import ml.huytools.ycnanswer.Core.LinkedListQueue;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
 
 public class PolygonShape extends Drawable {
@@ -15,6 +16,7 @@ public class PolygonShape extends Drawable {
 
     public PolygonShape(){
         path = new Path();
+        points = new LinkedList<>();
     }
 
     public PolygonShape(List<Vector2D> points){
@@ -32,21 +34,30 @@ public class PolygonShape extends Drawable {
             addToPath(p.x, p.y);
         }
         computeOrigin();
+        hasUpdateDraw = true;
     }
 
     public void addPoint(Vector2D p){
-        points.add(p);
         addToPath(p.x, p.y);
+        points.add(p);
         computeOrigin();
+        hasUpdateDraw = true;
     }
 
     private void addToPath(float x, float y){
         if(points.size() == 0){
-            path.lineTo(x, y);
-        }
-        else {
             path.moveTo(x, y);
         }
+        else {
+            path.lineTo(x, y);
+        }
+        hasUpdateDraw = true;
+    }
+
+    public void clearPoint(){
+        points.clear();
+        path = new Path();
+        hasUpdateDraw = true;
     }
 
     public boolean isCenterMinMax() {
@@ -85,6 +96,7 @@ public class PolygonShape extends Drawable {
 
             Vector2D size = max.sub(min);
             setOrigin(size.div(2));
+            hasUpdateDraw = true;
         }
     }
 

@@ -6,7 +6,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import ml.huytools.ycnanswer.Core.MVP.Model;
+import ml.huytools.ycnanswer.Core.MVP.Entity;
 
 
 @Documented
@@ -21,5 +21,5 @@ public @interface JsonName {
 
     String value() default "";
     Type type() default Type.Normal;
-    Class<?> clazz() default Model.class;
+    Class<?> clazz() default Entity.class;
 }

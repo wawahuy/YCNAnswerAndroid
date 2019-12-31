@@ -36,6 +36,15 @@ public class ActionCubicBezier extends Action {
         return create(actionTiming, CubicBezier.EaseOut);
     }
 
+    public float getTime() {
+        return time;
+    }
+
+    public void setTime(float time) {
+        this.time = time;
+        actionTiming.setTime(time);
+    }
+
     @Override
     protected void OnActionSetup() {
         actionTiming.setup(node);

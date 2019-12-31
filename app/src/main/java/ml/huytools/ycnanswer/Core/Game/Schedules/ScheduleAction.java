@@ -73,7 +73,6 @@ public class ScheduleAction {
             if(time - timeCurrent > timeout){
                 hasTimeout = false;
             }
-            timeCurrent = time;
             return true;
         }
 

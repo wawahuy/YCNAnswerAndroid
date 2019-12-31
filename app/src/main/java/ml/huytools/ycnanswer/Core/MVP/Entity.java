@@ -9,14 +9,14 @@ import java.lang.reflect.Field;
 import ml.huytools.ycnanswer.Core.Annotation.JsonName;
 
 /***
- * Model.java
+ * Entity.java
  * Author: Nguyen Gia Huy
  * Project: https://github.com/wawahuy/YCNAnswerAndroid
  * Start: 15/11/2019
  * Update: 20/11/2019
  *
  */
-public class Model<T extends Model> {
+public class Entity<T extends Entity> {
 
     public String toJson(){
         JSONObject jsonObject = new JSONObject();
@@ -35,10 +35,10 @@ public class Model<T extends Model> {
                 try {
                     switch(annotation.type()){
                         case Model:
-                            value = new JSONObject(((Model)field.get(this)).toJson());
+                            value = new JSONObject(((Entity)field.get(this)).toJson());
 
                         case ModelManager:
-                            value = new JSONArray(((ModelManager)field.get(this)).toJson());
+                            value = new JSONArray(((EntityManager)field.get(this)).toJson());
                             break;
 
                         default:
@@ -63,7 +63,7 @@ public class Model<T extends Model> {
     }
 
 
-    public static<T extends Model> T ParseJson(Class<T> clazz, String json) {
+    public static<T extends Entity> T ParseJson(Class<T> clazz, String json) {
         T model = null;
         try {
             model = clazz.newInstance();
@@ -114,16 +114,16 @@ public class Model<T extends Model> {
 
                     switch(annotation.type()){
                         case Model:
-                            /// Chuyển sang Model
-                            /// field.set(model, Model.ParseJson(type, jsonObject.get(name).toString()));
-                            Model o = (Model) field.getType().newInstance();
+                            /// Chuyển sang Entity
+                            /// field.set(model, Entity.ParseJson(type, jsonObject.get(name).toString()));
+                            Entity o = (Entity) field.getType().newInstance();
                             o.set(annotation.clazz(), jsonObject.get(name).toString());
                             field.set(this, o);
                             break;
 
                         case ModelManager:
                             /// Chuyển sang model manager
-                            ModelManager mo =  (ModelManager) field.getType().newInstance();
+                            EntityManager mo =  (EntityManager) field.getType().newInstance();
                             mo.set(annotation.clazz(), (JSONArray) jsonObject.get(name));
                             field.set(this, mo);
                             break;

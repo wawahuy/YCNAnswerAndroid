@@ -23,7 +23,7 @@ public class ResourceManager {
     public final Image imageMc;
 
     /// AnimationManager Frames
-    /// public final ModelManager<AnimationManager.Frame> framesMc;
+    /// public final EntityManager<AnimationManager.Frame> framesMc;
 
 
     private ResourceManager(Context context) {
@@ -34,7 +34,7 @@ public class ResourceManager {
         imageMc = Image.LoadByResource(R.drawable.sprite_mc);
 
         /// frames
-        /// framesMc = ModelManager.ParseJSON(AnimationManager.Frame.class, Resource.readRawTextFile(context, R.raw.frames_mc));
+        /// framesMc = EntityManager.ParseJSON(AnimationManager.Frame.class, Resource.readRawTextFile(context, R.raw.frames_mc));
     }
 
 

@@ -4,9 +4,9 @@ import java.util.LinkedHashMap;
 
 import ml.huytools.ycnanswer.Core.Annotation.JsonName;
 import ml.huytools.ycnanswer.Core.App;
+import ml.huytools.ycnanswer.Core.MVP.Entity;
+import ml.huytools.ycnanswer.Core.MVP.EntityManager;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
-import ml.huytools.ycnanswer.Core.MVP.Model;
-import ml.huytools.ycnanswer.Core.MVP.ModelManager;
 import ml.huytools.ycnanswer.Core.Resource;
 
 /***
@@ -33,19 +33,19 @@ import ml.huytools.ycnanswer.Core.Resource;
  *      ]
  *  }
  */
-public class AnimationData extends Model {
+public class AnimationData extends Entity {
     @JsonName(type = JsonName.Type.ModelManager, clazz = Action.class)
-    public ModelManager<Action> actions;
+    public EntityManager<Action> actions;
 
     @JsonName(type = JsonName.Type.ModelManager, clazz = Image.class)
-    public ModelManager<Image> images;
+    public EntityManager<Image> images;
 
 
     public  static AnimationData CreateByResource(int resFileJson){
 
-        /// Tạo Model  với Resource
+        /// Tạo Entity  với Resource
         String json = Resource.readRawTextFile(resFileJson);
-        AnimationData animationData = Model.ParseJson(AnimationData.class, json);
+        AnimationData animationData = Entity.ParseJson(AnimationData.class, json);
 
         /// Tải resource tương ứng
         animationData.init();
@@ -76,7 +76,7 @@ public class AnimationData extends Model {
 
 
 
-    public static class Image extends Model {
+    public static class Image extends Entity {
         @JsonName
         public String id;
 
@@ -93,7 +93,7 @@ public class AnimationData extends Model {
         public float scaleY = 1.0f;
 
         @JsonName(type = JsonName.Type.ModelManager, clazz = Image.Frame.class)
-        public ModelManager<Image.Frame> frames;
+        public EntityManager<Frame> frames;
 
         ///
         private boolean isLoaded = false;
@@ -101,7 +101,7 @@ public class AnimationData extends Model {
         private ml.huytools.ycnanswer.Core.Game.Graphics.Image image;
 
         /// Frames
-        public static class Frame extends Model {
+        public static class Frame extends Entity {
             @JsonName
             public float x;
 
@@ -159,7 +159,7 @@ public class AnimationData extends Model {
         }
     }
 
-    public static class Action extends Model {
+    public static class Action extends Entity {
         @JsonName
         public String name;
 
@@ -176,9 +176,9 @@ public class AnimationData extends Model {
         public boolean infinite = true;
 
         @JsonName(type = JsonName.Type.ModelManager, clazz = Action.Frame.class)
-        public ModelManager<Action.Frame> frames;
+        public EntityManager<Frame> frames;
 
-        public static class Frame extends Model {
+        public static class Frame extends Entity {
             @JsonName
             public String imgID;
 
