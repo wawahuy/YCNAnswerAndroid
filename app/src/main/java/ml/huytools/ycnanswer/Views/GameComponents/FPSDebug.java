@@ -12,7 +12,6 @@ import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleAction;
 import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleCallback;
 import ml.huytools.ycnanswer.Core.Game.Schedules.Scheduler;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
-import ml.huytools.ycnanswer.Views.Removing.Components.FPSDebugView;
 
 public class FPSDebug extends Text {
     int fps = 0;

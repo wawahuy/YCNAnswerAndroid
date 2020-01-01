@@ -40,18 +40,14 @@ public class GameDirector extends Thread {
 
     public void registration(Renderer renderer){
         setFramePerSecondsMax(framePerSeconds);
-        //synchronized (renders){
         renders.addQueue(renderer);
-        //}
     }
 
     public void cancelRegistration(Renderer renderer){
         if(renders.size() <= 1){
             sleeper.setSleep(100);
         }
-        // synchronized (renders) {
         renders.removeQueue(renderer);
-        //}
     }
 
     public void setFramePerSecondsMax(int frame){

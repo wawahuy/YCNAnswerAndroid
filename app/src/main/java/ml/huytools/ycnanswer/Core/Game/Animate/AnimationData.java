@@ -1,4 +1,4 @@
-package ml.huytools.ycnanswer.Core.Game.Removing;
+package ml.huytools.ycnanswer.Core.Game.Animate;
 
 import java.util.LinkedHashMap;
 

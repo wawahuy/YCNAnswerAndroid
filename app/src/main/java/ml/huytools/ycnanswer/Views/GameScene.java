@@ -19,9 +19,11 @@ import ml.huytools.ycnanswer.Core.Math.Vector2D;
 import ml.huytools.ycnanswer.Core.Resource;
 import ml.huytools.ycnanswer.Models.Entities.CHDiemCauHoi;
 import ml.huytools.ycnanswer.R;
+import ml.huytools.ycnanswer.Views.GameComponents.BoxMoney;
 import ml.huytools.ycnanswer.Views.GameComponents.BoxQuestion;
 import ml.huytools.ycnanswer.Views.GameComponents.CountDown;
 import ml.huytools.ycnanswer.Views.GameComponents.FPSDebug;
+import ml.huytools.ycnanswer.Views.GameComponents.QuestionGroup;
 import ml.huytools.ycnanswer.Views.GameComponents.SpotLight;
 import ml.huytools.ycnanswer.Views.GameComponents.TableScore;
 
@@ -30,16 +32,34 @@ public class GameScene extends Scene {
     private Context context;
     ResourceManager resourceManager;
 
-    ///--
+    ///-- Node --
+    Sprite spriteChair;
+    Sprite spritePC;
+
+    ///-- Group --
     FPSDebug fpsDebug;
     CountDown countDown;
     SpotLight spotLight;
     TableScore tableScore;
+    QuestionGroup questionGroup;
+    BoxMoney boxMoney;
 
     public GameScene(Context context) {
         super();
         this.context = context;
         resourceManager = ResourceManager.getInstance(context);
+
+        /// Chair
+        Image imageChair = resourceManager.imageChair;
+        Texture textureChair = new Texture(imageChair);
+        spriteChair = new Sprite(textureChair);
+        add(spriteChair);
+
+        /// PC
+        Image imagePC = resourceManager.imagePC;
+        Texture texturePC = new Texture(imagePC);
+        spritePC = new Sprite(texturePC);
+        add(spritePC);
 
         /// FPS
         fpsDebug = new FPSDebug();
@@ -61,6 +81,14 @@ public class GameScene extends Scene {
         tableScore = new TableScore();
         tableScore.setZOrder(90);
         add(tableScore);
+
+        /// Question
+        questionGroup = new QuestionGroup();
+        add(questionGroup);
+
+        /// Money
+        boxMoney = new BoxMoney();
+        add(boxMoney);
 
         /// Test
         countDown.start();
@@ -86,5 +114,25 @@ public class GameScene extends Scene {
         tableScore.setBoundingSize(new Vector2D(halfW*0.35f, h*0.6f));
         tableScore.setPosition(w*0.75f, h*0.25f);
 
+        /// Question
+        float xQuestion = halfW*0.4f;
+        questionGroup.setPosition(xQuestion, halfH);
+        questionGroup.setBoundingSize(new Vector2D(halfW, halfH));
+
+        /// money
+        boxMoney.setPosition(halfW*0.05f, halfH*1.2f);
+        boxMoney.setBoundingSize(new Vector2D(halfW*0.3f, halfH*0.3f));
+
+        /// Sprite
+        Vector2D sizePC = new Vector2D(h*0.2f, h*0.2f);
+        float posXPC = xQuestion + halfW/2 - sizePC.x/2;
+        float posYPC = halfH - sizePC.y;
+        spritePC.scaleDraw(sizePC, Sprite.ScaleType.FitXY);
+        spritePC.setPosition(posXPC, posYPC);
+
+        Vector2D sizeChair = new Vector2D(h*0.04f, h*0.15f);
+        float posYChair = halfH - sizeChair.y;
+        spriteChair.scaleDraw(sizePC, Sprite.ScaleType.FitXY);
+        spriteChair.setPosition(posXPC + sizePC.x*0.8f, posYChair);
     }
 }

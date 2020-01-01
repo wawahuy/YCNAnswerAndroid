@@ -22,6 +22,8 @@ public class ResourceManager {
     /// Image
     public final Image imageMc;
     public final Image imageBackgroundGame;
+    public final Image imageChair;
+    public final Image imagePC;
 
     /// AnimationManager Frames
     /// public final EntityManager<AnimationManager.Frame> framesMc;
@@ -34,6 +36,8 @@ public class ResourceManager {
         /// image
         imageMc = Image.LoadByResource(R.drawable.sprite_mc);
         imageBackgroundGame = Image.LoadByResource(R.drawable.sprite_bg_game);
+        imageChair = Image.LoadByResource(R.drawable.chair);
+        imagePC = Image.LoadByResource(R.drawable.sprite_pc);
 
         /// frames
         /// framesMc = EntityManager.ParseJSON(AnimationManager.Frame.class, Resource.readRawTextFile(context, R.raw.frames_mc));

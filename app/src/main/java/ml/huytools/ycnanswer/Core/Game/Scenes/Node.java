@@ -11,6 +11,9 @@ import ml.huytools.ycnanswer.Core.Game.Event.OnTouchListener;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
 
 public abstract class Node extends Transformable implements IGameObject {
+    private int id;
+    private static int IDGlobal = 0;
+
     protected boolean hasUpdateDraw = false;
     private boolean visible;
     private boolean enableAction;
@@ -26,6 +29,7 @@ public abstract class Node extends Transformable implements IGameObject {
     private Node zOrderNode;
 
     protected Node(){
+        id = IDGlobal++;
         visible = true;
         enableAction = true;
         zOrder = 0;
@@ -66,6 +70,10 @@ public abstract class Node extends Transformable implements IGameObject {
 
     public NodeGroup getGroupNode(){
         return nodeGroup;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public int getZOrder(){

@@ -152,6 +152,10 @@ public class TableScore extends NodeGroup {
     }
 
     private void updateUISelect(){
+        if(size == null || dsDiemCauHoi == null){
+            return;
+        }
+
         int posList = dsDiemCauHoi.size() - 1 - positionSelect;
         Node nodeText = groupText.getListNode().get(posList);
         Vector2D position = nodeText.getPosition();

@@ -36,6 +36,10 @@ public class RectangleShape extends Drawable {
 
     public void centerOrigin(boolean status){
         center = status;
+        if(!center) {
+            setOrigin(0, 0);
+        }
+        computeOrigin();
     }
 
     private void computeOrigin(){
