@@ -10,6 +10,7 @@ import ml.huytools.ycnanswer.Core.Game.Scenes.NodeGroup;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
 
 public class QuestionGroup extends NodeGroup implements OnTouchListener {
+    final String[] PLANChar = new String[]{"A", "B", "C", "D"};
     BoxQuestion question;
     BoxQuestion plans[];
 
@@ -27,7 +28,7 @@ public class QuestionGroup extends NodeGroup implements OnTouchListener {
             boxQuestion.setTouchListener(this);
             boxQuestion.getText().setSize(30);
             boxQuestion.setTextAlign(Paint.Align.LEFT);
-            boxQuestion.getText().setText(i+".");
+            boxQuestion.getText().setText(PLANChar[i] + ".");
             plans[i] = boxQuestion;
             add(boxQuestion);
         }
