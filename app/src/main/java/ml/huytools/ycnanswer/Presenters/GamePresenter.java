@@ -1,27 +1,20 @@
 package ml.huytools.ycnanswer.Presenters;
 
-import android.app.Activity;
-import android.content.Context;
-import android.graphics.Canvas;
-import android.os.SystemClock;
-import android.util.Log;
-
-import ml.huytools.ycnanswer.Commons.APIProvider;
-import ml.huytools.ycnanswer.Commons.CustomLoader;
-import ml.huytools.ycnanswer.Commons.Model;
-import ml.huytools.ycnanswer.Commons.ModelManager;
-import ml.huytools.ycnanswer.Commons.Presenter;
-import ml.huytools.ycnanswer.Commons.Resource;
-import ml.huytools.ycnanswer.Commons.Views.AbstractAnimation;
-import ml.huytools.ycnanswer.Commons.Views.CubicBezier;
-import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
-import ml.huytools.ycnanswer.Models.CauHoi;
+import ml.huytools.ycnanswer.Core.MVP.Entity;
+import ml.huytools.ycnanswer.Core.MVP.EntityManager;
+import ml.huytools.ycnanswer.Core.MVP.Presenter;
+import ml.huytools.ycnanswer.Core.Resource;
+import ml.huytools.ycnanswer.Models.Entities.CHDiemCauHoi;
+import ml.huytools.ycnanswer.Models.Entities.CauHoi;
 import ml.huytools.ycnanswer.R;
 
 public class GamePresenter extends Presenter<GamePresenter.View> {
 
+    /// Interface
+    /// Activity cần impl để Presenter có thể tương tác với Activity
+    /// Tách biệc hoạt động UI và Control
     public interface View {
-        void ResumeUI(ResumeData model);
+        //        void ResumeUI(ResumeData model);
 
         ///--------------
         void OpenLoading();
@@ -30,7 +23,7 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
         void UpdateLoadingBar(int per);
 
         ///--------------
-        void ConfigTableML(ModelManager<CHDiemCauHoi> chDiemCauHoi);
+        void ConfigTableML(EntityManager<CHDiemCauHoi> chDiemCauHoi);
         void SetLevelTableML(int level);
         void IncreaseLevelTableML();
 
@@ -47,15 +40,18 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
 
     ;
 
-    public static class ResumeData extends Model {
-        public int countDownCurrent;
-    }
+    /// DataSaved
+    /// Dữ liệu bị thay đổi mõi khi cấu hình activity bị thay đổi
+    /// Entity này sẽ chứa các thông tin thay đổi đó
+    //    public static class ResumeData extends Entity {
+    //        public long countDownStart;
+    //        public int levelTableML;
+    //    }
 
     ;
 
     public enum ANSWER {A, B, C, D}
-    ModelManager<CHDiemCauHoi> chDiemCauHoi;
-    CustomLoader loading;
+    EntityManager<CHDiemCauHoi> chDiemCauHoi;
 
     ;
 
@@ -69,9 +65,18 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
         view.ConfigTableML(chDiemCauHoi);
     }
 
+
+    /***
+     * OnResume được gọi mỗi khi vòng đời activity được tạo mới
+     * @param model
+     */
     @Override
-    protected void OnResume(Model model){
-        view.ResumeUI((ResumeData) model);
+    protected void OnResume(Entity model){
+//        /// add lại table
+//        view.ConfigTableML(chDiemCauHoi);
+//
+//        /// Yêu cầu UI cập nhật Data ở view lại
+//        view.ResumeUI((ResumeData) model);
     }
 
 
@@ -80,44 +85,11 @@ public class GamePresenter extends Presenter<GamePresenter.View> {
     private void loadGameDebug() {
 
         /// Debug
-        String s = Resource.readRawTextFile(activity.get().getApplication(), R.raw.test_cau_hinh_diem_cau_hoi);
-        chDiemCauHoi = ModelManager.ParseJSON(CHDiemCauHoi.class, s);
+        String s = Resource.readRawTextFile(R.raw.test_cau_hinh_diem_cau_hoi);
+        chDiemCauHoi = EntityManager.ParseJSON(CHDiemCauHoi.class, s);
     }
 
 
-    private void loadGame(){
-            ///-------- Need Update ----------------
-        new CustomLoader(){
-            @Override
-            protected void OnUpdateProgress(int p) {
-                view.UpdateLoadingBar(p);
-            }
-
-            @Override
-            protected void OnUpdateText(String text) {
-                view.UpdateLoadingText(text);
-            }
-
-            @Override
-            protected void OnStartLoad() {
-                /// Mo view loading
-                view.OpenLoading();
-
-                /// Load Cau Hinh Diem Cau Hoi
-                AddLoad(new Load<ModelManager<CHDiemCauHoi>>("Load config answer...", "Load config answer error"){
-                    @Override
-                    protected ModelManager<CHDiemCauHoi> OnRun() {
-                        return chDiemCauHoi = APIProvider.GET(APIUri.CAU_HINH_CAU_HOI).toModelManager(CHDiemCauHoi.class);
-                    }
-                });
-            }
-
-            @Override
-            protected void OnCompleteLoad() {
-                view.CloseLoading();
-            }
-        }.start();
-    }
 
 
 

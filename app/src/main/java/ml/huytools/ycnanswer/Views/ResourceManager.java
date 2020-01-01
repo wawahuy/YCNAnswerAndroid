@@ -3,10 +3,7 @@ package ml.huytools.ycnanswer.Views;
 import android.content.Context;
 import android.media.MediaPlayer;
 
-import ml.huytools.ycnanswer.Commons.ModelManager;
-import ml.huytools.ycnanswer.Commons.Resource;
-import ml.huytools.ycnanswer.Commons.Views.Animation;
-import ml.huytools.ycnanswer.Commons.Views.Image;
+import ml.huytools.ycnanswer.Core.Game.Graphics.Image;
 import ml.huytools.ycnanswer.R;
 
 public class ResourceManager {
@@ -24,9 +21,12 @@ public class ResourceManager {
 
     /// Image
     public final Image imageMc;
+    public final Image imageBackgroundGame;
+    public final Image imageChair;
+    public final Image imagePC;
 
-    /// Animation Frames
-    public final ModelManager<Animation.Frame> framesMc;
+    /// AnimationManager Frames
+    /// public final EntityManager<AnimationManager.Frame> framesMc;
 
 
     private ResourceManager(Context context) {
@@ -34,10 +34,13 @@ public class ResourceManager {
         audioTimeout = MediaPlayer.create(context, R.raw.outtime);
 
         /// image
-        imageMc = Image.LoadByResource(context.getResources(), R.drawable.sprite_mc);
+        imageMc = Image.LoadByResource(R.drawable.sprite_mc);
+        imageBackgroundGame = Image.LoadByResource(R.drawable.sprite_bg_game);
+        imageChair = Image.LoadByResource(R.drawable.chair);
+        imagePC = Image.LoadByResource(R.drawable.sprite_pc);
 
         /// frames
-        framesMc = ModelManager.ParseJSON(Animation.Frame.class, Resource.readRawTextFile(context, R.raw.frames_mc));
+        /// framesMc = EntityManager.ParseJSON(AnimationManager.Frame.class, Resource.readRawTextFile(context, R.raw.frames_mc));
     }
 
 

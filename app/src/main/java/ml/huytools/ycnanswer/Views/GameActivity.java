@@ -1,199 +1,57 @@
 package ml.huytools.ycnanswer.Views;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
-
-import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
+import android.util.AttributeSet;
+import android.view.SurfaceView;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
-import ml.huytools.ycnanswer.Commons.Model;
-import ml.huytools.ycnanswer.Commons.ModelManager;
-import ml.huytools.ycnanswer.Commons.Presenter;
-import ml.huytools.ycnanswer.Commons.Views.RenderingLoop;
-import ml.huytools.ycnanswer.Models.CHDiemCauHoi;
-import ml.huytools.ycnanswer.Models.CauHoi;
-import ml.huytools.ycnanswer.Presenters.GamePresenter;
+import androidx.appcompat.app.AppCompatActivity;
+
+import ml.huytools.ycnanswer.Core.Game.GameDirector;
+import ml.huytools.ycnanswer.Core.Game.Graphics.Image;
+import ml.huytools.ycnanswer.Core.Game.Renderer;
+import ml.huytools.ycnanswer.Core.Math.Vector2D;
 import ml.huytools.ycnanswer.R;
-import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownView;
-import ml.huytools.ycnanswer.Views.GameViews.Components.CountDownAudio;
-import ml.huytools.ycnanswer.Views.GameViews.Components.FPSDebugView;
-import ml.huytools.ycnanswer.Views.GameViews.Components.LoadingView;
-import ml.huytools.ycnanswer.Views.GameViews.Components.SpotLightView;
-import ml.huytools.ycnanswer.Views.GameViews.Components.TableMLView;
 
-
-public class GameActivity extends AppCompatActivity implements GamePresenter.View {
-    GamePresenter presenter;
-    ResourceManager resourceManager;
-    CountDownView countDown;
-    CountDownAudio countDownAudio;
-    SpotLightView spotLightView;
-    TableMLView tableMLView;
-
-    TextView txv_question;
-    TextView txv_paA;
-    TextView txv_paB;
-    TextView txv_paC;
-    TextView txv_paD;
+public class GameActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_game);
-
-        Log.v("Log", "Activity create: "+ toString());
-
-        /// init
-        resourceManager = ResourceManager.getInstance(this);
-        initView();
-        initCountDown();
-
-        /// debug
-        FPSDebugView.AddOnActivity(this);
-
-        /// Tạo Presenter với activity hiện tại
-        /// Ngăn chặn dữ liệu bị cập nhật lại trên View
-        presenter = Presenter.of(this, GamePresenter.class);
+        setContentView(R.layout.activity_game_sf);
     }
 
-    /// --------------- Resume Saved Data ------------------
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        /// Save Data
-        GamePresenter.ResumeData data = new GamePresenter.ResumeData();
-        data.countDownCurrent = countDown.getTimeCurrent();
-        presenter.postDataSaved(data);
+    public static class GameSurfaceView extends SurfaceView implements Renderer.Callback {
+        GameScene gameScene;
+        Renderer renderer;
 
-        super.onSaveInstanceState(outState);
-    }
+        public GameSurfaceView(Context context, AttributeSet attrs) {
+            super(context, attrs);
 
-    @Override
-    public void ResumeUI(GamePresenter.ResumeData model) {
-        if(model != null){
-            countDown.setTimeCurrent(model.countDownCurrent);
-        }
-    }
+            ///
+            gameScene = new GameScene(context);
 
-
-    /// ----------------- Init -------------------
-    private void initView(){
-        countDown = findViewById(R.id.countDown);
-        tableMLView = findViewById(R.id.iv_tb_level_question);
-        spotLightView = findViewById(R.id.spotLight);
-        txv_question = findViewById(R.id.txv_cauhoi);
-        txv_paA = findViewById(R.id.txv_paA);
-        txv_paB = findViewById(R.id.txv_paB);
-        txv_paC = findViewById(R.id.txv_paC);
-        txv_paD = findViewById(R.id.txv_paD);
-    }
-
-    private void initCountDown(){
-        //set audio
-        countDownAudio = new CountDownAudio();
-        countDownAudio.setAudioTimeout(resourceManager.audioTimeout);
-        countDown.setCallback(countDownAudio);
-    }
-
-
-    /// ----------- CustomLoader --------------------
-    @Override
-    public void OpenLoading() {
-        setContentView(R.layout.game_loading);
-    }
-
-    @Override
-    public void CloseLoading() {
-        setContentView(R.layout.activity_game);
-        initView();
-        initCountDown();
-    }
-
-    @Override
-    public void UpdateLoadingText(String message) {
-        ((TextView) findViewById(R.id.txvLoad)).setText(message);
-    }
-
-    @Override
-    public void UpdateLoadingBar(int p) {
-        ((ProgressBar)findViewById(R.id.barLoad)).setProgress(p);
-    }
-
-    /// ------------- Bang diem ------------------
-    @Override
-    public void ConfigTableML(ModelManager<CHDiemCauHoi> chDiemCauHoi) {
-        tableMLView.Config(chDiemCauHoi);
-    }
-
-    @Override
-    public void SetLevelTableML(int level) {
-    }
-
-    @Override
-    public void IncreaseLevelTableML() {
-        tableMLView.incPos();
-    }
-
-
-    /// ------------- Cau Hoi --------------------
-    @Override
-    public void UpdateQuestion(CauHoi cauHoi) {
-        txv_question.setText(cauHoi.getCauhoi());
-        txv_paA.setText(cauHoi.getPaA());
-        txv_paB.setText(cauHoi.getPaB());
-        txv_paC.setText(cauHoi.getPaC());
-        txv_paD.setText(cauHoi.getPaD());
-    }
-
-    public void OnAnswer(View view){
-        GamePresenter.ANSWER answer;
-        switch (view.getId()){
-            case R.id.txv_paA: answer = GamePresenter.ANSWER.A; break;
-            case R.id.txv_paB: answer = GamePresenter.ANSWER.B; break;
-            case R.id.txv_paC: answer = GamePresenter.ANSWER.C; break;
-            default:
-                answer = GamePresenter.ANSWER.D;
-                break;
+            ///
+            renderer = new Renderer(this, gameScene);
+            renderer.enableAutoRegisterDirector(this);
+            renderer.transparent();
         }
 
-        presenter.Answer(answer);
+        @Override
+        public void OnCreate(Vector2D size) {
+            gameScene.initSizeScreen(size);
+        }
+
+        @Override
+        public void OnResume(Vector2D size) {
+            gameScene.initSizeScreen(size);
+        }
+
+        @Override
+        public void OnDestroy() {
+        }
     }
-
-
-
-    /// ------------- Dem Nguoc --------------------
-    @Override
-    public void RestartCountDown() {
-        countDown.start();
-    }
-
-    @Override
-    public void ConfigCountDownTime(int second) {
-        countDown.setTimeCountDown(second);
-    }
-
-
-
-    /// ------------- Light ------------------------
-    @Override
-    public void RunEffectLight() {
-        /// Run on thread RenderingLoop.class
-       spotLightView.post(new Runnable() {
-            @Override
-            public void run() {
-                spotLightView.runFlickerAmbientLight();
-            }
-        });
-    }
-
-
 
     /// -------------- Full screen, hide navigation bar ---------
     @Override

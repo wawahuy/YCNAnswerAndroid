@@ -2,27 +2,26 @@ package ml.huytools.ycnanswer.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 
-import ml.huytools.ycnanswer.Commons.APIProvider;
-import ml.huytools.ycnanswer.Commons.ModelManager;
-import ml.huytools.ycnanswer.Commons.Presenter;
-import ml.huytools.ycnanswer.Models.CauHoi;
+import ml.huytools.ycnanswer.Core.API.ApiConfig;
+import ml.huytools.ycnanswer.Core.App;
 import ml.huytools.ycnanswer.R;
 
 public class MainActivity extends AppCompatActivity {
-//////// NO Model - View - Presenter
+//////// NO Entity - View - Presenter
 //////// UPDATE
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        configAPI();
+
+        /// Config Global
+        App.getInstance().init(this);
+        APIConfig();
+
 
         Intent intent = new Intent(this, GameActivity.class);
         startActivity(intent);
@@ -35,9 +34,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    void configAPI(){
+    void APIConfig(){
         /// Config Host
-        APIProvider.SetHost("http://192.168.1.130:8000/api");
+        ApiConfig.setHostname("http://192.168.1.130:8000/api");
 
 
     }
