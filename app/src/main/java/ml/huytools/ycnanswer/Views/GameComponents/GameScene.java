@@ -1,4 +1,4 @@
-package ml.huytools.ycnanswer.Views;
+package ml.huytools.ycnanswer.Views.GameComponents;
 
 import android.content.Context;
 import android.graphics.Rect;
@@ -26,6 +26,7 @@ import ml.huytools.ycnanswer.Views.GameComponents.FPSDebug;
 import ml.huytools.ycnanswer.Views.GameComponents.QuestionGroup;
 import ml.huytools.ycnanswer.Views.GameComponents.SpotLight;
 import ml.huytools.ycnanswer.Views.GameComponents.TableScore;
+import ml.huytools.ycnanswer.Views.ResourceManager;
 
 public class GameScene extends Scene {
     private Vector2D size;

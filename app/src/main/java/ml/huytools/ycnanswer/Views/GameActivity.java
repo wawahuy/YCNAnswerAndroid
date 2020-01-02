@@ -8,11 +8,10 @@ import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import ml.huytools.ycnanswer.Core.Game.GameDirector;
-import ml.huytools.ycnanswer.Core.Game.Graphics.Image;
 import ml.huytools.ycnanswer.Core.Game.Renderer;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
 import ml.huytools.ycnanswer.R;
+import ml.huytools.ycnanswer.Views.GameComponents.GameScene;
 
 public class GameActivity extends AppCompatActivity {
 

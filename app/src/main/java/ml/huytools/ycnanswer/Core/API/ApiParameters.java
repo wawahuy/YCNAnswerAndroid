@@ -155,7 +155,7 @@ public class ApiParameters {
              */
             dataOutputStream.writeBytes(TWO_HYPHENS + BOUNDARY + CRLF);
             dataOutputStream.writeBytes("Content-Disposition: form-data; name=\"" + key + "\""+ CRLF);
-            dataOutputStream.writeBytes("Content-Style: text/plain; charset=UTF-8" + CRLF);
+            dataOutputStream.writeBytes("Content-Type: text/plain; charset=UTF-8" + CRLF);
             dataOutputStream.writeBytes(CRLF);
             dataOutputStream.writeBytes(value + CRLF);
             dataOutputStream.flush();

@@ -36,6 +36,7 @@
             android:textStyle="bold" />
 
         <EditText
+            android:id="@+id/txtUser"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:layout_margin="20dp"
@@ -50,6 +51,7 @@
             android:textSize="17sp" />
 
         <EditText
+            android:id="@+id/txtPassword"
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:layout_margin="20dp"
@@ -68,6 +70,7 @@
             android:layout_height="45dp"
             android:background="@drawable/rounded_corner_button"
             android:fontFamily="@font/f1"
+            android:onClick="OnLogin"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:text="Đăng nhập"
@@ -88,6 +91,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:fontFamily="@font/f1"
+            android:onClick="OnRegister"
             android:text="Hoặc Đăng ký" />
         <LinearLayout
             android:layout_width="wrap_content"

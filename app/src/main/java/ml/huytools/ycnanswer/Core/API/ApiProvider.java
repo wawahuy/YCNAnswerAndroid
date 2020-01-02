@@ -1,6 +1,7 @@
 package ml.huytools.ycnanswer.Core.API;
 
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -17,6 +18,8 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
+
+import ml.huytools.ycnanswer.Core.API.ApiParameters;
 
 
 /***
@@ -247,7 +250,7 @@ public class ApiProvider {
                 connection.setRequestMethod(method);
                 connection.setDoOutput(true);
                 connection.setDoInput(true);
-                connection.setRequestProperty("Content-Style", "multipart/form-data;boundary=" + ApiParameters.Parameter.BOUNDARY);
+                connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + ApiParameters.Parameter.BOUNDARY);
 
                 //out
                 try {

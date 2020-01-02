@@ -18,8 +18,18 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Views.RegisterActivity"></activity>
-        <activity android:name=".Views.LoginActivity" />
+        <activity
+            android:name=".Views.CategoriesActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="landscape"></activity>
+        <activity
+            android:name=".Views.RegisterActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Views.LoginActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".Views.GameActivity"
             android:configChanges="orientation|keyboardHidden"

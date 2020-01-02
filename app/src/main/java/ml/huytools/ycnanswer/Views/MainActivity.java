@@ -2,44 +2,52 @@ package ml.huytools.ycnanswer.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
 import ml.huytools.ycnanswer.Core.API.ApiConfig;
 import ml.huytools.ycnanswer.Core.App;
+import ml.huytools.ycnanswer.Presenters.Interface.MainPresenter;
+import ml.huytools.ycnanswer.Presenters.MainPresenterImpl;
 import ml.huytools.ycnanswer.R;
+import ml.huytools.ycnanswer.Views.Interface.MainView;
 
-public class MainActivity extends AppCompatActivity {
-//////// NO Entity - View - Presenter
-//////// UPDATE
+public class MainActivity extends AppCompatActivity implements MainView {
+
+    MainPresenter mainPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        /// Config Global
         App.getInstance().init(this);
-        APIConfig();
+        ResourceManager.getInstance(this);
+
+        mainPresenter = new MainPresenterImpl(this);
+        mainPresenter.init();
+    }
 
 
-        Intent intent = new Intent(this, RegisterActivity.class);
-        startActivity(intent);
+    @Override
+    public void showActivityLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
         finish();
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    public void showActivityMainGame() {
+        /// Test
+        Intent intent = new Intent(this, CategoriesActivity.class);
+        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+        finish();
     }
 
-
-    void APIConfig(){
-        /// Config Host
-        ApiConfig.setHostname("http://192.168.1.130:8000/api");
-
-
+    @Override
+    public void showMessage(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
-
-
 }
