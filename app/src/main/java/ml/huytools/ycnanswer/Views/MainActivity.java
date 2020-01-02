@@ -24,17 +24,18 @@ public class MainActivity extends AppCompatActivity implements MainView {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         App.getInstance().init(this);
-        ResourceManager.getInstance(this);
-
         mainPresenter = new MainPresenterImpl(this);
         mainPresenter.init();
+
+        /// init resource
+        ResourceManager.getInstance(this);
     }
 
 
     @Override
     public void showActivityLogin() {
         Intent intent = new Intent(this, LoginActivity.class);
-        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+        startActivity(intent);
         finish();
     }
 
@@ -42,12 +43,15 @@ public class MainActivity extends AppCompatActivity implements MainView {
     public void showActivityMainGame() {
         /// Test
         Intent intent = new Intent(this, CategoriesActivity.class);
-        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+        startActivity(intent);
         finish();
     }
 
     @Override
     public void showMessage(String message) {
+        if(message == null || message.trim() == ""){
+            return;
+        }
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
 }

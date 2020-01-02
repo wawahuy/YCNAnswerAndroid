@@ -1,5 +1,6 @@
 package ml.huytools.ycnanswer.Views;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -11,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import ml.huytools.ycnanswer.Core.Game.Renderer;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
 import ml.huytools.ycnanswer.R;
-import ml.huytools.ycnanswer.Views.GameComponents.GameScene;
 
 public class GameActivity extends AppCompatActivity {
 
@@ -19,6 +19,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_sf);
+        ((GameSurfaceView)findViewById(R.id.gamesf)).create(this);
     }
 
     public static class GameSurfaceView extends SurfaceView implements Renderer.Callback {
@@ -29,12 +30,16 @@ public class GameActivity extends AppCompatActivity {
             super(context, attrs);
 
             ///
-            gameScene = new GameScene(context);
+            gameScene = new GameScene();
 
             ///
             renderer = new Renderer(this, gameScene);
             renderer.enableAutoRegisterDirector(this);
             renderer.transparent();
+        }
+
+        public void create(Activity activity){
+            gameScene.create(activity);
         }
 
         @Override

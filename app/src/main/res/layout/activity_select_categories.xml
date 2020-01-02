@@ -23,27 +23,30 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="0dp"
-            android:orientation="horizontal"
+            android:orientation="vertical"
+            android:padding="50dp"
             android:weightSum="12">
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_margin="0dp"
-                android:layout_weight="6"
-                android:padding="100dp"
-                android:src="@drawable/sprite_logo" />
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/f1"
+                android:text="Chọn lĩnh vực bạn muốn chơi:"
+                android:textAlignment="center"
+                android:textColor="#EBE4E4"
+                android:textSize="18sp" />
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyCategoires"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="6"
-                android:orientation="vertical"></LinearLayout>
+                android:layout_marginStart="100dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="100dp"
+                android:background="@drawable/border_categories"
+                android:padding="10dp" />
         </LinearLayout>
+
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

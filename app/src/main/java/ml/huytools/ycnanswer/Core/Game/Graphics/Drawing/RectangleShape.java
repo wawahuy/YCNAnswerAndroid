@@ -56,10 +56,9 @@ public class RectangleShape extends Drawable {
      */
     @Override
     protected boolean testTouchPoint(Vector2D point) {
-        /// Test
         /// Need update OOB or AABB Bounding
-        Vector2D min = positionWord.sub(origin);
-        Vector2D max = new Vector2D(rect.right + positionWord.x, rect.bottom + positionWord.y).sub(origin);
+        Vector2D min = positionWord.add(computeVector2DWordTrx(new Vector2D(0, 0)));
+        Vector2D max = positionWord.add(computeVector2DWordTrx(new Vector2D(rect.right, rect.bottom)));
 
         if(point.x < min.x || point.x > max.x) return false;
         if(point.y < min.y || point.y > max.y) return false;

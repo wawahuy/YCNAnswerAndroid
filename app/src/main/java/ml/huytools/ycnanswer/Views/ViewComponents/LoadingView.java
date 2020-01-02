@@ -8,18 +8,17 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import ml.huytools.ycnanswer.Core.Game.Renderer;
-import ml.huytools.ycnanswer.Core.Game.Scenes.NodeGroup;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
 import ml.huytools.ycnanswer.Views.GameComponents.Loading;
 
 public class LoadingView extends SurfaceView implements Renderer.Callback {
     Renderer renderer;
-    Loading nodeGroup;
+    Loading loading;
 
     public LoadingView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        nodeGroup = new Loading();
-        renderer = new Renderer(this, nodeGroup);
+        loading = new Loading();
+        renderer = new Renderer(this, loading);
         renderer.enableAutoRegisterDirector(this);
         renderer.transparent();
     }
@@ -38,18 +37,23 @@ public class LoadingView extends SurfaceView implements Renderer.Callback {
         ((ViewGroup)this.getParent()).removeView(this);
     }
 
+    public void setText(String text) {
+        loading.setText(text);
+    }
 
     @Override
     public void OnCreate(Vector2D size) {
-        nodeGroup.setBoundingSize(size);
+        loading.setBoundingSize(size);
     }
 
     @Override
     public void OnResume(Vector2D size) {
-        nodeGroup.setBoundingSize(size);
+        loading.setBoundingSize(size);
     }
 
     @Override
     public void OnDestroy() {
     }
+
+
 }

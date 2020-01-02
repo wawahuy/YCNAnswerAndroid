@@ -24,6 +24,10 @@ public class ResourceManager {
     public final Image imageBackgroundGame;
     public final Image imageChair;
     public final Image imagePC;
+    public final Image imageHelp50;
+    public final Image imageHelpSpectator;
+    public final Image imageHelpCall;
+    public final Image imageHome;
 
     /// AnimationManager Frames
     /// public final EntityManager<AnimationManager.Frame> framesMc;
@@ -38,6 +42,10 @@ public class ResourceManager {
         imageBackgroundGame = Image.LoadByResource(R.drawable.sprite_bg_game);
         imageChair = Image.LoadByResource(R.drawable.chair);
         imagePC = Image.LoadByResource(R.drawable.sprite_pc);
+        imageHelp50 = Image.LoadByResource(R.drawable.sprite_help_50_enable);
+        imageHelpSpectator = Image.LoadByResource(R.drawable.sprite_help_guest_enable);
+        imageHelpCall = Image.LoadByResource(R.drawable.sprite_help_call_enable);
+        imageHome = Image.LoadByResource(R.drawable.sprite_home);
 
         /// frames
         /// framesMc = EntityManager.ParseJSON(AnimationManager.Frame.class, Resource.readRawTextFile(context, R.raw.frames_mc));

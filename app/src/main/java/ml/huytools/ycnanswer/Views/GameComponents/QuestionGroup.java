@@ -8,6 +8,7 @@ import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.PolygonShape;
 import ml.huytools.ycnanswer.Core.Game.Scenes.Node;
 import ml.huytools.ycnanswer.Core.Game.Scenes.NodeGroup;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
+import ml.huytools.ycnanswer.Models.Entities.QuestionEntity;
 
 public class QuestionGroup extends NodeGroup implements OnTouchListener {
     final String[] PLANChar = new String[]{"A", "B", "C", "D"};
@@ -60,6 +61,14 @@ public class QuestionGroup extends NodeGroup implements OnTouchListener {
             boxQuestion.setBoundingSize(sizePlan);
         }
 
+    }
+
+    public void showQuestion(QuestionEntity questionEntity){
+        question.getText().setText(questionEntity.noidung);
+        plans[0].getText().setText("A. " + questionEntity.phuongan_A);
+        plans[1].getText().setText("B. " + questionEntity.phuongan_B);
+        plans[2].getText().setText("C. " + questionEntity.phuongan_C);
+        plans[3].getText().setText("D. " + questionEntity.phuongan_D);
     }
 
     @Override

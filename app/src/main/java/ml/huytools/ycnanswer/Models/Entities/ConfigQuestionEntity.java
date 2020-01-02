@@ -2,19 +2,15 @@ package ml.huytools.ycnanswer.Models.Entities;
 
 import ml.huytools.ycnanswer.Core.Annotation.JsonName;
 import ml.huytools.ycnanswer.Core.MVP.Entity;
+import ml.huytools.ycnanswer.Core.MVP.EntityManager;
 
-public class CHDiemCauHoi extends Entity {
-
-    @JsonName
-    public int id;
-
+public class ConfigQuestionEntity extends Entity {
     @JsonName
     public int diem;
 
     @JsonName
     public int thu_tu;
 
-    @JsonName
     public boolean moc;
-
+    public EntityManager<ConfigHelpEntity> helps;
 }

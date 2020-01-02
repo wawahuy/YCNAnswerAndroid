@@ -8,7 +8,7 @@ import ml.huytools.ycnanswer.Core.API.ApiParameters;
 import ml.huytools.ycnanswer.Core.API.ApiProvider;
 import ml.huytools.ycnanswer.Core.App;
 
-public class User {
+public class UserModel {
     static final String LOGIN_URI = "/login";
     static final String INFO_URI = "/user";
 

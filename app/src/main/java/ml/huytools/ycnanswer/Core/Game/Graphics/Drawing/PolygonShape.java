@@ -31,6 +31,7 @@ public class PolygonShape extends Drawable {
 
     public void setPoints(List<Vector2D> points) {
         this.points.clear();
+        path = new Path();
         for(Vector2D p:points){
             addToPath(p.x, p.y);
             this.points.add(p);

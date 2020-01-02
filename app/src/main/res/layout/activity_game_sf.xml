@@ -5,7 +5,7 @@
     android:background="@drawable/sprite_bg_game">
 
     <view
-        android:id="@+id/view"
+        android:id="@+id/gamesf"
         class="ml.huytools.ycnanswer.Views.GameActivity$GameSurfaceView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

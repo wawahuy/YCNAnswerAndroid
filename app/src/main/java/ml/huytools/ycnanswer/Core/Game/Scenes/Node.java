@@ -155,6 +155,9 @@ public abstract class Node extends Transformable implements IGameObject {
 
     @Override
     public void updateInput(Event event) {
+        if(!enableAction){
+            return;
+        }
         switch (event.getEventType()){
             case Touch:
                 progressionTouch((TouchEvent) event);

@@ -3,11 +3,8 @@ package ml.huytools.ycnanswer.Views.GameComponents;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 
-import androidx.constraintlayout.widget.Group;
-
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.LinkedList;
 import java.util.List;
 
 import ml.huytools.ycnanswer.Core.Game.Actions.Action;
@@ -16,7 +13,7 @@ import ml.huytools.ycnanswer.Core.Game.Actions.ActionRepeat;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionSequence;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionTimings.ActionCubicBezier;
 import ml.huytools.ycnanswer.Core.Game.Actions.ActionTimings.ActionMoveTo;
-import ml.huytools.ycnanswer.Core.Game.Event.OnTouchListener;
+import ml.huytools.ycnanswer.Core.Game.GameDirector;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Color;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.Drawable;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.RectangleShape;
@@ -24,9 +21,11 @@ import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.RoundRectangleShape;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.Text;
 import ml.huytools.ycnanswer.Core.Game.Scenes.Node;
 import ml.huytools.ycnanswer.Core.Game.Scenes.NodeGroup;
+import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleAction;
+import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleCallback;
 import ml.huytools.ycnanswer.Core.MVP.EntityManager;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
-import ml.huytools.ycnanswer.Models.Entities.CHDiemCauHoi;
+import ml.huytools.ycnanswer.Models.Entities.ConfigQuestionEntity;
 
 public class TableScore extends NodeGroup {
     final int BORDER_SIZE = 15;
@@ -39,7 +38,7 @@ public class TableScore extends NodeGroup {
     RoundRectangleShape select;
     NodeGroup groupText;
 
-    EntityManager<CHDiemCauHoi> dsDiemCauHoi;
+    EntityManager<ConfigQuestionEntity> dsDiemCauHoi;
     int positionSelect;
 
     public TableScore() {
@@ -78,20 +77,20 @@ public class TableScore extends NodeGroup {
         transformText();
     }
 
-    public void initData(EntityManager<CHDiemCauHoi> chDiemCauHoi){
+    public void initData(EntityManager<ConfigQuestionEntity> chDiemCauHoi){
         dsDiemCauHoi = chDiemCauHoi;
         positionSelect = 0;
         groupText.clear();
 
-        Collections.sort(dsDiemCauHoi, new Comparator<CHDiemCauHoi>() {
+        Collections.sort(dsDiemCauHoi, new Comparator<ConfigQuestionEntity>() {
             @Override
-            public int compare(CHDiemCauHoi c1, CHDiemCauHoi c2) {
+            public int compare(ConfigQuestionEntity c1, ConfigQuestionEntity c2) {
                 return c1.thu_tu > c2.thu_tu ? -1 : (c1.thu_tu < c2.thu_tu ? 1 : 0);
             }
         });
 
 
-        for(CHDiemCauHoi c:dsDiemCauHoi){
+        for(ConfigQuestionEntity c:dsDiemCauHoi){
             NodeGroup line = new NodeGroup();
 
             Text text = new Text();
@@ -122,12 +121,17 @@ public class TableScore extends NodeGroup {
             groupText.add(line);
         }
 
-        transformText();
+        GameDirector.getInstance().getScheduler().schedule(ScheduleAction.One(new ScheduleCallback() {
+            @Override
+            public void OnScheduleCallback(float dt) {
+                transformText();
+            }
+        }, 100));
     }
 
 
     private void transformText(){
-        if(size == null){
+        if(size == null || dsDiemCauHoi == null){
             return;
         }
 
@@ -135,7 +139,7 @@ public class TableScore extends NodeGroup {
         int i = 0;
 
         select.setSize(new Vector2D(size.x*0.8f, lineHeight + PADDING_LINE));
-        select.setOrigin(size.x*0.1f, PADDING_LINE);
+        select.setOrigin(size.x*0.1f, PADDING_LINE+lineHeight/4);
 
         for(Node node:groupText.getListNode()){
             i++;

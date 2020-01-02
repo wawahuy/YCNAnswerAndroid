@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
 
     public void OnRegister(View view){
         Intent intent = new Intent(this, RegisterActivity.class);
-        startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+        startActivity(intent);
     }
 
     @Override

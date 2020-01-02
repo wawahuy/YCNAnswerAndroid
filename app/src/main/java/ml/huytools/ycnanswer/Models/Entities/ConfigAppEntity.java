@@ -3,16 +3,10 @@ package ml.huytools.ycnanswer.Models.Entities;
 import ml.huytools.ycnanswer.Core.Annotation.JsonName;
 import ml.huytools.ycnanswer.Core.MVP.Entity;
 
-public class CHTroGiup extends Entity {
+public class ConfigAppEntity extends Entity {
     @JsonName
-    public int id;
+    public int co_hoi_sai;
 
     @JsonName
-    public int loai_tro_giup;
-
-    @JsonName
-    public int thu_tu;
-
-    @JsonName
-    public int credit;
+    public int thoi_gian_tra_loi;
 }

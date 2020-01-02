@@ -4,7 +4,7 @@ import ml.huytools.ycnanswer.Core.API.ApiConfig;
 import ml.huytools.ycnanswer.Core.API.ApiOutput;
 import ml.huytools.ycnanswer.Core.API.ApiProvider;
 import ml.huytools.ycnanswer.Core.API.JWTAuthenticate;
-import ml.huytools.ycnanswer.Models.User;
+import ml.huytools.ycnanswer.Models.UserModel;
 import ml.huytools.ycnanswer.Presenters.Interface.MainPresenter;
 import ml.huytools.ycnanswer.Views.Interface.MainView;
 
@@ -22,7 +22,7 @@ public class MainPresenterImpl implements MainPresenter {
     }
 
     public void checkLogged(){
-        String token = User.getTokenSaved();
+        String token = UserModel.getTokenSaved();
 
         if(token != null && token != ""){
             registerAuthorizationGlobal(token);
@@ -34,12 +34,12 @@ public class MainPresenterImpl implements MainPresenter {
                     if(output.Status){
                         mainView.showActivityMainGame();
                     } else {
-                        User.saveToken(null);
+                        UserModel.saveToken(null);
                         mainView.showActivityLogin();
                     }
                 }
             };
-            User.getInfoCurrent(callback);
+            UserModel.getInfoCurrent(callback);
 
             return;
         }

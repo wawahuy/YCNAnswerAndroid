@@ -27,6 +27,10 @@ public class Scene extends SceneBase {
         return nodeGroup.size();
     }
 
+    public NodeGroup getGroup(){
+        return nodeGroup;
+    }
+
     @Override
     public void OnDraw(Canvas canvas) {
         nodeGroup.draw(canvas);

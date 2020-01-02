@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5dp"
+        android:layout_weight="12"
+        android:background="@drawable/border1"
+        android:orientation="horizontal"
+        android:padding="5dp"
+        android:paddingStart="10dp">
+
+        <TextView
+            android:id="@+id/txtCategorieName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="7"
+            android:fontFamily="@font/f1"
+            android:paddingStart="10dp"
+            android:text="Lĩnh vực"
+            android:textColor="#F3EAEA"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtCategorieNum"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="5"
+            android:fontFamily="@font/f1"
+            android:text="Lĩnh vực"
+            android:textColor="#ECECEC"
+            android:textSize="8sp" />
+    </LinearLayout>
+</LinearLayout>

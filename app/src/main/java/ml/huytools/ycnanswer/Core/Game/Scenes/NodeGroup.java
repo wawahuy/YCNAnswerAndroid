@@ -48,6 +48,8 @@ public class NodeGroup extends Node {
         nodes.removeQueue(node);
     }
 
+
+
     public void clear(){
         nodes.clearQueue();
     }

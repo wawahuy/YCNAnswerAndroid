@@ -9,11 +9,9 @@ import ml.huytools.ycnanswer.Core.Game.Schedules.Scheduler;
 
 public abstract class SceneBase implements IGameObject {
     protected Camera camera;
-    protected Scheduler scheduler;
 
     public SceneBase(){
         camera = new Camera();
-        scheduler = new Scheduler();
     }
 
     public Camera getCamera() {
@@ -24,9 +22,6 @@ public abstract class SceneBase implements IGameObject {
         this.camera = camera;
     }
 
-    public Scheduler getScheduler() {
-        return scheduler;
-    }
 
     public void drawApplyCameraToModel(Canvas canvas){
         canvas.save();
@@ -51,9 +46,8 @@ public abstract class SceneBase implements IGameObject {
 
     @Override
     public boolean update() {
-        return scheduler.update() || OnUpdate();
+        return OnUpdate();
     }
-
     protected abstract void OnDraw(Canvas canvas);
     protected abstract boolean OnUpdate();
 }
