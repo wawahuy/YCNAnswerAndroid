@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity implements MainView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /// init
         App.getInstance().init(this);
         mainPresenter = new MainPresenterImpl(this);
         mainPresenter.init();
@@ -42,7 +44,7 @@ public class MainActivity extends AppCompatActivity implements MainView {
     @Override
     public void showActivityMainGame() {
         /// Test
-        Intent intent = new Intent(this, CategoriesActivity.class);
+        Intent intent = new Intent(this, MainGameActivity.class);
         startActivity(intent);
         finish();
     }

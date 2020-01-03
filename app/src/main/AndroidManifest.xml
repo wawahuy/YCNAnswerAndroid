@@ -19,9 +19,14 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".Views.MainGameActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="landscape"
+            ></activity>
+        <activity
             android:name=".Views.CategoriesActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="landscape"></activity>
+            android:screenOrientation="landscape" />
         <activity
             android:name=".Views.RegisterActivity"
             android:configChanges="orientation|keyboardHidden"
