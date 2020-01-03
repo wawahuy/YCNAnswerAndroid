@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import ml.huytools.ycnanswer.Models.CreditModel;
 import ml.huytools.ycnanswer.Models.Entities.UserEntity;
 import ml.huytools.ycnanswer.Presenters.Interface.MainGamePresenter;
 import ml.huytools.ycnanswer.Presenters.MainGamePresenterImpl;
@@ -56,9 +57,13 @@ public class MainGameActivity extends AppCompatActivity implements MainGameView 
     }
 
     public void OnOpenScore(View view){
+        Intent intent = new Intent(this, TurnActivity.class);
+        startActivity(intent);
     }
 
     public void OnOpenRanking(View view){
+        Intent intent = new Intent(this, RankActivity.class);
+        startActivity(intent);
     }
 
     public void OnOpenExit(View view){
@@ -66,6 +71,8 @@ public class MainGameActivity extends AppCompatActivity implements MainGameView 
     }
 
     public void OnOpenShop(View view){
+        Intent intent = new Intent(this, CreditActivity.class);
+        startActivity(intent);
     }
 
     public void OnOpenProfile(View view){
