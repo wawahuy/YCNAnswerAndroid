@@ -36,6 +36,7 @@ public class LoginPresenterImpl implements LoginPresenter {
                         String token = (String) resData.get("token");
                         UserModel.saveToken(token);
                         registerAuthorizationGlobal(token);
+                        view.openMainGameActivity();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }

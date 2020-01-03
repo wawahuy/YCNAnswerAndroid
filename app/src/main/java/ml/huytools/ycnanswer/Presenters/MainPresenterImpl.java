@@ -4,6 +4,7 @@ import ml.huytools.ycnanswer.Core.API.ApiConfig;
 import ml.huytools.ycnanswer.Core.API.ApiOutput;
 import ml.huytools.ycnanswer.Core.API.ApiProvider;
 import ml.huytools.ycnanswer.Core.API.JWTAuthenticate;
+import ml.huytools.ycnanswer.Models.Entities.UserEntity;
 import ml.huytools.ycnanswer.Models.UserModel;
 import ml.huytools.ycnanswer.Presenters.Interface.MainPresenter;
 import ml.huytools.ycnanswer.Views.Interface.MainView;
@@ -30,8 +31,8 @@ public class MainPresenterImpl implements MainPresenter {
                 @Override
                 public void OnAPIResult(ApiOutput output, int requestCode) {
                     mainView.showMessage(output.Message == null ? "Lỗi" : output.Message);
-
                     if(output.Status){
+                        UserModel.setUserGlobal((UserEntity) output.toModel(UserEntity.class));
                         mainView.showActivityMainGame();
                     } else {
                         UserModel.saveToken(null);

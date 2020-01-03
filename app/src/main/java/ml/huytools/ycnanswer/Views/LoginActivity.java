@@ -61,4 +61,11 @@ public class LoginActivity extends AppCompatActivity implements LoginView {
     public void showMessage(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
+
+    @Override
+    public void openMainGameActivity() {
+        Intent intent = new Intent(this, MainGameActivity.class);
+        startActivity(intent);
+        finish();
+    }
 }
