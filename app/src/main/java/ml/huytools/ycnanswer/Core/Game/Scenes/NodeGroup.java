@@ -95,6 +95,10 @@ public class NodeGroup extends Node {
 
     @Override
     public void updateInput(Event event) {
+        if(!isEnableTouch()){
+            return;
+        }
+
         super.computePositionWordIfTouches(event);
         super.updateInput(event);
         for(Node node:nodes){

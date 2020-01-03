@@ -29,7 +29,7 @@ import ml.huytools.ycnanswer.Views.GameComponents.TableScore;
 import ml.huytools.ycnanswer.Views.Interface.GameView;
 import ml.huytools.ycnanswer.Views.ViewComponents.LoadingView;
 
-public class GameScene extends Scene implements GameView, OnTouchListener {
+public class GameScene extends Scene implements GameView, OnTouchListener, QuestionGroup.QuestionCallback {
     private Vector2D size;
     private WeakReference<Activity> activity;
     ResourceManager resourceManager;
@@ -79,7 +79,7 @@ public class GameScene extends Scene implements GameView, OnTouchListener {
         Image imageHelp50 = resourceManager.imageHelp50;
         Texture textureHelp50 = new Texture(imageHelp50);
         spriteHelp50 = new Sprite(textureHelp50);
-        spriteHelp50.setEnableAction(false);
+        spriteHelp50.setEnableTouch(false);
         spriteHelp50.setVisible(false);
         add(spriteHelp50);
 
@@ -87,7 +87,7 @@ public class GameScene extends Scene implements GameView, OnTouchListener {
         Image imageHelpSpectator = resourceManager.imageHelpSpectator;
         Texture textureHelpSpectator = new Texture(imageHelpSpectator);
         spriteHelpSpectator = new Sprite(textureHelpSpectator);
-        spriteHelpSpectator.setEnableAction(false);
+        spriteHelpSpectator.setEnableTouch(false);
         spriteHelpSpectator.setVisible(false);
         add(spriteHelpSpectator);
 
@@ -95,7 +95,7 @@ public class GameScene extends Scene implements GameView, OnTouchListener {
         Image imageHelpCall = resourceManager.imageHelpCall;
         Texture textureHelpCall = new Texture(imageHelpCall);
         spriteHelpCall = new Sprite(textureHelpCall);
-        spriteHelpCall.setEnableAction(false);
+        spriteHelpCall.setEnableTouch(false);
         spriteHelpCall.setVisible(false);
         add(spriteHelpCall);
 
@@ -132,7 +132,7 @@ public class GameScene extends Scene implements GameView, OnTouchListener {
         add(tableScore);
 
         /// Question
-        questionGroup = new QuestionGroup();
+        questionGroup = new QuestionGroup(this);
         questionGroup.setVisible(false);
         add(questionGroup);
 
@@ -207,11 +207,18 @@ public class GameScene extends Scene implements GameView, OnTouchListener {
         spriteHome.scaleDraw(sizeIcon, Sprite.ScaleType.FitXY);
     }
 
+
+    /// ---------- Interface GameView -----------------
     @Override
     public void visibleAll(boolean status){
         for(Node node:getGroup().getListNode()){
             node.setVisible(status);
         }
+    }
+
+    @Override
+    public void setEnableTouchAll(boolean status) {
+        getGroup().setEnableTouch(status);
     }
 
     @Override
@@ -242,8 +249,48 @@ public class GameScene extends Scene implements GameView, OnTouchListener {
     @Override
     public void showQuestion(QuestionEntity questionEntity) {
         questionGroup.showQuestion(questionEntity);
+    }
+
+    @Override
+    public void setWarningPlanQuestion(String planQuestion) {
+        questionGroup.setWarningPlanQuestion(planQuestion);
+    }
+
+    @Override
+    public void setSuccessPlanQuestion(String planQuestion) {
+        questionGroup.setSuccessPlanQuestion(planQuestion);
+    }
+
+    @Override
+    public void setErrorPlanQuestion(String planQuestion) {
+        questionGroup.setErrorPlanQuestion(planQuestion);
+    }
+
+    @Override
+    public void setPositionScoreTable(int positionScoreTable) {
+        tableScore.setPositionSelect(positionScoreTable);
+    }
+
+    @Override
+    public void runEffectLight() {
+        spotLight.runEffectFlickerAmbient();
+    }
+
+    @Override
+    public void runEffectLightSlow() {
+        spotLight.runEffectSlow();
+    }
+
+    @Override
+    public void startCountDown() {
         countDown.start();
     }
+
+    @Override
+    public void stopContDown() {
+        countDown.die();
+    }
+
 
     @Override
     public void close() {
@@ -251,6 +298,7 @@ public class GameScene extends Scene implements GameView, OnTouchListener {
     }
 
 
+    /// ---------- Interface OnTouchListener ---------
     @Override
     public void OnTouchBegin(Node node, Vector2D p) {
     }
@@ -267,5 +315,11 @@ public class GameScene extends Scene implements GameView, OnTouchListener {
             close();
         }
 
+    }
+
+    /// -------- Interface QuestionCallback ------
+    @Override
+    public void OnAnswer(String answer) {
+        gamePresenter.answer(answer);
     }
 }

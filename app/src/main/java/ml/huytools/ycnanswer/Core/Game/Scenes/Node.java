@@ -1,6 +1,7 @@
 package ml.huytools.ycnanswer.Core.Game.Scenes;
 
 import android.graphics.Canvas;
+import android.util.Log;
 
 import ml.huytools.ycnanswer.Core.Game.Actions.Action;
 import ml.huytools.ycnanswer.Core.Game.Event.Event;
@@ -17,6 +18,7 @@ public abstract class Node extends Transformable implements IGameObject {
     protected boolean hasUpdateDraw = false;
     private boolean visible;
     private boolean enableAction;
+    private boolean enableTouch;
     private Action action;
     private NodeGroup nodeGroup;
 
@@ -32,6 +34,7 @@ public abstract class Node extends Transformable implements IGameObject {
         id = IDGlobal++;
         visible = true;
         enableAction = true;
+        enableTouch = true;
         zOrder = 0;
         typeTouch = TouchEvent.TouchType.NORMAL;
     }
@@ -121,6 +124,14 @@ public abstract class Node extends Transformable implements IGameObject {
         this.touchListener = touchListener;
     }
 
+    public boolean isEnableTouch() {
+        return enableTouch;
+    }
+
+    public void setEnableTouch(boolean enableTouch) {
+        this.enableTouch = enableTouch;
+    }
+
     /***
      * Các đối tượng sẽ được vẽ kèm theo ma trận biến đổi bởi Transformable
      * Nên vẽ các đối tượng ở góc tọa độ và di chuyển đến trọng tâm
@@ -155,7 +166,7 @@ public abstract class Node extends Transformable implements IGameObject {
 
     @Override
     public void updateInput(Event event) {
-        if(!enableAction){
+        if(!enableTouch){
             return;
         }
         switch (event.getEventType()){
@@ -183,20 +194,26 @@ public abstract class Node extends Transformable implements IGameObject {
 
         computePositionWordIfTouches(touchEvent);
 
-        if(testTouchPoint(touchEvent.getPoint()) && touchEvent.getType() != TouchEvent.TouchType.END){
-            if(typeTouch == TouchEvent.TouchType.NORMAL){
-                touchListener.OnTouchBegin(this, touchEvent.getPoint().clone());
-                typeTouch = TouchEvent.TouchType.BEGIN;
-            } else {
-                touchListener.OnTouchMove(this, touchEvent.getPoint().clone());
-                typeTouch = TouchEvent.TouchType.MOVE;
-            }
-        } else {
-            if(typeTouch == TouchEvent.TouchType.MOVE || typeTouch == TouchEvent.TouchType.BEGIN){
-                touchListener.OnTouchEnd(this, touchEvent.getPoint().clone());
-                typeTouch = TouchEvent.TouchType.NORMAL;
-            }
+        if(testTouchPoint(touchEvent.getPoint()) && touchEvent.getType() == TouchEvent.TouchType.END){
+            touchListener.OnTouchEnd(this, touchEvent.getPoint().clone());
         }
+
+//        if(testTouchPoint(touchEvent.getPoint()) && touchEvent.getType() != TouchEvent.TouchType.END){
+//            if(typeTouch == TouchEvent.TouchType.NORMAL){
+//                touchListener.OnTouchBegin(this, touchEvent.getPoint().clone());
+//                typeTouch = TouchEvent.TouchType.BEGIN;
+//            } else {
+//                touchListener.OnTouchMove(this, touchEvent.getPoint().clone());
+//                typeTouch = TouchEvent.TouchType.MOVE;
+//            }
+//            return;
+//        }
+//
+//        if(typeTouch == TouchEvent.TouchType.MOVE || typeTouch == TouchEvent.TouchType.BEGIN){
+//            touchListener.OnTouchEnd(this, touchEvent.getPoint().clone());
+//        }
+//        typeTouch = TouchEvent.TouchType.NORMAL;
+
     }
 
 }

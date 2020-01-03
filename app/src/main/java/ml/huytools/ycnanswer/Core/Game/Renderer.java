@@ -12,6 +12,8 @@ import android.view.View;
 
 import ml.huytools.ycnanswer.Core.Game.Event.Event;
 import ml.huytools.ycnanswer.Core.Game.Event.TouchEvent;
+import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleAction;
+import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleCallback;
 import ml.huytools.ycnanswer.Core.LinkedListQueue;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
 
@@ -43,6 +45,7 @@ public class Renderer implements SurfaceHolder.Callback, View.OnTouchListener {
         events.updateQueue();
         for(Event event:events){
             gameObject.updateInput(event);
+
         }
         events.clear();
     }
@@ -112,7 +115,7 @@ public class Renderer implements SurfaceHolder.Callback, View.OnTouchListener {
     }
 
     @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
+    public boolean onTouch(View view, final MotionEvent motionEvent) {
         int action = motionEvent.getAction();
         float x = motionEvent.getX();
         float y = motionEvent.getY();
@@ -125,7 +128,7 @@ public class Renderer implements SurfaceHolder.Callback, View.OnTouchListener {
 
                 case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_CANCEL:
-                        events.addQueue(new TouchEvent(TouchEvent.TouchType.END, new Vector2D(x, y)));
+                        events.addQueue(new TouchEvent(TouchEvent.TouchType.END, new Vector2D(motionEvent.getX(), motionEvent.getY())));
                         break;
         }
         return true;

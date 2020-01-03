@@ -3,7 +3,14 @@ package ml.huytools.ycnanswer.Views.GameComponents;
 import android.graphics.Paint;
 import android.util.Log;
 
+import ml.huytools.ycnanswer.Core.Game.Actions.Action;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionDrawings.ActionColorTo;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionRepeat;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionRepeatForever;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionSequence;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionTimings.ActionCubicBezier;
 import ml.huytools.ycnanswer.Core.Game.Event.OnTouchListener;
+import ml.huytools.ycnanswer.Core.Game.Graphics.Color;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.PolygonShape;
 import ml.huytools.ycnanswer.Core.Game.Scenes.Node;
 import ml.huytools.ycnanswer.Core.Game.Scenes.NodeGroup;
@@ -14,8 +21,13 @@ public class QuestionGroup extends NodeGroup implements OnTouchListener {
     final String[] PLANChar = new String[]{"A", "B", "C", "D"};
     BoxQuestion question;
     BoxQuestion plans[];
+    QuestionCallback questionCallback;
 
-    public QuestionGroup(){
+    public interface QuestionCallback {
+        void OnAnswer(String answer);
+    }
+
+    public QuestionGroup(QuestionCallback questionCallback){
         /// Question
         question = new BoxQuestion();
         question.getText().setSize(35);
@@ -33,6 +45,8 @@ public class QuestionGroup extends NodeGroup implements OnTouchListener {
             plans[i] = boxQuestion;
             add(boxQuestion);
         }
+
+        this.questionCallback = questionCallback;
     }
 
     public void setBoundingSize(Vector2D v) {
@@ -69,17 +83,65 @@ public class QuestionGroup extends NodeGroup implements OnTouchListener {
         plans[1].getText().setText("B. " + questionEntity.phuongan_B);
         plans[2].getText().setText("C. " + questionEntity.phuongan_C);
         plans[3].getText().setText("D. " + questionEntity.phuongan_D);
+
+        for(BoxQuestion pl:plans){
+            pl.getBackground().runAction(ActionColorTo.create(new Color(255, 3, 14, 51), 200));
+        }
+    }
+
+
+    private void CheckAnswer(Node node) {
+        int id = node.getId();
+        if(id == plans[0].getId()){
+            questionCallback.OnAnswer("A");
+        } else if(id == plans[1].getId()){
+            questionCallback.OnAnswer("B");
+        } else if(id == plans[2].getId()){
+            questionCallback.OnAnswer("C");
+        } else if(id == plans[3].getId()){
+            questionCallback.OnAnswer("D");
+        }
+    }
+
+    public void setWarningPlanQuestion(String planQuestion) {
+        Node node = plans[planStrToInt(planQuestion)].getBackground();
+        node.runAction(ActionColorTo.create(new Color(200, 251, 189, 35), 200));
+    }
+
+    public void setSuccessPlanQuestion(String planQuestion) {
+        Node node = plans[planStrToInt(planQuestion)].getBackground();
+        node.runAction(ActionColorTo.create(new Color(200, 103, 180, 89), 200));
+    }
+
+    public void setErrorPlanQuestion(String planQuestion) {
+        Node node = plans[planStrToInt(planQuestion)].getBackground();
+        node.runAction(
+                ActionRepeatForever.create(
+                        ActionSequence.create(
+                                ActionCubicBezier.Ease(ActionColorTo.create(new Color(255, 221, 81, 69), 100)),
+                                ActionCubicBezier.Ease(ActionColorTo.create(new Color(255, 241, 184, 180), 100))
+                        )
+                )
+        );
+    }
+
+    public void setInfoPlanQuestion(String planQuestion){
+        Node node = plans[planStrToInt(planQuestion)].getBackground();
+        node.runAction(ActionColorTo.create(new Color(255, 3, 14, 51), 200));
+    }
+
+    public int planStrToInt(String plan){
+        if(plan.equals("A")) return 0;
+        if(plan.equals("B")) return 1;
+        if(plan.equals("C")) return 2;
+        return 3;
     }
 
     @Override
     public void OnTouchBegin(Node node, Vector2D p) {
-        int id = node.getId();
-        if(id == plans[0].getId()){
-        } else if(id == plans[1].getId()){
-        } else if(id == plans[2].getId()){
-        } else if(id == plans[3].getId()){
-        }
+
     }
+
 
     @Override
     public void OnTouchMove(Node node, Vector2D p) {
@@ -87,5 +149,6 @@ public class QuestionGroup extends NodeGroup implements OnTouchListener {
 
     @Override
     public void OnTouchEnd(Node node, Vector2D p) {
+        CheckAnswer(node);
     }
 }

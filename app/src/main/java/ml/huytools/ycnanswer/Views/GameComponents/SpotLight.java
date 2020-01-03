@@ -64,6 +64,12 @@ public class SpotLight extends NodeGroup {
         flickerAmbientFight.runEffect(timeEffect);
     }
 
+    public void runEffectSlow(){
+        for(SpotLightChild spotLightChild: spotLights){
+            spotLightChild.runEffectSlow(timeEffect/2);
+        }
+    }
+
     /**
      * SpotLight
      */
@@ -91,6 +97,20 @@ public class SpotLight extends NodeGroup {
 
         public void runEffect(int timeEffect){
             setTimeRotate(timeRotateFast);
+
+            /// Schedule end effect
+            ScheduleCallback scheduleCallback = new ScheduleCallback() {
+                @Override
+                public void OnScheduleCallback(float dt) {
+                    setTimeRotate(timeRotate);
+                }
+            };
+            ScheduleAction scheduleAction = ScheduleAction.One(scheduleCallback, timeEffect);
+            GameDirector.getInstance().getScheduler().schedule(scheduleAction);
+        }
+
+        public void runEffectSlow(int timeEffect){
+            setTimeRotate(timeRotate*2);
 
             /// Schedule end effect
             ScheduleCallback scheduleCallback = new ScheduleCallback() {

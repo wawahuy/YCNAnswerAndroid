@@ -4,6 +4,10 @@ import java.util.LinkedList;
 
 import ml.huytools.ycnanswer.Core.API.ApiOutput;
 import ml.huytools.ycnanswer.Core.API.ApiProvider;
+import ml.huytools.ycnanswer.Core.Game.GameDirector;
+import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleAction;
+import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleCallback;
+import ml.huytools.ycnanswer.Core.Game.Schedules.Scheduler;
 import ml.huytools.ycnanswer.Core.MVP.EntityManager;
 import ml.huytools.ycnanswer.Models.ConfigModel;
 import ml.huytools.ycnanswer.Models.Entities.ConfigAllEntity;
@@ -22,11 +26,13 @@ public class GamePresenterImpl implements GamePresenter {
     GameView gameView;
     EntityManager<QuestionEntity> questionEntities;
     ConfigAllEntity configAllEntity;
+    Scheduler scheduler;
 
     int positionQuestionCurrent;
 
     public GamePresenterImpl(GameView gameView) {
         this.gameView = gameView;
+        scheduler = GameDirector.getInstance().getScheduler();
     }
 
     private void error(String m){
@@ -38,14 +44,34 @@ public class GamePresenterImpl implements GamePresenter {
         gameView.hideLoading();
         gameView.setDataTableScore(configAllEntity.cau_hinh_cau_hoi);
         gameView.visibleAll(true);
-        positionQuestionCurrent = 0;
-        showQuestionCurrent();
+        positionQuestionCurrent = -1;
+
+        scheduler.schedule(ScheduleAction.One(new ScheduleCallback() {
+            @Override
+            public void OnScheduleCallback(float dt) {
+                nextQuestion();
+            }
+        }, 100));
     }
 
-    private void showQuestionCurrent(){
-        QuestionEntity question = questionEntities.get(positionQuestionCurrent);
-        gameView.showQuestion(question);
+    private void nextQuestion(){
+        positionQuestionCurrent++;
+        gameView.setPositionScoreTable(positionQuestionCurrent);
+        gameView.runEffectLight();
+        gameView.stopContDown();
+        gameView.setEnableTouchAll(false);
+
+        /// disable and run effect
+        scheduler.schedule(ScheduleAction.One(new ScheduleCallback() {
+            @Override
+            public void OnScheduleCallback(float dt) {
+                gameView.showQuestion(questionEntities.get(positionQuestionCurrent));
+                gameView.startCountDown();
+                gameView.setEnableTouchAll(true);
+            }
+        }, 2000));
     }
+
 
     private void loadConfig(){
         gameView.updateTextLoading("Tải cấu hình...");
@@ -96,6 +122,33 @@ public class GamePresenterImpl implements GamePresenter {
             }
         };
         QuestionModel.getQuestionByCategoriesID(categoriesID, callback);
+    }
+
+    @Override
+    public void answer(final String answer) {
+        gameView.setEnableTouchAll(false);
+        gameView.setWarningPlanQuestion(answer);
+        gameView.stopContDown();
+        gameView.runEffectLightSlow();
+
+        scheduler.schedule(ScheduleAction.One(new ScheduleCallback() {
+            @Override
+            public void OnScheduleCallback(float dt) {
+                QuestionEntity cur = questionEntities.get(positionQuestionCurrent);
+                if(answer.equals(cur.dapan)){
+                    gameView.setSuccessPlanQuestion(answer);
+                    nextQuestion();
+                } else {
+                    gameView.setErrorPlanQuestion(answer);
+                    gameView.setSuccessPlanQuestion(cur.dapan);
+                    lose();
+                }
+            }
+        }, 1500));
+    }
+
+    @Override
+    public void lose() {
     }
 
 

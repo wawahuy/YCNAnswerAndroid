@@ -58,10 +58,8 @@ public class BoxQuestion extends NodeGroup {
     protected boolean testTouchPoint(Vector2D point) {
         /// Need Update Performances
         /// Test
-        Vector2D sizeMul = new Vector2D(size.x*scale.x, size.y*scale.y);
-        Vector2D originMul = new Vector2D(origin.x*scale.x, origin.y*scale.y);
-        Vector2D min = positionWord.sub(originMul);
-        Vector2D max = new Vector2D(sizeMul.x + positionWord.x, sizeMul.y + positionWord.y).sub(originMul);
+        Vector2D min = positionWord.add(computeVector2DWordTrx(new Vector2D(0, 0)));
+        Vector2D max = positionWord.add(computeVector2DWordTrx(new Vector2D(size.x, size.y)));
         if(point.x < min.x || point.x > max.x) return false;
         if(point.y < min.y || point.y > max.y) return false;
         return true;
