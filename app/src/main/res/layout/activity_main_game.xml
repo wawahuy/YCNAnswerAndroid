@@ -200,7 +200,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_weight="2"
                 android:onClick="OnOpenShop"
-                app:srcCompat="@drawable/icon_shop" />
+                app:srcCompat="@drawable/icon_cart" />
 
             <ImageView
                 android:id="@+id/imageView11"
@@ -209,8 +209,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_weight="2"
                 android:onClick="OnOpenExit"
-                android:padding="5dp"
-                app:srcCompat="@drawable/icon_logout" />
+                app:srcCompat="@drawable/icon_exit" />
 
         </LinearLayout>
 

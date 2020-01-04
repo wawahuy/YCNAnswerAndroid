@@ -31,13 +31,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/f1"
-                android:text="Danh sách lượt chơi"
+                android:text="Lịch sử lượt chơi"
                 android:textAlignment="center"
                 android:textColor="#EBE4E4"
                 android:textSize="18sp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycleTurn"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginStart="100dp"
