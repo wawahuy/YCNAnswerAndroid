@@ -18,7 +18,7 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void init() {
-        ApiConfig.setHostname("http://192.168.1.4:8000/api");
+        ApiConfig.setHostname("http://192.168.1.130:8000/api");
         checkLogged();
     }
 

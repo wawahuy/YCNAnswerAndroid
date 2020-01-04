@@ -3,6 +3,7 @@ package ml.huytools.ycnanswer.Views.GameComponents;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.Drawable;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.PolygonShape;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.RoundRectangleShape;
+import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.Text;
 import ml.huytools.ycnanswer.Core.Game.Scenes.NodeGroup;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
 
@@ -11,6 +12,7 @@ public class BoxMoney extends NodeGroup {
     final int BORDER_ROUND = 35;
     RoundRectangleShape background;
     RoundRectangleShape border;
+    Text text;
 
     public BoxMoney(){
         background = new RoundRectangleShape();
@@ -28,6 +30,12 @@ public class BoxMoney extends NodeGroup {
         border.setZOrder(-100);
         border.centerOrigin(true);
         add(border);
+
+        text = new Text();
+        text.setColor(255, 255, 255, 255);
+        text.setSize(40);
+        text.centerOrigin(true);
+        add(text);
     }
 
     public void setBoundingSize(Vector2D size){
@@ -36,5 +44,10 @@ public class BoxMoney extends NodeGroup {
         background.setSize(size.sub(new Vector2D(BORDER_WIDTH/2, BORDER_WIDTH/2)));
         border.setPosition(c);
         border.setSize(size);
+        text.setPosition(c);
+    }
+
+    public Text getText() {
+        return text;
     }
 }

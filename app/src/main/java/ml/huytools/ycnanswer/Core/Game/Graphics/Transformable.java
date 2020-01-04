@@ -116,13 +116,13 @@ public class Transformable {
     }
 
     public Vector2D computePositionWordTrx(){
-        return computeVector2DWordTrx(position);
+        return computeVector2DWordTrx(new Vector2D(0, 0));
     }
 
     public Vector2D computeVector2DWordTrx(Vector2D v){
         float[] src = new float[]{ v.x, v.y};
         float[] dst = new float[2];
-        matrix.mapVectors(dst, src);
+        matrix.mapPoints(dst, src);
         return new Vector2D(dst[0], dst[1]);
     }
 

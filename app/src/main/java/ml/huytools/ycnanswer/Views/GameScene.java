@@ -1,25 +1,39 @@
 package ml.huytools.ycnanswer.Views;
 
 import android.app.Activity;
-import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import java.lang.ref.WeakReference;
+import java.util.LinkedHashMap;
 
+import ml.huytools.ycnanswer.Core.Game.Actions.Action;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionSequence;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionTimings.ActionCubicBezier;
+import ml.huytools.ycnanswer.Core.Game.Actions.ActionTimings.ActionScaleTo;
 import ml.huytools.ycnanswer.Core.Game.Event.OnTouchListener;
+import ml.huytools.ycnanswer.Core.Game.GameDirector;
+import ml.huytools.ycnanswer.Core.Game.Graphics.Color;
+import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.Drawable;
+import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.RectangleShape;
+import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.RoundRectangleShape;
+import ml.huytools.ycnanswer.Core.Game.Graphics.Drawing.Text;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Image;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Sprite;
 import ml.huytools.ycnanswer.Core.Game.Graphics.Texture;
 import ml.huytools.ycnanswer.Core.Game.Scenes.Node;
 import ml.huytools.ycnanswer.Core.Game.Scenes.Scene;
+import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleAction;
+import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleCallback;
 import ml.huytools.ycnanswer.Core.MVP.EntityManager;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
-import ml.huytools.ycnanswer.Models.Entities.ConfigQuestionEntity;
+import ml.huytools.ycnanswer.Models.Entities.findConfigQuestionEntity;
 import ml.huytools.ycnanswer.Models.Entities.QuestionEntity;
+import ml.huytools.ycnanswer.Models.TurnModel;
 import ml.huytools.ycnanswer.Presenters.GamePresenterImpl;
 import ml.huytools.ycnanswer.Presenters.Interface.GamePresenter;
+import ml.huytools.ycnanswer.Views.GameComponents.BoxHelpSpectator;
 import ml.huytools.ycnanswer.Views.GameComponents.BoxMoney;
 import ml.huytools.ycnanswer.Views.GameComponents.CountDown;
 import ml.huytools.ycnanswer.Views.GameComponents.FPSDebug;
@@ -28,6 +42,8 @@ import ml.huytools.ycnanswer.Views.GameComponents.SpotLight;
 import ml.huytools.ycnanswer.Views.GameComponents.TableScore;
 import ml.huytools.ycnanswer.Views.Interface.GameView;
 import ml.huytools.ycnanswer.Views.ViewComponents.LoadingView;
+
+import static android.graphics.Typeface.BOLD;
 
 public class GameScene extends Scene implements GameView, OnTouchListener, QuestionGroup.QuestionCallback {
     private Vector2D size;
@@ -46,6 +62,7 @@ public class GameScene extends Scene implements GameView, OnTouchListener, Quest
     TableScore tableScore;
     QuestionGroup questionGroup;
     BoxMoney boxMoney;
+    BoxHelpSpectator boxHelpSpectator;
 
     LoadingView loadingView;
     GamePresenter gamePresenter;
@@ -66,37 +83,37 @@ public class GameScene extends Scene implements GameView, OnTouchListener, Quest
         Texture textureChair = new Texture(imageChair);
         spriteChair = new Sprite(textureChair);
         spriteChair.setVisible(false);
-        add(spriteChair);
+//        add(spriteChair);
 
         /// PC
         Image imagePC = resourceManager.imagePC;
         Texture texturePC = new Texture(imagePC);
         spritePC = new Sprite(texturePC);
         spritePC.setVisible(false);
-        add(spritePC);
+//        add(spritePC);
 
         /// Help 50
         Image imageHelp50 = resourceManager.imageHelp50;
         Texture textureHelp50 = new Texture(imageHelp50);
         spriteHelp50 = new Sprite(textureHelp50);
-        spriteHelp50.setEnableTouch(false);
         spriteHelp50.setVisible(false);
+        spriteHelp50.setTouchListener(this);
         add(spriteHelp50);
 
         /// Help spectator
         Image imageHelpSpectator = resourceManager.imageHelpSpectator;
         Texture textureHelpSpectator = new Texture(imageHelpSpectator);
         spriteHelpSpectator = new Sprite(textureHelpSpectator);
-        spriteHelpSpectator.setEnableTouch(false);
         spriteHelpSpectator.setVisible(false);
+        spriteHelpSpectator.setTouchListener(this);
         add(spriteHelpSpectator);
 
         /// Help call
         Image imageHelpCall = resourceManager.imageHelpCall;
         Texture textureHelpCall = new Texture(imageHelpCall);
         spriteHelpCall = new Sprite(textureHelpCall);
-        spriteHelpCall.setEnableTouch(false);
         spriteHelpCall.setVisible(false);
+        spriteHelpCall.setTouchListener(this);
         add(spriteHelpCall);
 
         /// Home
@@ -186,10 +203,13 @@ public class GameScene extends Scene implements GameView, OnTouchListener, Quest
         spriteChair.scaleDraw(sizePC, Sprite.ScaleType.FitXY);
         spriteChair.setPosition(posXPC + sizePC.x*0.8f, posYChair);
 
-        /// Help
         Vector2D sizeIcon = new Vector2D(halfW*0.11f, halfW*0.11f);
         float yIcon = halfH*0.02f;
+        float xHome = sizeIcon.x;
+        spriteHome.setPosition(xHome, yIcon);
+        spriteHome.scaleDraw(sizeIcon, Sprite.ScaleType.FitXY);
 
+        /// Help
         float xHelpCall = w - sizeIcon.x*2;
         spriteHelpCall.setPosition(xHelpCall, yIcon);
         spriteHelpCall.scaleDraw(sizeIcon, Sprite.ScaleType.FitXY);
@@ -202,9 +222,7 @@ public class GameScene extends Scene implements GameView, OnTouchListener, Quest
         spriteHelpSpectator.setPosition(xHelpSpectator, yIcon);
         spriteHelpSpectator.scaleDraw(sizeIcon, Sprite.ScaleType.FitXY);
 
-        float xHome = sizeIcon.x;
-        spriteHome.setPosition(xHome, yIcon);
-        spriteHome.scaleDraw(sizeIcon, Sprite.ScaleType.FitXY);
+
     }
 
 
@@ -227,7 +245,7 @@ public class GameScene extends Scene implements GameView, OnTouchListener, Quest
     }
 
     @Override
-    public void updateTextLoading(String text) {
+    public void updateTextLoading(final String text) {
         loadingView.setText(text);
     }
 
@@ -237,12 +255,17 @@ public class GameScene extends Scene implements GameView, OnTouchListener, Quest
     }
 
     @Override
-    public void showMessage(String message) {
-        Toast.makeText(activity.get().getBaseContext(), message, Toast.LENGTH_LONG).show();
+    public void showMessage(final String message) {
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(activity.get().getBaseContext(), message, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
     @Override
-    public void setDataTableScore(EntityManager<ConfigQuestionEntity> configQuestionEntities) {
+    public void setDataTableScore(EntityManager<findConfigQuestionEntity> configQuestionEntities) {
         tableScore.initData(configQuestionEntities);
     }
 
@@ -291,6 +314,126 @@ public class GameScene extends Scene implements GameView, OnTouchListener, Quest
         countDown.die();
     }
 
+    @Override
+    public void setBoxCredit(int credit) {
+        boxMoney.getText().setText("$" + String.valueOf(credit));
+        boxMoney.getText().runAction(ActionSequence.create(
+                ActionCubicBezier.EaseIn(ActionScaleTo.create(new Vector2D(1.1f, 1.1f), 200)),
+                ActionCubicBezier.EaseOut(ActionScaleTo.create(new Vector2D(1.0f, 1.0f), 200))
+        ));
+    }
+
+    @Override
+    public void addBoxSpectator(LinkedHashMap<String, Integer> lp) {
+        boxHelpSpectator = new BoxHelpSpectator(lp);
+        boxHelpSpectator.setPosition(150, 400);
+        add(boxHelpSpectator);
+    }
+
+    @Override
+    public void removeBoxSpectator() {
+        if(boxHelpSpectator != null){
+            remove(boxHelpSpectator);
+        }
+    }
+
+    @Override
+    public void clearPlans(Object[] plans) {
+        questionGroup.clearPlans(plans);
+    }
+
+    @Override
+    public void showIconSupport50() {
+        spriteHelp50.setEnableTouch(true);
+        spriteHelp50.setVisible(true);
+    }
+
+    @Override
+    public void hideIconSupport50() {
+        spriteHelp50.setEnableTouch(false);
+        spriteHelp50.setVisible(false);
+    }
+
+    @Override
+    public void showIconSupportSpectator() {
+        spriteHelpSpectator.setEnableTouch(true);
+        spriteHelpSpectator.setVisible(true);
+    }
+
+    @Override
+    public void hideIconSupportSpectator() {
+        spriteHelpSpectator.setEnableTouch(false);
+        spriteHelpSpectator.setVisible(false);
+    }
+
+    @Override
+    public void showIconSupportCall() {
+        spriteHelpCall.setEnableTouch(true);
+        spriteHelpCall.setVisible(true);
+    }
+
+    @Override
+    public void hideIconSupportCall() {
+        spriteHelpCall.setEnableTouch(false);
+        spriteHelpCall.setVisible(false);
+    }
+
+    @Override
+    public void showWin(String messeage) {
+        showTB(messeage);
+    }
+
+    @Override
+    public void showLose(String messeage) {
+        showTB(messeage);
+    }
+
+    public void showTB(String message){
+        RoundRectangleShape rectangleShape = new RoundRectangleShape();
+        rectangleShape.setSize(size.mul(0.7f));
+        rectangleShape.centerOrigin(true);
+        rectangleShape.setColor(new Color(53, 170, 202));
+        rectangleShape.setRoundSize(30);
+        rectangleShape.setStyle(Drawable.Style.STROKE);
+        rectangleShape.setStrokeWidth(40);
+        rectangleShape.setPosition(size.mul(0.5f));
+        rectangleShape.setZOrder(10001);
+        add(rectangleShape);
+
+        RoundRectangleShape rectangleShapeBG = new RoundRectangleShape();
+        rectangleShapeBG.setSize(size.mul(0.7f));
+        rectangleShapeBG.centerOrigin(true);
+        rectangleShapeBG.setColor(new Color(140, 206, 225));
+        rectangleShapeBG.setRoundSize(30);
+        rectangleShapeBG.setPosition(size.mul(0.5f));
+        rectangleShapeBG.setZOrder(10000);
+        add(rectangleShapeBG);
+
+        Text text = new Text();
+        text.setPosition(size.x*0.5f, size.y*0.4f);
+        text.setSize(120);
+        text.setTextStyle(BOLD);
+        text.setText(message);
+        text.centerOrigin(true);
+        text.setZOrder(10000000);
+        add(text);
+
+        spriteHome.setZOrder(100000000);
+        spriteHome.setPosition(size.x*0.49f, size.y*0.6f);
+        spriteHome.setEnableTouch(true);
+        spriteHome.setEnableAction(true);
+        spriteHome.setVisible(true);
+
+        GameDirector.getInstance().getScheduler().schedule(ScheduleAction.One(new ScheduleCallback() {
+            @Override
+            public void OnScheduleCallback(float dt) {
+                close();
+            }
+        }, 4000));
+
+    }
+
+
 
     @Override
     public void close() {
@@ -315,6 +458,16 @@ public class GameScene extends Scene implements GameView, OnTouchListener, Quest
             close();
         }
 
+        /// Support 50
+        if(node.getId() == spriteHelp50.getId()){
+            gamePresenter.support50();
+        }
+
+        /// Support spectator
+        if(node.getId() == spriteHelpSpectator.getId()){
+            gamePresenter.supportSpectator();
+
+        }
     }
 
     /// -------- Interface QuestionCallback ------

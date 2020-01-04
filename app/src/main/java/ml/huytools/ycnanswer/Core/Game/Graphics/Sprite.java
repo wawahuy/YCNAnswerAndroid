@@ -97,8 +97,8 @@ public class Sprite extends Node {
     protected boolean testTouchPoint(Vector2D point) {
         /// Test
         /// Need update OOB or AABB Bounding
-        Vector2D min = positionWord.add(computeVector2DWordTrx(new Vector2D(0, 0)));
-        Vector2D max = positionWord.add(computeVector2DWordTrx(new Vector2D(rect.right, rect.bottom)));
+        Vector2D min = computeVector2DWordTrx(new Vector2D(0, 0));
+        Vector2D max = computeVector2DWordTrx(new Vector2D(rect.right, rect.bottom));
 
         if(point.x < min.x || point.x > max.x) return false;
         if(point.y < min.y || point.y > max.y) return false;

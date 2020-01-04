@@ -4,7 +4,7 @@ import ml.huytools.ycnanswer.Core.Annotation.JsonName;
 import ml.huytools.ycnanswer.Core.MVP.Entity;
 import ml.huytools.ycnanswer.Core.MVP.EntityManager;
 
-public class ConfigQuestionEntity extends Entity {
+public class findConfigQuestionEntity extends Entity {
     @JsonName
     public int diem;
 

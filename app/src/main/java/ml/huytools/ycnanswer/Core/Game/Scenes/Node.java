@@ -180,9 +180,15 @@ public abstract class Node extends Transformable implements IGameObject {
     ///// -------- touches -----------
     protected void computePositionWordIfTouches(Event event){
         if(positionWord == null && event.getEventType() == Event.EventType.Touch){
-            positionWord = computePositionWordTrx();
             if( nodeGroup!=null ){
-                positionWord = positionWord.add(nodeGroup.positionWord);
+                if(this instanceof NodeGroup){
+                    positionWord = computePositionWordTrx();
+                    positionWord = positionWord.add(nodeGroup.positionWord);
+                } else {
+                    positionWord = nodeGroup.positionWord;
+                }
+            } else {
+                positionWord = new Vector2D(0, 0);
             }
         }
     }

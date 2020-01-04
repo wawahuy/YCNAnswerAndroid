@@ -25,7 +25,7 @@ import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleAction;
 import ml.huytools.ycnanswer.Core.Game.Schedules.ScheduleCallback;
 import ml.huytools.ycnanswer.Core.MVP.EntityManager;
 import ml.huytools.ycnanswer.Core.Math.Vector2D;
-import ml.huytools.ycnanswer.Models.Entities.ConfigQuestionEntity;
+import ml.huytools.ycnanswer.Models.Entities.findConfigQuestionEntity;
 
 public class TableScore extends NodeGroup {
     final int BORDER_SIZE = 15;
@@ -38,7 +38,7 @@ public class TableScore extends NodeGroup {
     RoundRectangleShape select;
     NodeGroup groupText;
 
-    EntityManager<ConfigQuestionEntity> dsDiemCauHoi;
+    EntityManager<findConfigQuestionEntity> dsDiemCauHoi;
     int positionSelect;
 
     public TableScore() {
@@ -77,20 +77,20 @@ public class TableScore extends NodeGroup {
         transformText();
     }
 
-    public void initData(EntityManager<ConfigQuestionEntity> chDiemCauHoi){
+    public void initData(EntityManager<findConfigQuestionEntity> chDiemCauHoi){
         dsDiemCauHoi = chDiemCauHoi;
         positionSelect = 0;
         groupText.clear();
 
-        Collections.sort(dsDiemCauHoi, new Comparator<ConfigQuestionEntity>() {
+        Collections.sort(dsDiemCauHoi, new Comparator<findConfigQuestionEntity>() {
             @Override
-            public int compare(ConfigQuestionEntity c1, ConfigQuestionEntity c2) {
+            public int compare(findConfigQuestionEntity c1, findConfigQuestionEntity c2) {
                 return c1.thu_tu > c2.thu_tu ? -1 : (c1.thu_tu < c2.thu_tu ? 1 : 0);
             }
         });
 
 
-        for(ConfigQuestionEntity c:dsDiemCauHoi){
+        for(findConfigQuestionEntity c:dsDiemCauHoi){
             NodeGroup line = new NodeGroup();
 
             Text text = new Text();

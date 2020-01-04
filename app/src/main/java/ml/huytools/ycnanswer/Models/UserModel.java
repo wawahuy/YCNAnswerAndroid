@@ -64,4 +64,12 @@ public class UserModel {
     public static void getListRank(ApiProvider.Async.Callback callback) {
         ApiProvider.Async.GET("/user/ranking").Then(callback);
     }
+
+    public static void addCredit(int credit, ApiProvider.Async.Callback callback){
+        ApiParameters apiParameters = new ApiParameters();
+        apiParameters.add("credit", String.valueOf(credit));
+        ApiProvider.Async.POST("/goi-credit/cap-nhat-them").SetParams(apiParameters).Then(callback);
+    }
+
+
 }

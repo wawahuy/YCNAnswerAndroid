@@ -22,6 +22,11 @@ public class GameActivity extends AppCompatActivity {
         ((GameSurfaceView)findViewById(R.id.gamesf)).create(this);
     }
 
+    @Override
+    public void onBackPressed() {
+        // super.onBackPressed(); commented this line in order to disable back press
+    }
+
     public static class GameSurfaceView extends SurfaceView implements Renderer.Callback {
         GameScene gameScene;
         Renderer renderer;

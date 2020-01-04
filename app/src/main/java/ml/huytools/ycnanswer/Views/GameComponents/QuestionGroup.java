@@ -85,6 +85,8 @@ public class QuestionGroup extends NodeGroup implements OnTouchListener {
         plans[3].getText().setText("D. " + questionEntity.phuongan_D);
 
         for(BoxQuestion pl:plans){
+            pl.setVisible(true);
+            pl.setEnableTouch(true);
             pl.getBackground().runAction(ActionColorTo.create(new Color(255, 3, 14, 51), 200));
         }
     }
@@ -102,6 +104,14 @@ public class QuestionGroup extends NodeGroup implements OnTouchListener {
             questionCallback.OnAnswer("D");
         }
     }
+
+    public void clearPlans(Object[] plans) {
+        for(Object o:plans){
+            this.plans[planStrToInt((String) o)].setVisible(false);
+            this.plans[planStrToInt((String) o)].setEnableTouch(false);
+        }
+    }
+
 
     public void setWarningPlanQuestion(String planQuestion) {
         Node node = plans[planStrToInt(planQuestion)].getBackground();
