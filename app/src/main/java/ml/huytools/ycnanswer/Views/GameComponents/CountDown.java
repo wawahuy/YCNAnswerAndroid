@@ -32,6 +32,10 @@ public class CountDown extends NodeGroup implements ScheduleCallback {
     final int BAR_WIDTH = 20;
     final int TEXT_SIZE = 40;
 
+    public interface OnCountDownEnd {
+        void OnCountDownEnd();
+    }
+
     /// -- Object Game ----
     Vector2D size;
     Text textNumberTime;
@@ -43,6 +47,7 @@ public class CountDown extends NodeGroup implements ScheduleCallback {
     /// -- Data ---
     int  timeCountDown;
     long timeStartCountDown;
+    OnCountDownEnd onCountDownEnd;
 
     public CountDown(){
         timeCountDown = 30000;
@@ -76,6 +81,14 @@ public class CountDown extends NodeGroup implements ScheduleCallback {
 
         /// Init action
         initActionOnCircleBar();
+    }
+
+    public OnCountDownEnd getOnCountDownEnd() {
+        return onCountDownEnd;
+    }
+
+    public void setOnCountDownEnd(OnCountDownEnd onCountDownEnd) {
+        this.onCountDownEnd = onCountDownEnd;
     }
 
     /**
@@ -153,7 +166,9 @@ public class CountDown extends NodeGroup implements ScheduleCallback {
         int  tSecond = (int)(t/1000);
 
         if(tSecond <= 0){
-            start();
+            if(onCountDownEnd != null){
+                onCountDownEnd.OnCountDownEnd();
+            }
             return;
         }
 

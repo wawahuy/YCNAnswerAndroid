@@ -295,14 +295,38 @@ public class GamePresenterImpl implements GamePresenter {
             public void OnScheduleCallback(float dt) {
                 gameView.removeBoxSpectator();
             }
-        }, 5000));
+        }, 7000));
 
         gameView.hideIconSupportSpectator();
     }
 
     @Override
-    public void supporCall() {
-        gameView.showMessage("Chức năng chưa hổ trợ.");
+    public void supportCall() {
+        int r = new Random().nextInt(100);
+        String plan;
+
+        if(r <= 70){
+            plan = questionEntities.get(positionQuestionCurrent).dapan;
+        }
+        else {
+            LinkedHashMap<Integer, String> list = new LinkedHashMap<>();
+            list.put(0, "A");
+            list.put(1, "B");
+            list.put(2, "C");
+            list.put(3, "D");
+            list.remove(planStrToInt(questionEntities.get(positionQuestionCurrent).dapan));
+            plan = list.get(list.keySet().toArray()[new Random().nextInt(3)]);
+        }
+
+        gameView.addBoxHelpCall(plan);
+        gameView.hideIconSupportCall();
+        scheduler.schedule(ScheduleAction.One(new ScheduleCallback() {
+            @Override
+            public void OnScheduleCallback(float dt) {
+                gameView.removeBoxHelpCall();
+            }
+        }, 5000));
+
     }
 
     @Override

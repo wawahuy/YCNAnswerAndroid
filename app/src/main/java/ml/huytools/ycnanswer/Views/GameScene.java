@@ -33,6 +33,7 @@ import ml.huytools.ycnanswer.Models.Entities.QuestionEntity;
 import ml.huytools.ycnanswer.Models.TurnModel;
 import ml.huytools.ycnanswer.Presenters.GamePresenterImpl;
 import ml.huytools.ycnanswer.Presenters.Interface.GamePresenter;
+import ml.huytools.ycnanswer.Views.GameComponents.BoxHelpCall;
 import ml.huytools.ycnanswer.Views.GameComponents.BoxHelpSpectator;
 import ml.huytools.ycnanswer.Views.GameComponents.BoxMoney;
 import ml.huytools.ycnanswer.Views.GameComponents.CountDown;
@@ -45,7 +46,7 @@ import ml.huytools.ycnanswer.Views.ViewComponents.LoadingView;
 
 import static android.graphics.Typeface.BOLD;
 
-public class GameScene extends Scene implements GameView, OnTouchListener, QuestionGroup.QuestionCallback {
+public class GameScene extends Scene implements GameView, OnTouchListener, QuestionGroup.QuestionCallback, CountDown.OnCountDownEnd {
     private Vector2D size;
     private WeakReference<Activity> activity;
     ResourceManager resourceManager;
@@ -63,6 +64,7 @@ public class GameScene extends Scene implements GameView, OnTouchListener, Quest
     QuestionGroup questionGroup;
     BoxMoney boxMoney;
     BoxHelpSpectator boxHelpSpectator;
+    BoxHelpCall boxHelpCall;
 
     LoadingView loadingView;
     GamePresenter gamePresenter;
@@ -174,6 +176,7 @@ public class GameScene extends Scene implements GameView, OnTouchListener, Quest
         int sizeCountDown = (int)(halfW*0.2f);
         countDown.setSizeBounding(new Vector2D(sizeCountDown, sizeCountDown));
         countDown.setPosition(halfW - sizeCountDown/2, -(int)(sizeCountDown/8));
+        countDown.setOnCountDownEnd(this);
 
         /// SpotLight
         spotLight.setBoundingSize(size);
@@ -331,6 +334,20 @@ public class GameScene extends Scene implements GameView, OnTouchListener, Quest
     }
 
     @Override
+    public void addBoxHelpCall(String plan) {
+        boxHelpCall = new BoxHelpCall(plan, activity.get().getBaseContext());
+        boxHelpCall.setPosition(400, 250);
+        add(boxHelpCall);
+    }
+
+    @Override
+    public void removeBoxHelpCall() {
+        if(boxHelpCall != null){
+            remove(boxHelpCall);
+        }
+    }
+
+    @Override
     public void removeBoxSpectator() {
         if(boxHelpSpectator != null){
             remove(boxHelpSpectator);
@@ -468,11 +485,20 @@ public class GameScene extends Scene implements GameView, OnTouchListener, Quest
             gamePresenter.supportSpectator();
 
         }
+
+        if(node.getId() == spriteHelpCall.getId()){
+            gamePresenter.supportCall();
+        }
     }
 
     /// -------- Interface QuestionCallback ------
     @Override
     public void OnAnswer(String answer) {
         gamePresenter.answer(answer);
+    }
+
+    @Override
+    public void OnCountDownEnd() {
+        gamePresenter.lose();
     }
 }

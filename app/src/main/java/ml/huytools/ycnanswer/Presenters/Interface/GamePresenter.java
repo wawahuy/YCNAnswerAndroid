@@ -5,6 +5,6 @@ public interface GamePresenter {
     void answer(String answer);
     void support50();
     void supportSpectator();
-    void supporCall();
+    void supportCall();
     void lose();
 }

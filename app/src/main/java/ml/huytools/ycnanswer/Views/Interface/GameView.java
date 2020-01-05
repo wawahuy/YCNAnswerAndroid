@@ -25,6 +25,8 @@ public interface GameView {
     void stopContDown();
     void setBoxCredit(int credit);
     void addBoxSpectator(LinkedHashMap<String, Integer> dp);
+    void addBoxHelpCall(String plan);
+    void removeBoxHelpCall();
     void removeBoxSpectator();
     void clearPlans(Object[] plans);
     void showIconSupport50();

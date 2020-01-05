@@ -30,7 +30,7 @@ public class QuestionGroup extends NodeGroup implements OnTouchListener {
     public QuestionGroup(QuestionCallback questionCallback){
         /// Question
         question = new BoxQuestion();
-        question.getText().setSize(35);
+        question.getText().setSize(30);
         add(question);
 
         /// Plan A, B, C, D <=> 0..3
@@ -39,7 +39,7 @@ public class QuestionGroup extends NodeGroup implements OnTouchListener {
             BoxQuestion boxQuestion = new BoxQuestion();
             boxQuestion.setBorderWidth(8);
             boxQuestion.setTouchListener(this);
-            boxQuestion.getText().setSize(30);
+            boxQuestion.getText().setSize(25);
             boxQuestion.setTextAlign(Paint.Align.LEFT);
             boxQuestion.getText().setText(PLANChar[i] + ".");
             plans[i] = boxQuestion;

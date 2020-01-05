@@ -28,6 +28,7 @@ public class ResourceManager {
     public final Image imageHelpSpectator;
     public final Image imageHelpCall;
     public final Image imageHome;
+    public final Image imageCall;
 
     /// AnimationManager Frames
     /// public final EntityManager<AnimationManager.Frame> framesMc;
@@ -46,6 +47,7 @@ public class ResourceManager {
         imageHelpSpectator = Image.LoadByResource(R.drawable.sprite_help_guest_enable);
         imageHelpCall = Image.LoadByResource(R.drawable.sprite_help_call_enable);
         imageHome = Image.LoadByResource(R.drawable.sprite_home);
+        imageCall = Image.LoadByResource(R.drawable.sprite_call);
 
         /// frames
         /// framesMc = EntityManager.ParseJSON(AnimationManager.Frame.class, Resource.readRawTextFile(context, R.raw.frames_mc));
