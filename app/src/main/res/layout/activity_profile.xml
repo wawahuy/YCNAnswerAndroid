@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/sprite_bg"
+    tools:context=".Views.ProfileActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="12"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="8dp">
+
+        <TextView
+            android:id="@+id/tzkk"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:fontFamily="@font/f1"
+            android:gravity="center"
+            android:text="Hồ sơ"
+            android:textColor="#F1E9E9"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10"
+            android:orientation="horizontal"
+            android:paddingStart="50dp"
+            android:paddingEnd="50dp"
+            android:paddingBottom="30dp"
+            android:weightSum="12">
+
+            <LinearLayout
+                android:id="@+id/ssac"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="5"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:id="@+id/imgProfileAvatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="5"
+                    android:background="@drawable/border_categories"
+                    android:onClick="OnClickAvatar"
+                    android:padding="20dp"
+                    app:srcCompat="@drawable/profile" />
+
+                <Button
+                    android:id="@+id/btnChangeAvatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="37dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/rounded_corner_button"
+                    android:onClick="OnChangeAvatar"
+                    android:text="Thay đổi avatar"
+                    android:textSize="12sp"
+                    android:visibility="invisible" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_weight="7"
+                android:background="@drawable/border_categories"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/txtProfileName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/border1"
+                    android:fontFamily="@font/f1"
+                    android:padding="5dp"
+                    android:text="Tài khoản:"
+                    android:textColor="#E6DEDE"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtProfileCredit"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/border1"
+                    android:fontFamily="@font/f1"
+                    android:padding="5dp"
+                    android:text="Credit:"
+                    android:textColor="#E6DEDE"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtProfileEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/border1"
+                    android:fontFamily="@font/f1"
+                    android:padding="5dp"
+                    android:text="Email:"
+                    android:textColor="#E6DEDE"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtProfileHightScore"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/border1"
+                    android:fontFamily="@font/f1"
+                    android:padding="5dp"
+                    android:text="Điểm cao nhất:"
+                    android:textColor="#E6DEDE"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/button"
+                    android:layout_width="318dp"
+                    android:layout_height="37dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/rounded_corner_button"
+                    android:onClick="OnOpenChangePassword"
+                    android:text="Đổi mật khẩu"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

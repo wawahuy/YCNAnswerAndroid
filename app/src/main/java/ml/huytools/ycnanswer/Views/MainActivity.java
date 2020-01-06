@@ -2,45 +2,58 @@ package ml.huytools.ycnanswer.Views;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
-import android.content.Context;
+import android.app.ActivityOptions;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.Toast;
 
-import ml.huytools.ycnanswer.Commons.APIProvider;
-import ml.huytools.ycnanswer.Commons.ModelManager;
-import ml.huytools.ycnanswer.Commons.Presenter;
-import ml.huytools.ycnanswer.Models.CauHoi;
+import ml.huytools.ycnanswer.Core.API.ApiConfig;
+import ml.huytools.ycnanswer.Core.App;
+import ml.huytools.ycnanswer.Presenters.Interface.MainPresenter;
+import ml.huytools.ycnanswer.Presenters.MainPresenterImpl;
 import ml.huytools.ycnanswer.R;
+import ml.huytools.ycnanswer.Views.Interface.MainView;
 
-public class MainActivity extends AppCompatActivity {
-//////// NO Model - View - Presenter
-//////// UPDATE
+public class MainActivity extends AppCompatActivity implements MainView {
+
+    MainPresenter mainPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        configAPI();
 
-        Intent intent = new Intent(this, GameActivity.class);
+        /// init
+        App.getInstance().init(this);
+        mainPresenter = new MainPresenterImpl(this);
+        mainPresenter.init();
+
+        /// init resource
+        ResourceManager.getInstance(this);
+    }
+
+
+    @Override
+    public void showActivityLogin() {
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         finish();
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    public void showActivityMainGame() {
+        /// Test
+        Intent intent = new Intent(this, MainGameActivity.class);
+        startActivity(intent);
+        finish();
     }
 
-
-    void configAPI(){
-        /// Config Host
-        APIProvider.SetHost("http://192.168.1.130:8000/api");
-
-
+    @Override
+    public void showMessage(String message) {
+        if(message == null || message.trim() == ""){
+            return;
+        }
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
-
-
 }
