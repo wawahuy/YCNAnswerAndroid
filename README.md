@@ -10,4 +10,6 @@
 - Đây là bản client
 - Sử dụng các API được xây dựng tại repo
 https://github.com/wawahuy/Laravel-CDTH17C
+## Demo
+https://www.youtube.com/watch?v=R4b_FP4dLYs&ab_channel=CodeYUH
 
